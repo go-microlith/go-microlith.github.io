@@ -23,6 +23,68 @@ Clone The repository should be cloned to the root of your Go workspace&amp;rsquo
     </item>
     
     <item>
+      <title>Create a Bucket</title>
+      <link>http://example.org/resources/blob/create/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/blob/create/</guid>
+      <description>Create a bucket by calling Bucket() on a service builder.
+images := service.Bucket(&amp;quot;images&amp;quot;)  </description>
+    </item>
+    
+    <item>
+      <title>Create a Cron Job</title>
+      <link>http://example.org/resources/cron/create/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/cron/create/</guid>
+      <description>Jobs can be scheduled either using CloudWatch events syntax or cron syntax. To use CloudWatch syntax, call ScheduledJob() on a service builder. To use cron syntax, call the CronJob() method.
+// Create a job that runs every 15 minutes service.ScheduledJob(&amp;quot;scheduled-job-id&amp;quot;, &amp;quot;15 minutes&amp;quot;, func(ctx context.Context, evt events.CloudWatchEvent) error { // ... }) // Create a job that runs every day a noon UTC service.CronJob(&amp;quot;cron-job-id&amp;quot;, &amp;quot;0 12 * * ? *&amp;quot;, func(ctx context.</description>
+    </item>
+    
+    <item>
+      <title>Create a Log Reader</title>
+      <link>http://example.org/resources/inst/create/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/inst/create/</guid>
+      <description>Readers can be attached one or more Lambda functions and processes the CloudWatch logs the functions produce. Log messages can be filtered to reduce message volume.
+To create a log reader, call the Reader() method on a service builder.
+// Create a reader for logs containing the word &amp;quot;error&amp;quot; onErrors := service.Reader(&amp;quot;on-errors&amp;quot;, func(ctx context.Context, evt events.CloudwatchLogsEvent) error { // ... }) // Create some Lambda functions processor := service.Processor(...) observer := service.</description>
+    </item>
+    
+    <item>
+      <title>Create a Stream</title>
+      <link>http://example.org/resources/strm/create/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/strm/create/</guid>
+      <description>Create a stream by calling Stream() on a service builder:
+userSignups := service.Stream(&amp;quot;user-signups&amp;quot;)  </description>
+    </item>
+    
+    <item>
+      <title>Create a Table</title>
+      <link>http://example.org/resources/stor/create/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/stor/create/</guid>
+      <description>Create a table by calling the Table() method on a service builder.
+// Create a table var hashKey = StringAttribute(&amp;quot;hash-key&amp;quot;) var rangeKey = StringAttribute(&amp;quot;range-key&amp;quot;) var table = service.Table(&amp;quot;the-id&amp;quot;, hashKey, rangeKey, ChangeTypeNewAndOld)  To create secondary indexes on a table, use the GlobalIndex() and LocalIndex() methods.
+// Create a Global Secondary Index var gsiHashKey = StringAttribute(&amp;quot;gsi-hash-key&amp;quot;) var gsiRangeKey = StringAttribute(&amp;quot;gsi-range-key&amp;quot;) var gsi = table.GlobalIndex(&amp;quot;gsi&amp;quot;, gsiHashKey, gsiRangeKey, ProjectionTypeAll) // Create a Local Secondary Index var lsiRangeKey = StringAttribute(&amp;quot;lsi-range-key&amp;quot;) var lsi = table.</description>
+    </item>
+    
+    <item>
+      <title>Define an API</title>
+      <link>http://example.org/resources/rest/define/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/rest/define/</guid>
+      <description>APIs follow the AWS API Gateway design, based on Swagger. Define your API by calling the Scope() method on a service or domain builder. Within your scope, use the builder DSL to define your API.
+Scopes Scope names are paths, such as &amp;ldquo;/foo&amp;rdquo; or &amp;ldquo;/foo/bar&amp;rdquo;. Scopes can contain path parameters enclosed in curly braces, such as &amp;ldquo;/{foo-id}&amp;rdquo;. Scopes can define nested scopes which are prefixed by their parent scope.</description>
+    </item>
+    
+    <item>
       <title>Get Microlith</title>
       <link>http://example.org/bootstrap/go_get/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
@@ -68,6 +130,16 @@ Clone The repository should be cloned to the root of your Go workspace&amp;rsquo
     </item>
     
     <item>
+      <title>Call an API</title>
+      <link>http://example.org/resources/rest/call/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/rest/call/</guid>
+      <description>Call APIs by creating a Client and calling the Call() method. This takes the endpoint to call and an optional request body for non HEAD and GET requests. Call() can be passed an optional request builder to set the path and query parameters and request headers. The Call() method returns a standard http.Response.
+requestBody := map[string]interface{}{&amp;quot;Foo&amp;quot;: &amp;quot;bar&amp;quot;} responseBody := map[string]interface{}{} // Construct a new client var client = NewClient(&amp;quot;http://localhost:8080/&amp;quot;) // Call an endpoint resp, err := client.</description>
+    </item>
+    
+    <item>
       <title>Domains</title>
       <link>http://example.org/architecture/domains/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
@@ -75,6 +147,16 @@ Clone The repository should be cloned to the root of your Go workspace&amp;rsquo
       <guid>http://example.org/architecture/domains/</guid>
       <description>Services are grouped into a Domain. A Domain is a REST API, a set of services, and set of channels.
 Routing Domains route using REST. The API, called the Origin, handles all external traffic. It receives requests, makes calls on the services to collect state and perform business logic, and then constructs a response to the user.</description>
+    </item>
+    
+    <item>
+      <title>Publishing to Streams</title>
+      <link>http://example.org/resources/strm/publisher/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/strm/publisher/</guid>
+      <description>To publish to a stream, create a Publisher object and Publish() messages. The publisher automatically encodes the messages to JSON and batches messages before sending. Be sure to Flush() your publisher to ensure the final batch is sent.
+// Create a publisher var publisher = NewPublisher(userSignups) func someHandler(ctx context.Context) error { // Be sure to Flush() the publisher defer publisher.Flush(ctx) // Write messages to the stream if err := publisher.Publish(ctx, &amp;quot;partition-one&amp;quot;, &amp;quot;value-one&amp;quot;); err !</description>
     </item>
     
     <item>
@@ -86,6 +168,28 @@ Routing Domains route using REST. The API, called the Origin, handles all extern
       <description>Services implement the business logic of your Microlith application. At the code level, a service is an object which implements the tld.ServiceBuilder interface.
 Let&amp;rsquo;s refactor our domain into a pair of services: a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service. Then we&amp;rsquo;ll refactor our origin endpoint to call those services to build a response.
 Create a Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word. The word service will have one endpoint that responds with the word as JSON.</description>
+    </item>
+    
+    <item>
+      <title>Working with Buckets</title>
+      <link>http://example.org/resources/blob/manipulator/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/blob/manipulator/</guid>
+      <description>Objects are added, updated, and removed from a bucket using a Manipulator.
+// Create a manipulator mnip := NewManipulator(images) // Put an object into the bucket body, err := NewBufferString(&amp;quot;the-body&amp;quot;) if err != nil { log.Panic(err) } defer body.Close() if err := mnip.Put(ctx, &amp;quot;/the/key&amp;quot;, body); err != nil { log.Panic(err) } // Get the object from the bucket contents, err := mnip.Get(ctx, &amp;quot;/the/key&amp;quot;) if err != nil { log.Panic(err) } io.</description>
+    </item>
+    
+    <item>
+      <title>Working with Tables</title>
+      <link>http://example.org/resources/stor/mutator/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/stor/mutator/</guid>
+      <description>To interact with a table, create a Mutator. A Mutator is a client for a DynamoDB table.
+// Create the mutator mutator := NewMutator(table)  Mutators supports queries, scans, and CRUD operations. Batch operations are supported using separate GetBatch() and WriteBatch() functions.
+For indexes, create a Querier. This works identically to a Mutator but is limited to the Query() and Scan() operations only.
+All operations support optional builders to refine the operations.</description>
     </item>
     
     <item>
@@ -110,13 +214,35 @@ Any service can publish events onto channels it has references to. When a servic
     </item>
     
     <item>
-      <title>Resources</title>
-      <link>http://example.org/tutorial/resources/</link>
+      <title>Channels</title>
+      <link>http://example.org/tutorial/channels/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/tutorial/resources/</guid>
-      <description>Each service is an AWS::Serverless service composed of resources and asynchronous actions. You add resources and actions via the service builder in your Build() method. Microlith supports a subset of the full AWS::Serverless specification. You can find documentation on the supported resources and actions in the GoDocs:
- REST APIs S3 Buckets Kinesis Streams DynamoDB Tables Cron Jobs CloudWatch Log Readers  </description>
+      <guid>http://example.org/tutorial/channels/</guid>
+      <description>Channels are created by calling either the microlith.Channel() function to create a channel in the root domain, or by calling the microlith.Channel() method on a domain builder to create a channel in a subdomain. The returned reference can then be passed to a service so the service can interact with the channel.
+Let&amp;rsquo;s create a channel that logs an event when a request is made against the &amp;ldquo;hello-world&amp;rdquo; endpoint in the Origin.</description>
+    </item>
+    
+    <item>
+      <title>Observing Changes</title>
+      <link>http://example.org/resources/blob/observer/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/blob/observer/</guid>
+      <description>Observers are Lambda functions that observe buckets and are executed when their contents change. Each observer may subscribe to multiple buckets and multiple events per bucket. Additionally, events can be filtered on either the prefix or suffix of the key.
+Observers cannot access buckets. This is due to a circular dependency in CloudFormation. If an observer needs to access buckets, a work around is to publish all events to a Stream and create a processor to perform the action.</description>
+    </item>
+    
+    <item>
+      <title>Process Messages from Streams</title>
+      <link>http://example.org/resources/strm/processor/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/strm/processor/</guid>
+      <description>Processors are Lambda functions that processes messages published to a stream. Each processor may subscribe to multiple streams and is called when messages are published to any of the streams.
+Messages are given to processors in batches. To simplify this, create a Scanner to loop through the batch and process individual messages.
+To create a process, call the Processor() method on a service builder.
+// Create a processor processor := service.</description>
     </item>
     
     <item>
@@ -128,6 +254,17 @@ Any service can publish events onto channels it has references to. When a servic
       <description>Microlith uses Route53 DNS as its global router. This requires a one-time, non-automatable setup. Once set up, a domain name can be reused for multiple Microlith applications.
 You will need the Domain Name and the Hosted Zone ID to bootstrap your application. For the remainder of the documentation, we will assume you own my-domain.com in hosted zone Z1234567890.
  Domain Name You will need a domain name hosted in Route53.</description>
+    </item>
+    
+    <item>
+      <title>Watching for Changes</title>
+      <link>http://example.org/resources/stor/watcher/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/stor/watcher/</guid>
+      <description>If change streaming is enabled on a table, changes to the table can be processed using a Watcher Lambda function. Only tables can be watched, not secondary indexes.
+To create a watcher, call the Watcher() method on a service builder.
+// Create a watcher watcher = service.Watcher(&amp;quot;process-changes&amp;quot;, func(ctx context.Context, evt events.DynamoDBEvent) error { // ... }) // Watch for changes on the table watcher.Watch(table, strm.StartingPositionTrimHorizon)  </description>
     </item>
     
     <item>
@@ -152,13 +289,15 @@ The process will take several minutes for the initial deploy.</description>
     </item>
     
     <item>
-      <title>Channels</title>
-      <link>http://example.org/tutorial/channels/</link>
+      <title>Globals</title>
+      <link>http://example.org/tutorial/globals/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/tutorial/channels/</guid>
-      <description>Channels are created by calling either the microlith.Channel() function to create a channel in the root domain, or by calling the microlith.Channel() method on a domain builder to create a channel in a subdomain. The returned reference can then be passed to a service so the service can interact with the channel.
-Let&amp;rsquo;s create a channel that logs an event when a request is made against the &amp;ldquo;hello-world&amp;rdquo; endpoint in the Origin.</description>
+      <guid>http://example.org/tutorial/globals/</guid>
+      <description>Global services are addressable by all services and origins in any domain. The built service can be passed directly to subdomains and services.
+Global channels are addressable by any service or origin in any domain and any global service. The returned reference can be passed to domains and services.
+Let&amp;rsquo;s promote the &amp;ldquo;world&amp;rdquo; service to a global service and the &amp;ldquo;requests&amp;rdquo; channel to a global channel.
+Promote the World Service To promote the &amp;ldquo;world&amp;rdquo; service, we need to use the microlith.</description>
     </item>
     
     <item>
@@ -182,18 +321,6 @@ git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  I
       <description>Some business logic needs to be shared between multiple domains, but services and subdomains cannot access each other. To share logic across the entire application, Microlith provides Global services and channels.
 Services Global services share business logic across domains. They can be called by all services and origins.
 Channels Global channels broadcast messages among all services and origins.</description>
-    </item>
-    
-    <item>
-      <title>Globals</title>
-      <link>http://example.org/tutorial/globals/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/tutorial/globals/</guid>
-      <description>Global services are addressable by all services and origins in any domain. The built service can be passed directly to subdomains and services.
-Global channels are addressable by any service or origin in any domain and any global service. The returned reference can be passed to domains and services.
-Let&amp;rsquo;s promote the &amp;ldquo;world&amp;rdquo; service to a global service and the &amp;ldquo;requests&amp;rdquo; channel to a global channel.
-Promote the World Service To promote the &amp;ldquo;world&amp;rdquo; service, we need to use the microlith.</description>
     </item>
     
     <item>

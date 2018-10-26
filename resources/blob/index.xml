@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Buckets on Microlith</title>
+    <link>http://example.org/resources/blob/</link>
+    <description>Recent content in Buckets on Microlith</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Oct 2018 18:10:01 -0600</lastBuildDate>
+    
+	<atom:link href="http://example.org/resources/blob/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Create a Bucket</title>
+      <link>http://example.org/resources/blob/create/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/blob/create/</guid>
+      <description>Create a bucket by calling Bucket() on a service builder.
+images := service.Bucket(&amp;quot;images&amp;quot;)  </description>
+    </item>
+    
+    <item>
+      <title>Working with Buckets</title>
+      <link>http://example.org/resources/blob/manipulator/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/blob/manipulator/</guid>
+      <description>Objects are added, updated, and removed from a bucket using a Manipulator.
+// Create a manipulator mnip := NewManipulator(images) // Put an object into the bucket body, err := NewBufferString(&amp;quot;the-body&amp;quot;) if err != nil { log.Panic(err) } defer body.Close() if err := mnip.Put(ctx, &amp;quot;/the/key&amp;quot;, body); err != nil { log.Panic(err) } // Get the object from the bucket contents, err := mnip.Get(ctx, &amp;quot;/the/key&amp;quot;) if err != nil { log.Panic(err) } io.</description>
+    </item>
+    
+    <item>
+      <title>Observing Changes</title>
+      <link>http://example.org/resources/blob/observer/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/blob/observer/</guid>
+      <description>Observers are Lambda functions that observe buckets and are executed when their contents change. Each observer may subscribe to multiple buckets and multiple events per bucket. Additionally, events can be filtered on either the prefix or suffix of the key.
+Observers cannot access buckets. This is due to a circular dependency in CloudFormation. If an observer needs to access buckets, a work around is to publish all events to a Stream and create a processor to perform the action.</description>
+    </item>
+    
+  </channel>
+</rss>

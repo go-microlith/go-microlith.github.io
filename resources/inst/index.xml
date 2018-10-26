@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Log Readers on Microlith</title>
+    <link>http://example.org/resources/inst/</link>
+    <description>Recent content in Log Readers on Microlith</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Oct 2018 18:10:01 -0600</lastBuildDate>
+    
+	<atom:link href="http://example.org/resources/inst/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Create a Log Reader</title>
+      <link>http://example.org/resources/inst/create/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/inst/create/</guid>
+      <description>Readers can be attached one or more Lambda functions and processes the CloudWatch logs the functions produce. Log messages can be filtered to reduce message volume.
+To create a log reader, call the Reader() method on a service builder.
+// Create a reader for logs containing the word &amp;quot;error&amp;quot; onErrors := service.Reader(&amp;quot;on-errors&amp;quot;, func(ctx context.Context, evt events.CloudwatchLogsEvent) error { // ... }) // Create some Lambda functions processor := service.Processor(...) observer := service.</description>
+    </item>
+    
+  </channel>
+</rss>

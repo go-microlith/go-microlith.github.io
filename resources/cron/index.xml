@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cron Jobs on Microlith</title>
+    <link>http://example.org/resources/cron/</link>
+    <description>Recent content in Cron Jobs on Microlith</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Oct 2018 18:10:01 -0600</lastBuildDate>
+    
+	<atom:link href="http://example.org/resources/cron/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Create a Cron Job</title>
+      <link>http://example.org/resources/cron/create/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/cron/create/</guid>
+      <description>Jobs can be scheduled either using CloudWatch events syntax or cron syntax. To use CloudWatch syntax, call ScheduledJob() on a service builder. To use cron syntax, call the CronJob() method.
+// Create a job that runs every 15 minutes service.ScheduledJob(&amp;quot;scheduled-job-id&amp;quot;, &amp;quot;15 minutes&amp;quot;, func(ctx context.Context, evt events.CloudWatchEvent) error { // ... }) // Create a job that runs every day a noon UTC service.CronJob(&amp;quot;cron-job-id&amp;quot;, &amp;quot;0 12 * * ? *&amp;quot;, func(ctx context.</description>
+    </item>
+    
+  </channel>
+</rss>

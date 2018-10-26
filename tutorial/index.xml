@@ -35,16 +35,6 @@ Create a Service We will create a &amp;ldquo;word&amp;rdquo; service that return
     </item>
     
     <item>
-      <title>Resources</title>
-      <link>http://example.org/tutorial/resources/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/tutorial/resources/</guid>
-      <description>Each service is an AWS::Serverless service composed of resources and asynchronous actions. You add resources and actions via the service builder in your Build() method. Microlith supports a subset of the full AWS::Serverless specification. You can find documentation on the supported resources and actions in the GoDocs:
- REST APIs S3 Buckets Kinesis Streams DynamoDB Tables Cron Jobs CloudWatch Log Readers  </description>
-    </item>
-    
-    <item>
       <title>Channels</title>
       <link>http://example.org/tutorial/channels/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tables on Microlith</title>
+    <link>http://example.org/resources/stor/</link>
+    <description>Recent content in Tables on Microlith</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Oct 2018 18:10:01 -0600</lastBuildDate>
+    
+	<atom:link href="http://example.org/resources/stor/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Create a Table</title>
+      <link>http://example.org/resources/stor/create/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/stor/create/</guid>
+      <description>Create a table by calling the Table() method on a service builder.
+// Create a table var hashKey = StringAttribute(&amp;quot;hash-key&amp;quot;) var rangeKey = StringAttribute(&amp;quot;range-key&amp;quot;) var table = service.Table(&amp;quot;the-id&amp;quot;, hashKey, rangeKey, ChangeTypeNewAndOld)  To create secondary indexes on a table, use the GlobalIndex() and LocalIndex() methods.
+// Create a Global Secondary Index var gsiHashKey = StringAttribute(&amp;quot;gsi-hash-key&amp;quot;) var gsiRangeKey = StringAttribute(&amp;quot;gsi-range-key&amp;quot;) var gsi = table.GlobalIndex(&amp;quot;gsi&amp;quot;, gsiHashKey, gsiRangeKey, ProjectionTypeAll) // Create a Local Secondary Index var lsiRangeKey = StringAttribute(&amp;quot;lsi-range-key&amp;quot;) var lsi = table.</description>
+    </item>
+    
+    <item>
+      <title>Working with Tables</title>
+      <link>http://example.org/resources/stor/mutator/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/stor/mutator/</guid>
+      <description>To interact with a table, create a Mutator. A Mutator is a client for a DynamoDB table.
+// Create the mutator mutator := NewMutator(table)  Mutators supports queries, scans, and CRUD operations. Batch operations are supported using separate GetBatch() and WriteBatch() functions.
+For indexes, create a Querier. This works identically to a Mutator but is limited to the Query() and Scan() operations only.
+All operations support optional builders to refine the operations.</description>
+    </item>
+    
+    <item>
+      <title>Watching for Changes</title>
+      <link>http://example.org/resources/stor/watcher/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/resources/stor/watcher/</guid>
+      <description>If change streaming is enabled on a table, changes to the table can be processed using a Watcher Lambda function. Only tables can be watched, not secondary indexes.
+To create a watcher, call the Watcher() method on a service builder.
+// Create a watcher watcher = service.Watcher(&amp;quot;process-changes&amp;quot;, func(ctx context.Context, evt events.DynamoDBEvent) error { // ... }) // Watch for changes on the table watcher.Watch(table, strm.StartingPositionTrimHorizon)  </description>
+    </item>
+    
+  </channel>
+</rss>
