@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Tags :: Microlith</title>
+    <title>Subdomains :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1540514675" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/tags/">
+  <body class="" data-url="/tutorial/subdomains/">
     <nav id="sidebar" class="">
 
 
@@ -369,7 +369,7 @@
   
     
     <li data-nav-id="/tutorial/" title="Tutorial" class="dd-item 
-        
+        parent
         
         
         ">
@@ -488,7 +488,7 @@
  
   
     
-      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item ">
+      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item active">
         <a href="/tutorial/subdomains/">
         Subdomains
         
@@ -558,7 +558,19 @@
                     
           
           
-            Tags
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/tutorial/'>Tutorial</a> > Subdomains
+          
+         
+          
+         
           
            
                   </span>
@@ -566,7 +578,16 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#create-a-subdomain">Create a Subdomain</a></li>
+<li><a href="#call-the-subdomain">Call the Subdomain</a></li>
+<li><a href="#ship-it">Ship It</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -578,7 +599,7 @@
         
         <div id="body-inner">
           
-            <h1>Tags</h1>
+            <h1>Subdomains</h1>
           
 
         
@@ -586,9 +607,192 @@
 
 
 
+<p>Creating a subdomain is similar to creating a service.  At the code level, a subdomain is an object that implements the <code>tld.DomainBuilder</code> interface and is registered under the root domain.</p>
+
+<p>We will create a subdomain that mirrors the root domain.  It will have a <code>hello</code> service and use the global <code>world</code> service and <code>requests</code> channel.  The origin will have an endpoint that calls these services and constructs the response.</p>
+
+<h2 id="create-a-subdomain">Create a Subdomain</h2>
+
+<p>Let&rsquo;s create a subdomain named &ldquo;sub.domain&rdquo; that responds to <code>GET /</code> with a <code>200 OK</code> and a response body of <code>&quot;Hello, subdomain world!&quot;</code>.</p>
+
+<p>First, let&rsquo;s create an object that implements the <code>tld.DomainBuilder</code> interface.  The constructor will take references to the global <code>world</code> service and the <code>requests</code> channel, and will construct a new instance of the <code>hello</code> service.  In the builder, we need to register the instance of the <code>hello</code> service with the domain.</p>
+
+<p>In <code>${GOPATH}/src/example.com/sub.domain.go</code>:</p>
+
+<pre><code class="language-go">package main
+
+import (
+  &quot;context&quot;
+  &quot;fmt&quot;
+  &quot;log&quot;
+  &quot;net/http&quot;
+  &quot;strings&quot;
+
+  &quot;github.com/aws/aws-lambda-go/events&quot;
+
+  &quot;gopkg.in/microlith.v0/sam/tld&quot;
+  &quot;gopkg.in/microlith.v0/sam/tld/strm&quot;
+  &quot;gopkg.in/microlith.v0/sam/tld/rest&quot;
+)
+
+// A Sub is a subdomain
+type Sub struct {
+  helloSvc *Word
+  worldSvc *Word
+  requests *strm.Stream
+  endpoint *rest.Endpoint
+  client   *rest.Client
+}
+
+// NewSub constructs a new subdomain referencing the &quot;world&quot; global service and
+// the &quot;requests&quot; global channel.
+func NewSub(world *Word, requests *strm.Stream) *Sub {
+  return &amp;Sub{
+    helloSvc: NewWord(&quot;hello&quot;, requests),
+    worldSvc: world,
+    requests: requests,
+  }
+}
+
+// Build implements the tld.DomainBuilder interface.
+func (sub *Sub) Build(domain *tld.Domain) {
+  domain.Service(&quot;hello&quot;, sub.helloSvc)
+}
+</code></pre>
+
+<p>Next, we need to add an endpoint on the subdomain&rsquo;s origin.  The handler for the
+endpoint will call the <code>hello</code> and <code>world</code> services and construct a response to
+return to the user.</p>
+
+<pre><code class="language-go">func (sub *Sub) Build(domain *tld.Domain) {
+  // ... Same as before ...
+
+  domain.Scope(&quot;/&quot;, func(scope *rest.Scope) {
+    sub.endpoint = scope.Get(&quot;hello-subdomain-world&quot;, sub.handler)
+  })
+}
+
+func (sub *Sub) handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+  hello, err := sub.helloSvc.Word(ctx)
+  if err != nil {
+    return rest.Respond(http.StatusInternalServerError, err)
+  }
+
+  world, err := sub.worldSvc.Word(ctx)
+  if err != nil {
+    return rest.Respond(http.StatusInternalServerError, err)
+  }
+
+  helloSubdomainWorld := fmt.Sprintf(&quot;%s, subdomain %s!&quot;, strings.Title(hello), world)
+  return rest.Respond(http.StatusOK, helloSubdomainWorld)
+}
+</code></pre>
+
+<p>Finally, let&rsquo;s add a public client method to the subdomain so we can call it
+from the root domain.  We&rsquo;ll need to create a REST client in the builder using
+the <code>tld.DomainClient</code> function.</p>
+
+<pre><code class="language-go">func (sub *Sub) Build(domain *tld.Domain) {
+  // ... Same as before ...
+
+  var err error
+  sub.client, err = tld.DomainClient(domain)
+  if err != nil {
+    log.Panic(err)
+  }
+}
+
+// HelloSubdomainWorld calls the &quot;hello-subdomain-world&quot; endpoint on the
+// service.  On success, it returns the string &quot;Hello, subdomain world!&quot;.
+// Otherwise, it returns an error.
+func (sub *Sub) HelloSubdomainWorld(ctx context.Context) (string, error) {
+  resp, err := sub.client.Call(sub.endpoint, nil)
+  if err != nil {
+    return &quot;&quot;, err
+  }
+
+  switch resp.StatusCode {
+  case http.StatusOK:
+    msg := &quot;&quot;
+    if err := rest.ResponseBody(resp, &amp;msg); err != nil {
+      return &quot;&quot;, err
+    }
+    return msg, nil
+  default:
+    err := rest.ErrorResponse(resp, nil)
+    return &quot;&quot;, err
+  }
+}
+</code></pre>
+
+<h2 id="call-the-subdomain">Call the Subdomain</h2>
+
+<p>Mount an instance of this subdomain in the root domain of your application using the <code>microlith.Subdomain()</code> function.  In <code>root.go</code>:</p>
+
+<pre><code class="language-go">var (
+  // ... Same as before ...
+
+  subDomain = NewSub(worldSvc, requests)
+)
+
+func init() {
+  // ... Same as before ...
+
+  microlith.Subdomain(&quot;sub.domain&quot;, subDomain)
+}
+</code></pre>
+
+<p>The subdomain can be called from the root domain origin, from services in the root domain, or directly via its domain name.  Let&rsquo;s add an endpoint to the root domain&rsquo;s origin that calls the subdomain.</p>
+
+<p>In <code>root.go</code>:</p>
+
+<pre><code class="language-go">func init() {
+  microlith.Scope(&quot;/&quot;, func(scope *rest.Scope) {
+    // ... Same as before ...
+
+    scope.Scope(&quot;/proxy/to/subdomain&quot;, func(scope *rest.Scope) {
+      scope.Get(&quot;subdomain&quot;, subHandler)
+    })
+  })
+}
+
+func subHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+  msg, err := subDomain.HelloSubdomainWorld(ctx)
+  if err != nil {
+    return rest.Respond(http.StatusInternalServerError, err)
+  }
+
+  return rest.Respond(http.StatusOK, msg)
+}
+</code></pre>
+
+<h2 id="ship-it">Ship It</h2>
+
+<p>Deploy your app:</p>
+
+<pre><code class="language-bash">git add .
+git commit -m &quot;Added a subdomain&quot;
+git push origin master
+</code></pre>
+
+<p>Now you can make requests against the subdomain either directly or via the proxy endpoint:</p>
+
+<pre><code class="language-bash"># Direct request
+curl -v https://sub.domain.prod.my-domain.com/
+
+# Via the proxy endpoint
+curl -v https://prod.my-domain.com/proxy/to/subdomain
+</code></pre>
+
+<div class="notices tip" ><p>Adding a subdomain causes Microlith to issue new SSL certificates.  During the deploy, the owner of <code>my-domain.com</code> will receive two confirmation emails for certificates, one for <code>sub.domain.test.my-domain.com</code> and one for <code>sub.domain.prod.my-domain.com</code>.  The build pipeline will stall until the confirmations are completed.</p>
+</div>
+
+
+
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -832,6 +1036,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -839,6 +1044,25 @@
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -909,21 +1133,6 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -946,8 +1155,10 @@
 
 
         
+            <a class="nav nav-prev" href="/tutorial/globals/" title="Globals"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/tutorial/root/" title="The Root Domain" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -977,3 +1188,4 @@
 
   </body>
 </html>
+

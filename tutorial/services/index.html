@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Tags :: Microlith</title>
+    <title>Services :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1540514675" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/tags/">
+  <body class="" data-url="/tutorial/services/">
     <nav id="sidebar" class="">
 
 
@@ -369,7 +369,7 @@
   
     
     <li data-nav-id="/tutorial/" title="Tutorial" class="dd-item 
-        
+        parent
         
         
         ">
@@ -412,7 +412,7 @@
  
   
     
-      <li data-nav-id="/tutorial/services/" title="Services" class="dd-item ">
+      <li data-nav-id="/tutorial/services/" title="Services" class="dd-item active">
         <a href="/tutorial/services/">
         Services
         
@@ -558,7 +558,19 @@
                     
           
           
-            Tags
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/tutorial/'>Tutorial</a> > Services
+          
+         
+          
+         
           
            
                   </span>
@@ -566,7 +578,20 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#create-a-service">Create a Service</a>
+<ul>
+<li><a href="#add-an-endpoint">Add An Endpoint</a></li>
+<li><a href="#implement-a-client">Implement a Client</a></li>
+</ul></li>
+<li><a href="#use-the-service">Use the Service</a></li>
+<li><a href="#ship-it">Ship It</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -578,7 +603,7 @@
         
         <div id="body-inner">
           
-            <h1>Tags</h1>
+            <h1>Services</h1>
           
 
         
@@ -586,9 +611,156 @@
 
 
 
+<p>Services implement the business logic of your Microlith application.  At the code level, a service is an object which implements the <code>tld.ServiceBuilder</code> interface.</p>
+
+<p>Let&rsquo;s refactor our domain into a pair of services: a <code>hello</code> and a <code>world</code> service.  Then we&rsquo;ll refactor our origin endpoint to call those services to build a response.</p>
+
+<h2 id="create-a-service">Create a Service</h2>
+
+<p>We will create a word service that returns a fixed word.  The word service will have one endpoint that responds to <code>GET /</code> with a <code>200 OK</code> and the word as JSON.  We will then create instances of the service as our <code>hello</code> and <code>world</code> services.</p>
+
+<p>To create the service, create an object named <code>Word</code> that implements the <code>tld.ServiceBuilder</code> interface.</p>
+
+<p>In <code>${GOPATH}/src/example.com/word.go</code>:</p>
+
+<pre><code class="language-go">package main
+
+import (
+  &quot;gopkg.in/microlith.v0/sam/tld&quot;
+  &quot;gopkg.in/microlith.v0/sam/tld/rest&quot;
+)
+
+// Word is a service that returns a fixed word
+type Word struct {
+  word     string
+  client   *rest.Client
+  endpoint *rest.Endpoint
+}
+
+// NewWord constructs an instance of the &quot;word&quot; service returning the word.
+func NewWord(word string) *Word {
+  return &amp;Word{
+    word: word,
+  }
+}
+
+// Build implements the tld.ServiceBuilder interface.
+func (word *Word) Build(service *tld.Service) {
+  // TODO
+}
+</code></pre>
+
+<h3 id="add-an-endpoint">Add An Endpoint</h3>
+
+<p>To add an endpoint, use the <code>Scope()</code> method on the service builder.  This method behaves the same as <code>microlith.Scope()</code> did on the origin.  We will capture the endpoint in an instance variable so we can use it in the next step.</p>
+
+<pre><code class="language-go">func (word *Word) Build(service *tld.Service) {
+  service.Scope(&quot;/&quot;, func(scope *rest.Scope) {
+    word.endpoint = scope.Get(&quot;word&quot;, word.handler)
+  })
+}
+
+func (word *Word) handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+  return rest.Respond(http.StatusOK, word.word)
+}
+</code></pre>
+
+<h3 id="implement-a-client">Implement a Client</h3>
+
+<p>To implement a client, add public methods to your service.  To make calls against your service, create a <code>rest.Client</code> in your service builder and use the <code>Call()</code> method to call endpoints.</p>
+
+<pre><code class="language-go">func (word *Word) Build(service *tld.Service) {
+  // ... Same as before ...
+
+  var err error
+  word.client, err = tld.ServiceClient(service)
+  if err != nil {
+    log.Panic(err)
+  }
+}
+
+// Word calls the &quot;word&quot; endpoint.  On success, it returns the word.  Otherwise,
+// it returns an error.
+func (word *Word) Word(ctx context.Context) (string, error) {
+  resp, err := word.client.Call(word.endpoint, nil)
+  if err != nil {
+    return &quot;&quot;, err
+  }
+
+  switch resp.StatusCode {
+  case http.StatusOK:
+    msg := &quot;&quot;
+    if err := rest.ResponseBody(resp, &amp;msg); err != nil {
+      return &quot;&quot;, err
+    }
+    return msg, nil
+  default:
+    err := rest.ErrorResponse(resp, nil)
+    return &quot;&quot;, err
+  }
+}
+</code></pre>
+
+<h2 id="use-the-service">Use the Service</h2>
+
+<p>Now that we have the <code>word</code> service, we can use it in our origin to factor out our business logic.  We will create two instances of the service returning &ldquo;hello&rdquo; and &ldquo;world&rdquo; and then call those from our origin to construct our response.</p>
+
+<p>First, you must create and register the services with your domain using the <code>microlith.Service()</code> function.  In <code>root.go</code>:</p>
+
+<pre><code class="language-go">var (
+  helloSvc = NewWord(&quot;hello&quot;)
+  worldSvc = NewWord(&quot;world&quot;)
+)
+
+func init() {
+  // ... Same as before ...
+
+  microlith.Service(&quot;hello&quot;, helloSvc)
+  microlith.Service(&quot;world&quot;, worldSvc)
+}
+</code></pre>
+
+<p>Next, use your the client methods in your handler to call the services and construct the response.</p>
+
+<pre><code class="language-go">func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+  hello, err := helloSvc.Word(ctx)
+  if err != nil {
+    return rest.Respond(http.StatusInternalServerError, err)
+  }
+
+  world, err := worldSvc.Word(ctx)
+  if err != nil {
+    return rest.Respond(http.StatusInternalServerError, err)
+  }
+
+  helloWorld := fmt.Sprintf(&quot;%s, %s!&quot;, strings.Title(hello), world)
+  return rest.Respond(http.StatusOK, helloWorld)
+}
+</code></pre>
+
+<h2 id="ship-it">Ship It</h2>
+
+<p>You should be ready to deploy.</p>
+
+<pre><code class="language-bash">git add .
+git commit -m &quot;Factored into services&quot;
+git push origin master
+</code></pre>
+
+<p>Once deployed, you can make requests against your domain.  You should see the same response as before.</p>
+
+<pre><code class="language-bash">curl -v https://prod.my-domain.com/
+</code></pre>
+
+<div class="notices tip" ><p>You might notice that this deploy takes longer than the last deploy.  This is because Microlith uses <a href="https://aws.amazon.com/blogs/compute/implementing-safe-aws-lambda-deployments-with-aws-codedeploy/">safe Lambda deploys</a>.  By default, the test environment transitions traffic using the <code>AllAtOnce</code> configuration and the production environment uses the <code>Canary10Percent5Minutes</code> configuration.  These are both configurable via the bootstrap process.</p>
+</div>
+
+
+
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -832,6 +1004,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -839,6 +1012,61 @@
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -888,54 +1116,6 @@
             
         
                     
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
             
         
                     
@@ -946,8 +1126,10 @@
 
 
         
+            <a class="nav nav-prev" href="/tutorial/root/" title="The Root Domain"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/tutorial/resources/" title="Resources" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -977,3 +1159,4 @@
 
   </body>
 </html>
+

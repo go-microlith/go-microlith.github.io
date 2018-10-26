@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Tags :: Microlith</title>
+    <title>Bootstrap Your Application :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1540514675" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/tags/">
+  <body class="" data-url="/bootstrap/bootstrap/">
     <nav id="sidebar" class="">
 
 
@@ -115,7 +115,7 @@
   
     
     <li data-nav-id="/bootstrap/" title="Bootstrap" class="dd-item 
-        
+        parent
         
         
         ">
@@ -196,7 +196,7 @@
  
   
     
-      <li data-nav-id="/bootstrap/bootstrap/" title="Bootstrap Your Application" class="dd-item ">
+      <li data-nav-id="/bootstrap/bootstrap/" title="Bootstrap Your Application" class="dd-item active">
         <a href="/bootstrap/bootstrap/">
         Bootstrap Your Application
         
@@ -558,7 +558,19 @@
                     
           
           
-            Tags
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/bootstrap/'>Bootstrap</a> > Bootstrap Your Application
+          
+         
+          
+         
           
            
                   </span>
@@ -578,17 +590,44 @@
         
         <div id="body-inner">
           
-            <h1>Tags</h1>
+            <h1>Bootstrap Your Application</h1>
           
 
         
 
 
+<p>The bootstrap process will host for your application in AWS.  This includes a Git repository for your source code and a continuous deployment pipeline with test and production environments for your application.  It will then initialize a git repository in your local source tree, create an initial commit and push, and wait for a full build and deploy to go green.</p>
+
+<p>The process will take several minutes for the initial deploy.  While it is deploying, read about Microlith&rsquo;s <a href="#architecture">Architecture</a>.</p>
+
+<p>Use your application to run the bootstrap command:</p>
+
+<pre><code class="language-bash">example.com instance bootstrap \
+  --test-validation-domain my-domain.com \
+  --test-hosted-zone-id    Z1234567890 \
+  --test-dns-name          test.my-domain.com \
+  --prod-validation-domain my-domain.com \
+  --prod-hosted-zone-id    Z1234567890 \
+  --prod-dns-name          prod.my-domain.com
+</code></pre>
+
+<p>For the bootstrap process, you need to configure the DNS settings for both the test and production environments.  For each, you need to pass three arguments to the bootstrap command:</p>
+
+<ul>
+<li><code>validation-domain</code> is the domain name whose contacts will be sent confirmation emails.</li>
+<li><code>hosted-zone-id</code> is the Route53 hosted zone the validation domain is hosted in.</li>
+<li><code>dns-name</code> is the <code>A</code> record that resolves to your application.  These can be the validation domain name itself or any subdomain of it.</li>
+</ul>
+
+<p>We will mount the test environment under <code>test.my-domain.com</code> and the production environment under <code>prod.my-domain.com</code>.</p>
+
+<p>During the bootstrap process, the WHOIS contact of the domain will receive two confirmation emails for ACM certificates, one for <code>test.my-domain.com</code> and one for <code>prod.my-domain.com</code>.  The build pipeline will stall until these email confirmations are completed.</p>
 
 
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -640,6 +679,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -652,6 +692,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -701,53 +744,6 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -765,53 +761,8 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -920,6 +871,102 @@
             
         
                     
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
                         
             
             
@@ -946,8 +993,10 @@
 
 
         
+            <a class="nav nav-prev" href="/bootstrap/route53/" title="Route53"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/bootstrap/done/" title="Done" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -977,3 +1026,4 @@
 
   </body>
 </html>
+

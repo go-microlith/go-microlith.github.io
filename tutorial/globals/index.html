@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Tags :: Microlith</title>
+    <title>Globals :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1540514675" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/tags/">
+  <body class="" data-url="/tutorial/globals/">
     <nav id="sidebar" class="">
 
 
@@ -369,7 +369,7 @@
   
     
     <li data-nav-id="/tutorial/" title="Tutorial" class="dd-item 
-        
+        parent
         
         
         ">
@@ -469,7 +469,7 @@
  
   
     
-      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item ">
+      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item active">
         <a href="/tutorial/globals/">
         Globals
         
@@ -558,7 +558,19 @@
                     
           
           
-            Tags
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/tutorial/'>Tutorial</a> > Globals
+          
+         
+          
+         
           
            
                   </span>
@@ -566,7 +578,15 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#promote-the-world-service">Promote the World Service</a></li>
+<li><a href="#ship-it">Ship It</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -578,7 +598,7 @@
         
         <div id="body-inner">
           
-            <h1>Tags</h1>
+            <h1>Globals</h1>
           
 
         
@@ -586,9 +606,53 @@
 
 
 
+<p>Some business logic needs to be shared between multiple domains, but services and subdomains cannot access each other.  To share logic across the entire application, Microlith provides Global services and channels.</p>
+
+<p>Global services are addressable by all services and origins in any domain.  Global services are created by calling the <code>microlith.GlobalService()</code> function with a <code>tld.ServiceBuilder</code>.  The built service can be passed directly to subdomains and services.</p>
+
+<p>Global channels are addressable by any service or origin in any domain and any global service.  Global channels are created by calling the <code>microlith.GlobalChannel()</code> function.  Like channels, the returned reference from <code>GlobalChannel()</code> can be passed to domains and services.</p>
+
+<p>Let&rsquo;s promote the <code>world</code> service to a global service and the <code>requests</code> channel to a global channel.</p>
+
+<h2 id="promote-the-world-service">Promote the World Service</h2>
+
+<p>To promote the <code>world</code> service, we need to use <code>microlith.GlobalService()</code> instead of <code>microlith.Service()</code>.  Likewise, to promote the channel, we need to use <code>microlith.GlobalChannel()</code> instead of <code>microlith.Channel()</code>.</p>
+
+<p>In your <code>root.go</code>:</p>
+
+<pre><code class="language-go">var (
+  requests = microlith.GlobalChannel(&quot;requests&quot;)
+
+  // ... Same as before ...
+)
+
+func init() {
+  // ... Same as before ...
+
+  microlith.GlobalService(&quot;world&quot;, worldSvc)
+}
+</code></pre>
+
+<h2 id="ship-it">Ship It</h2>
+
+<p>Now, the <code>world</code> service and <code>requests</code> channel are no longer part of the root domain, but shared across all domains.  Commit and push to deploy your changes.</p>
+
+<pre><code class="language-bash">git add .
+git commit -m &quot;Promoted 'world' to a global service&quot;
+git push origin master
+</code></pre>
+
+<p>Finally, call your endpoints to verify that your application functions as expected.</p>
+
+<pre><code class="language-bash"># Call the root origin endpoint.  Should return &quot;Hello, world!&quot;
+curl -v https://prod.my-domain.com/
+</code></pre>
+
+
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -832,6 +896,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -839,6 +904,25 @@
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -893,21 +977,6 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -925,6 +994,9 @@
             
                 
                     
+                        
+                        
+                    
                 
                 
 
@@ -946,8 +1018,10 @@
 
 
         
+            <a class="nav nav-prev" href="/tutorial/channels/" title="Channels"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/tutorial/subdomains/" title="Subdomains" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -977,3 +1051,4 @@
 
   </body>
 </html>
+

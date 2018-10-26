@@ -1,14 +1,154 @@
 [
 {
-	"uri": "http://example.org/categories/",
-	"title": "Categories",
+	"uri": "http://example.org/bootstrap/go_get/",
+	"title": "Get Microlith",
 	"tags": [],
 	"description": "",
-	"content": ""
+	"content": "Use go get to fetch Microlith:\ngo get -u gopkg.in/microlith.v0  "
+},
+{
+	"uri": "http://example.org/architecture/services/",
+	"title": "Services",
+	"tags": [],
+	"description": "",
+	"content": "Business logic for an application is factored into Services. A Service is a REST API, a set of resources, and a set of asynchronous actions.\nServices follow an AWS::Serverless model, containing resources such as Buckets, Tables, and Streams along with Lambda functions to asynchronously react to events on those resources. All external access to the resources goes through endpoints on a REST API.\nAll resources in the service are available to all Lambdas in the service, but services cannot access resources outside of the ones they declare nor other services.\nServices are not directly routable from the internet. Services must live in a container that makes calls on them.\n"
+},
+{
+	"uri": "http://example.org/tutorial/root/",
+	"title": "The Root Domain",
+	"tags": [],
+	"description": "",
+	"content": " The root domain is the starting point for a Microlith application. It has a specialized API exposed via the top-level microlith package.\nThe Origin Start by creating a single endpoint on the origin of your root domain. This endpoint responds to GET / with a 200 OK and a response body of \u0026quot;Hello, world!\u0026quot;.\nYou add endpoints by defining an API with the microlith.Scope() function. You must pass a unique name and a handler function for each defined endpoint. This function must match the signature of an API Gateway Lambda Function.\nIn ${GOPATH}/src/example.com/root.go:\npackage main import ( \u0026quot;context\u0026quot; \u0026quot;net/http\u0026quot; \u0026quot;github.com/aws/aws-lambda-go/events\u0026quot; microlith \u0026quot;gopkg.in/microlith.v0\u0026quot; \u0026quot;gopkg.in/microlith.v0/sam/tld/rest\u0026quot; ) func init() { microlith.Scope(\u0026quot;/\u0026quot;, func(scope *rest.Scope) { scope.Get(\u0026quot;hello-world\u0026quot;, handler) }) } func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) { return rest.Respond(http.StatusOK, \u0026quot;Hello, world!\u0026quot;) }  Ship It Deploy your app:\ngit add . git commit -m \u0026quot;Added my first endpoint\u0026quot; git push origin master  Once your application has deployed, you can make requests against your endpoint:\ncurl -v https://prod.my-domain.com/  Freshly deployed Lambdas perform a cold start when the first request is received. When manual testing, you application may return a 500 Internal Server Error on the first few requests after deployment until the Lambdas warm up. If it does, wait a few seconds and retry the request a couple of times until it returns the expected response.\n "
+},
+{
+	"uri": "http://example.org/intro/",
+	"title": "Introduction",
+	"tags": [],
+	"description": "",
+	"content": " Microlith Microlith is a AWS::Serverless framework for Go.\nIncluded in the Box  Zero YAML Zero configuration Simple API Powerful service-oriented model Secure, best-practices testing and production environments \u0026ldquo;Push to prod\u0026rdquo; Continuous Deployment  "
+},
+{
+	"uri": "http://example.org/bootstrap/create/",
+	"title": "Create An Application",
+	"tags": [],
+	"description": "",
+	"content": "Microlith applications are a single Go executable that serves an entire top-level domain, such as example.com. To create an application, create an executable in ${GOPATH}/src/example.com/main.go that calls microlith.Main().\npackage main import ( microlith \u0026quot;gopkg.in/microlith.v0\u0026quot; ) func main() { microlith.Main() }  The name of the executable is significant to Microlith. It must be named after the top-level domain name it logically serves. In this case, example.com.\nThe import path of the source code is also significant to Microlith. By default, the main executable must live in the root of your repo at the root of your Go workspace\u0026rsquo;s source tree. In this case, ${GOPATH}/src/example.com\nNow, build your application:\ngo install example.com  Your application is now ready to be bootstrapped. Before you can do that, you need to set up Route53.\n"
+},
+{
+	"uri": "http://example.org/architecture/domains/",
+	"title": "Domains",
+	"tags": [],
+	"description": "",
+	"content": "Services are grouped into a Domain. A Domain is a REST API, a set of services, and set of channels.\nDomains route using REST. The API, called the Origin, handles all external traffic. It receives requests, makes calls on the services to collect state and perform business logic, and then constructs a response to the user.\n"
+},
+{
+	"uri": "http://example.org/tutorial/services/",
+	"title": "Services",
+	"tags": [],
+	"description": "",
+	"content": " Services implement the business logic of your Microlith application. At the code level, a service is an object which implements the tld.ServiceBuilder interface.\nLet\u0026rsquo;s refactor our domain into a pair of services: a hello and a world service. Then we\u0026rsquo;ll refactor our origin endpoint to call those services to build a response.\nCreate a Service We will create a word service that returns a fixed word. The word service will have one endpoint that responds to GET / with a 200 OK and the word as JSON. We will then create instances of the service as our hello and world services.\nTo create the service, create an object named Word that implements the tld.ServiceBuilder interface.\nIn ${GOPATH}/src/example.com/word.go:\npackage main import ( \u0026quot;gopkg.in/microlith.v0/sam/tld\u0026quot; \u0026quot;gopkg.in/microlith.v0/sam/tld/rest\u0026quot; ) // Word is a service that returns a fixed word type Word struct { word string client *rest.Client endpoint *rest.Endpoint } // NewWord constructs an instance of the \u0026quot;word\u0026quot; service returning the word. func NewWord(word string) *Word { return \u0026amp;Word{ word: word, } } // Build implements the tld.ServiceBuilder interface. func (word *Word) Build(service *tld.Service) { // TODO }  Add An Endpoint To add an endpoint, use the Scope() method on the service builder. This method behaves the same as microlith.Scope() did on the origin. We will capture the endpoint in an instance variable so we can use it in the next step.\nfunc (word *Word) Build(service *tld.Service) { service.Scope(\u0026quot;/\u0026quot;, func(scope *rest.Scope) { word.endpoint = scope.Get(\u0026quot;word\u0026quot;, word.handler) }) } func (word *Word) handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) { return rest.Respond(http.StatusOK, word.word) }  Implement a Client To implement a client, add public methods to your service. To make calls against your service, create a rest.Client in your service builder and use the Call() method to call endpoints.\nfunc (word *Word) Build(service *tld.Service) { // ... Same as before ... var err error word.client, err = tld.ServiceClient(service) if err != nil { log.Panic(err) } } // Word calls the \u0026quot;word\u0026quot; endpoint. On success, it returns the word. Otherwise, // it returns an error. func (word *Word) Word(ctx context.Context) (string, error) { resp, err := word.client.Call(word.endpoint, nil) if err != nil { return \u0026quot;\u0026quot;, err } switch resp.StatusCode { case http.StatusOK: msg := \u0026quot;\u0026quot; if err := rest.ResponseBody(resp, \u0026amp;msg); err != nil { return \u0026quot;\u0026quot;, err } return msg, nil default: err := rest.ErrorResponse(resp, nil) return \u0026quot;\u0026quot;, err } }  Use the Service Now that we have the word service, we can use it in our origin to factor out our business logic. We will create two instances of the service returning \u0026ldquo;hello\u0026rdquo; and \u0026ldquo;world\u0026rdquo; and then call those from our origin to construct our response.\nFirst, you must create and register the services with your domain using the microlith.Service() function. In root.go:\nvar ( helloSvc = NewWord(\u0026quot;hello\u0026quot;) worldSvc = NewWord(\u0026quot;world\u0026quot;) ) func init() { // ... Same as before ... microlith.Service(\u0026quot;hello\u0026quot;, helloSvc) microlith.Service(\u0026quot;world\u0026quot;, worldSvc) }  Next, use your the client methods in your handler to call the services and construct the response.\nfunc handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) { hello, err := helloSvc.Word(ctx) if err != nil { return rest.Respond(http.StatusInternalServerError, err) } world, err := worldSvc.Word(ctx) if err != nil { return rest.Respond(http.StatusInternalServerError, err) } helloWorld := fmt.Sprintf(\u0026quot;%s, %s!\u0026quot;, strings.Title(hello), world) return rest.Respond(http.StatusOK, helloWorld) }  Ship It You should be ready to deploy.\ngit add . git commit -m \u0026quot;Factored into services\u0026quot; git push origin master  Once deployed, you can make requests against your domain. You should see the same response as before.\ncurl -v https://prod.my-domain.com/  You might notice that this deploy takes longer than the last deploy. This is because Microlith uses safe Lambda deploys. By default, the test environment transitions traffic using the AllAtOnce configuration and the production environment uses the Canary10Percent5Minutes configuration. These are both configurable via the bootstrap process.\n "
+},
+{
+	"uri": "http://example.org/bootstrap/",
+	"title": "Bootstrap",
+	"tags": [],
+	"description": "",
+	"content": " Bootstrap Bootstrap will step you through getting your first Microlith application set up via the automated bootstrap process.\nBy the end of the bootstrap, you will be able to \u0026ldquo;push to prod\u0026rdquo;:\n# Deploy your application git add . git commit -m \u0026quot;My changes\u0026quot; git push origin master # Use your test and production environments curl -v https://test.my-domain.com/ curl -v https://prod.my-domain.com/  Be sure that your AWS credentials are available to the AWS SDK for Go with no arguments. The configured region will be overridden and the bootstrap process will always deploy to the us-east-1 region.\n "
+},
+{
+	"uri": "http://example.org/architecture/",
+	"title": "Architecture",
+	"tags": [],
+	"description": "",
+	"content": " Architecture Microlith is built on a service-oriented model called the Domain model. In the Domain model, Services are units of business logic. The model provides abstractions to group services, route external traffic to them, and to communicate internally between them.\nThere are five core concepts to Microlith\u0026rsquo;s architecture:\n Services contain business logic Domains group and route to services Channels communicate between services The Application groups and routes to domains. Globals are shared between domains  "
+},
+{
+	"uri": "http://example.org/architecture/channels/",
+	"title": "Channels",
+	"tags": [],
+	"description": "",
+	"content": "To communicate between services, you can create Channels. Channels provide asynchronous broadcast messaging to all services in a domain.\nAny service can publish events onto channels it has references to. When a service publishes an event on a channel, all subscribed processors in all services receive that event.\n"
+},
+{
+	"uri": "http://example.org/tutorial/resources/",
+	"title": "Resources",
+	"tags": [],
+	"description": "",
+	"content": "Each service is an AWS::Serverless service composed of resources and asynchronous actions. You add resources and actions via the service builder in your Build() method. Microlith supports a subset of the full AWS::Serverless specification. You can find documentation on the supported resources and actions in the GoDocs:\n REST APIs S3 Buckets Kinesis Streams DynamoDB Tables Cron Jobs CloudWatch Log Readers  "
+},
+{
+	"uri": "http://example.org/bootstrap/route53/",
+	"title": "Route53",
+	"tags": [],
+	"description": "",
+	"content": " Microlith uses Route53 DNS as its global router. This requires a one-time, non-automatable setup. Once set up, a domain name can be reused for multiple Microlith applications.\nDomain Name You will need a domain name hosted in Route53. If you have an existing domain, it can be reused. Microlith will not alter the settings of the domain name, only manage a set of subdomain A records for each application.\nTo register or transfer a domain name from the AWS Console:\n Navigate to Route53 Navigate to \u0026ldquo;Registered Domains\u0026rdquo; Click either the \u0026ldquo;Register Domain\u0026rdquo; or \u0026ldquo;Transfer Domain\u0026rdquo; button Follow the prompts  You will need the Domain Name and the Hosted Zone ID to bootstrap your application. For the remainder of the README, we will assume you own my-domain.com in hosted zone Z1234567890.\nEmail Validation Microlith issues SSL certificates against your domain via AWS Certificate Manager using email validation. You must have a valid contact email able to respond to confirmation emails. There are two options, one if you have email at the domain and another if you don\u0026rsquo;t.\nEmail Alias (Recommended) If you receive email at my-domain.com, you may receive confirmation emails automatically. By default, Amazon will send confirmation emails to:\n administrator@my-domain.com hostmaster@my-domain.com postmaster@my-domain.com webmaster@my-domain.com admin@my-domain.com  If these email addresses are not valid at your domain name, configure an email alias.\nWHOIS If you do not receive email at your domain, you must configure your WHOIS information.\nYour domain name must have a valid Domain, Technical, and/or Administrative contact with an email address. You must explicitly disable privacy protection on these contacts so the email addresses are visible in the WHOIS database.\nIn the AWS Console:\n Navigate to Route53 Navigate to \u0026ldquo;Registered Domains\u0026rdquo; Choose the domain name you wish to use for Microlith Click the \u0026ldquo;Edit Contacts\u0026rdquo; button Add email addresses to your Domain, Technical, and/or Administrative contacts Set \u0026ldquo;Privacy Protection\u0026rdquo; to \u0026ldquo;Disable\u0026rdquo; on the contacts Click the \u0026ldquo;Save\u0026rdquo; button  "
+},
+{
+	"uri": "http://example.org/tutorial/",
+	"title": "Tutorial",
+	"tags": [],
+	"description": "",
+	"content": " Tutorial The tutorial will get you started building Microlith applications. The full source code for the completed tutorial is available in the tutorial.com repository.\nThe tutorial will start by creating a Hello World. You will then factor it out into services using Microlith\u0026rsquo;s service-oriented model. By the end of the tutorial, you will have a simple application that uses all of Microlith\u0026rsquo;s service and routing infrastructure.\nThe tutorial does not cover adding resources and Lambdas to services in detail. An example application using resources and Lambdas is in the blog.com repository. For full documentation, read the GoDocs.\n"
+},
+{
+	"uri": "http://example.org/architecture/application/",
+	"title": "Application",
+	"tags": [],
+	"description": "",
+	"content": "An Application is the top-level container in a Microlith app. An application is a root domain, a set of named subdomains, and a set of global services and channels.\nAn Application routes using DNS. The root domain is mounted under the top-level DNS name specified in the bootstrap process. All subdomains are mounted relative to the root domain.\n"
+},
+{
+	"uri": "http://example.org/bootstrap/bootstrap/",
+	"title": "Bootstrap Your Application",
+	"tags": [],
+	"description": "",
+	"content": "The bootstrap process will host for your application in AWS. This includes a Git repository for your source code and a continuous deployment pipeline with test and production environments for your application. It will then initialize a git repository in your local source tree, create an initial commit and push, and wait for a full build and deploy to go green.\nThe process will take several minutes for the initial deploy. While it is deploying, read about Microlith\u0026rsquo;s Architecture.\nUse your application to run the bootstrap command:\nexample.com instance bootstrap \\ --test-validation-domain my-domain.com \\ --test-hosted-zone-id Z1234567890 \\ --test-dns-name test.my-domain.com \\ --prod-validation-domain my-domain.com \\ --prod-hosted-zone-id Z1234567890 \\ --prod-dns-name prod.my-domain.com  For the bootstrap process, you need to configure the DNS settings for both the test and production environments. For each, you need to pass three arguments to the bootstrap command:\n validation-domain is the domain name whose contacts will be sent confirmation emails. hosted-zone-id is the Route53 hosted zone the validation domain is hosted in. dns-name is the A record that resolves to your application. These can be the validation domain name itself or any subdomain of it.  We will mount the test environment under test.my-domain.com and the production environment under prod.my-domain.com.\nDuring the bootstrap process, the WHOIS contact of the domain will receive two confirmation emails for ACM certificates, one for test.my-domain.com and one for prod.my-domain.com. The build pipeline will stall until these email confirmations are completed.\n"
+},
+{
+	"uri": "http://example.org/tutorial/channels/",
+	"title": "Channels",
+	"tags": [],
+	"description": "",
+	"content": " Services need to communicate, but cannot Call() each other. To communicate between services, Microlith provides broadcast channels. A Channel is a Stream that is shared between all services in a domain. It can be published to and processed from just like a stream.\nChannels are created by calling either the microlith.Channel() function to create a channel in the root domain, or by calling the Channel() method on a domain builder to create a channel in a subdomain. The returned reference can then be passed to a service so the service can interact with the channel.\nCreate a Channel Let\u0026rsquo;s create a channel that logs an event when a request is made against the \u0026ldquo;hello-world\u0026rdquo; endpoint in the Origin. First, create the channel and an event type in the origin.\nIn your root.go:\nvar ( requests = microlith.Channel(\u0026quot;requests\u0026quot;) // ... Same as before ... ) type Request struct { At time.Time }  Update the Word Service Next, we need to pass the channel to the services that will use it and start processing events sent over the channel. First, update the constructor for the word service so that it takes the channel as an argument.\nIn your word.go:\ntype Word struct { // ... Same as before ... requests *strm.Stream } // NewWord constructs an instance of the \u0026quot;word\u0026quot; service that returns the word // and processes the requests channel. func NewWord(word string, requests *strm.Stream) *Word { return \u0026amp;Word{ word: word, requests: requests, } }  Next, process events on the channel by creating a strm.Processor in the builder. Implement a Kinesis Lambda method to handle the events. Use the Subscribe() method to subscribe to the channel.\nfunc (word *Word) Build(service *tld.Service) { // ... Same as before ... processor := service.Processor(\u0026quot;requests\u0026quot;, word.processRequests) processor.Subscribe(word.requests, strm.StartingPositionTrimHorizon) } func (word *Word) processRequests(ctx context.Context, evt events.KinesisEvent) error { scanner := strm.NewScanner(evt) for scanner.Next() { partitionKey := \u0026quot;\u0026quot; request := new(Request) if err := scanner.Scan(\u0026amp;partitionKey, request); err != nil { return err } log.Printf(\u0026quot;Request made at %s\u0026quot;, request.At.Format(time.RFC3339Nano)) } return nil }  Emit Events Now that the services are updated to subscribe to the channel, we need to provide the channel to the services and start publishing events.\nUse the new constructors to pass the channel to the services. In your root.go:\nvar ( requests = microlith.Channel(\u0026quot;requests\u0026quot;) helloSvc = NewWord(\u0026quot;hello\u0026quot;, requests) worldSvc = NewWord(\u0026quot;world\u0026quot;, requests) )  Finally, publish an event to the channel on every request:\nvar publisher = strm.NewPublisher(requests) func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) { defer publisher.Flush(ctx) if err := publisher.Publish(ctx, \u0026quot;partition-key\u0026quot;, \u0026amp;Request{At: time.Now()}); err != nil { return rest.Respond(http.StatusInternalServerError, err) } // ... Same as before ... }  Ship It Now both services will process an event every time a request is made against the hello-world endpoint. Commit and push to deploy your changes.\ngit add . git commit -m \u0026quot;Added a channel\u0026quot; git push origin master  Make a request against the GET / endpoint and your processors will soon emit a message to the logs.\n# Trigger a publish curl -v https://prod.my-domain.com/  "
+},
+{
+	"uri": "http://example.org/bootstrap/done/",
+	"title": "Done",
+	"tags": [],
+	"description": "",
+	"content": " Once the build completes and deploys, your application has been bootstrapped.\nYou can validate that it is running by making a HTTP request against your test and production instances. You should receive a \u0026ldquo;Missing authentication token\u0026rdquo; message since no endpoints are defined.\ncurl -v https://test.my-domain.com/ curl -v https://prod.my-domain.com/  From now on, git push origin master deploys your application:\ngit add . git commit -m \u0026quot;My changes\u0026quot; git push origin master  If you receive a 403 when trying to push on Mac OS X, the credentials stored in the Keychain have expired. You will need to delete them to push again, as documented in Step 3 here.\nTeardown Instructions The bootstrap process creates three stacks: example-com, example-com-test, and example-com-prod.\nTo tear down the application:\n Empty any buckets in the -test and -prod stacks Delete the -test and -prod stacks Empty the bootstrap bucket in the example-com stack Disable termination protection on the example-com stack Delete the example-com stack  If you delete the example-com stack first, it will delete the IAM role and you will be unable to tear down the -test and -prod stacks. If this happens, you must manually recreate the deleted DeployRole exactly (including the generated name) to tear down the stacks. Termination protection is enabled on the example-com stack to prevent this.\n"
+},
+{
+	"uri": "http://example.org/architecture/globals/",
+	"title": "Globals",
+	"tags": [],
+	"description": "",
+	"content": "Global services share business logic across domains. They can be called by all services and origins.\nGlobal channels broadcast messages among all services and origins.\n"
+},
+{
+	"uri": "http://example.org/tutorial/globals/",
+	"title": "Globals",
+	"tags": [],
+	"description": "",
+	"content": " Some business logic needs to be shared between multiple domains, but services and subdomains cannot access each other. To share logic across the entire application, Microlith provides Global services and channels.\nGlobal services are addressable by all services and origins in any domain. Global services are created by calling the microlith.GlobalService() function with a tld.ServiceBuilder. The built service can be passed directly to subdomains and services.\nGlobal channels are addressable by any service or origin in any domain and any global service. Global channels are created by calling the microlith.GlobalChannel() function. Like channels, the returned reference from GlobalChannel() can be passed to domains and services.\nLet\u0026rsquo;s promote the world service to a global service and the requests channel to a global channel.\nPromote the World Service To promote the world service, we need to use microlith.GlobalService() instead of microlith.Service(). Likewise, to promote the channel, we need to use microlith.GlobalChannel() instead of microlith.Channel().\nIn your root.go:\nvar ( requests = microlith.GlobalChannel(\u0026quot;requests\u0026quot;) // ... Same as before ... ) func init() { // ... Same as before ... microlith.GlobalService(\u0026quot;world\u0026quot;, worldSvc) }  Ship It Now, the world service and requests channel are no longer part of the root domain, but shared across all domains. Commit and push to deploy your changes.\ngit add . git commit -m \u0026quot;Promoted 'world' to a global service\u0026quot; git push origin master  Finally, call your endpoints to verify that your application functions as expected.\n# Call the root origin endpoint. Should return \u0026quot;Hello, world!\u0026quot; curl -v https://prod.my-domain.com/  "
+},
+{
+	"uri": "http://example.org/tutorial/subdomains/",
+	"title": "Subdomains",
+	"tags": [],
+	"description": "",
+	"content": " Creating a subdomain is similar to creating a service. At the code level, a subdomain is an object that implements the tld.DomainBuilder interface and is registered under the root domain.\nWe will create a subdomain that mirrors the root domain. It will have a hello service and use the global world service and requests channel. The origin will have an endpoint that calls these services and constructs the response.\nCreate a Subdomain Let\u0026rsquo;s create a subdomain named \u0026ldquo;sub.domain\u0026rdquo; that responds to GET / with a 200 OK and a response body of \u0026quot;Hello, subdomain world!\u0026quot;.\nFirst, let\u0026rsquo;s create an object that implements the tld.DomainBuilder interface. The constructor will take references to the global world service and the requests channel, and will construct a new instance of the hello service. In the builder, we need to register the instance of the hello service with the domain.\nIn ${GOPATH}/src/example.com/sub.domain.go:\npackage main import ( \u0026quot;context\u0026quot; \u0026quot;fmt\u0026quot; \u0026quot;log\u0026quot; \u0026quot;net/http\u0026quot; \u0026quot;strings\u0026quot; \u0026quot;github.com/aws/aws-lambda-go/events\u0026quot; \u0026quot;gopkg.in/microlith.v0/sam/tld\u0026quot; \u0026quot;gopkg.in/microlith.v0/sam/tld/strm\u0026quot; \u0026quot;gopkg.in/microlith.v0/sam/tld/rest\u0026quot; ) // A Sub is a subdomain type Sub struct { helloSvc *Word worldSvc *Word requests *strm.Stream endpoint *rest.Endpoint client *rest.Client } // NewSub constructs a new subdomain referencing the \u0026quot;world\u0026quot; global service and // the \u0026quot;requests\u0026quot; global channel. func NewSub(world *Word, requests *strm.Stream) *Sub { return \u0026amp;Sub{ helloSvc: NewWord(\u0026quot;hello\u0026quot;, requests), worldSvc: world, requests: requests, } } // Build implements the tld.DomainBuilder interface. func (sub *Sub) Build(domain *tld.Domain) { domain.Service(\u0026quot;hello\u0026quot;, sub.helloSvc) }  Next, we need to add an endpoint on the subdomain\u0026rsquo;s origin. The handler for the endpoint will call the hello and world services and construct a response to return to the user.\nfunc (sub *Sub) Build(domain *tld.Domain) { // ... Same as before ... domain.Scope(\u0026quot;/\u0026quot;, func(scope *rest.Scope) { sub.endpoint = scope.Get(\u0026quot;hello-subdomain-world\u0026quot;, sub.handler) }) } func (sub *Sub) handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) { hello, err := sub.helloSvc.Word(ctx) if err != nil { return rest.Respond(http.StatusInternalServerError, err) } world, err := sub.worldSvc.Word(ctx) if err != nil { return rest.Respond(http.StatusInternalServerError, err) } helloSubdomainWorld := fmt.Sprintf(\u0026quot;%s, subdomain %s!\u0026quot;, strings.Title(hello), world) return rest.Respond(http.StatusOK, helloSubdomainWorld) }  Finally, let\u0026rsquo;s add a public client method to the subdomain so we can call it from the root domain. We\u0026rsquo;ll need to create a REST client in the builder using the tld.DomainClient function.\nfunc (sub *Sub) Build(domain *tld.Domain) { // ... Same as before ... var err error sub.client, err = tld.DomainClient(domain) if err != nil { log.Panic(err) } } // HelloSubdomainWorld calls the \u0026quot;hello-subdomain-world\u0026quot; endpoint on the // service. On success, it returns the string \u0026quot;Hello, subdomain world!\u0026quot;. // Otherwise, it returns an error. func (sub *Sub) HelloSubdomainWorld(ctx context.Context) (string, error) { resp, err := sub.client.Call(sub.endpoint, nil) if err != nil { return \u0026quot;\u0026quot;, err } switch resp.StatusCode { case http.StatusOK: msg := \u0026quot;\u0026quot; if err := rest.ResponseBody(resp, \u0026amp;msg); err != nil { return \u0026quot;\u0026quot;, err } return msg, nil default: err := rest.ErrorResponse(resp, nil) return \u0026quot;\u0026quot;, err } }  Call the Subdomain Mount an instance of this subdomain in the root domain of your application using the microlith.Subdomain() function. In root.go:\nvar ( // ... Same as before ... subDomain = NewSub(worldSvc, requests) ) func init() { // ... Same as before ... microlith.Subdomain(\u0026quot;sub.domain\u0026quot;, subDomain) }  The subdomain can be called from the root domain origin, from services in the root domain, or directly via its domain name. Let\u0026rsquo;s add an endpoint to the root domain\u0026rsquo;s origin that calls the subdomain.\nIn root.go:\nfunc init() { microlith.Scope(\u0026quot;/\u0026quot;, func(scope *rest.Scope) { // ... Same as before ... scope.Scope(\u0026quot;/proxy/to/subdomain\u0026quot;, func(scope *rest.Scope) { scope.Get(\u0026quot;subdomain\u0026quot;, subHandler) }) }) } func subHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) { msg, err := subDomain.HelloSubdomainWorld(ctx) if err != nil { return rest.Respond(http.StatusInternalServerError, err) } return rest.Respond(http.StatusOK, msg) }  Ship It Deploy your app:\ngit add . git commit -m \u0026quot;Added a subdomain\u0026quot; git push origin master  Now you can make requests against the subdomain either directly or via the proxy endpoint:\n# Direct request curl -v https://sub.domain.prod.my-domain.com/ # Via the proxy endpoint curl -v https://prod.my-domain.com/proxy/to/subdomain  Adding a subdomain causes Microlith to issue new SSL certificates. During the deploy, the owner of my-domain.com will receive two confirmation emails for certificates, one for sub.domain.test.my-domain.com and one for sub.domain.prod.my-domain.com. The build pipeline will stall until the confirmations are completed.\n "
 },
 {
 	"uri": "http://example.org/",
 	"title": "Microlith",
+	"tags": [],
+	"description": "",
+	"content": " Microlith Go Serverless\n"
+},
+{
+	"uri": "http://example.org/categories/",
+	"title": "Categories",
 	"tags": [],
 	"description": "",
 	"content": ""

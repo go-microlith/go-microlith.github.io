@@ -3,12 +3,112 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://example.org/categories/</loc>
-    <priority>0</priority>
+    <loc>http://example.org/bootstrap/go_get/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/architecture/services/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tutorial/root/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/intro/</loc>
+    <lastmod>2018-10-25T18:05:05-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/bootstrap/create/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/architecture/domains/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tutorial/services/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/bootstrap/</loc>
+    <lastmod>2018-10-25T18:00:28-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/architecture/</loc>
+    <lastmod>2018-10-25T18:18:21-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/architecture/channels/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tutorial/resources/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/bootstrap/route53/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tutorial/</loc>
+    <lastmod>2018-10-25T18:22:27-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/architecture/application/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/bootstrap/bootstrap/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tutorial/channels/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/bootstrap/done/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/architecture/globals/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tutorial/globals/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tutorial/subdomains/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
   </url>
   
   <url>
     <loc>http://example.org/</loc>
+    <lastmod>2018-10-25T18:00:28-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/categories/</loc>
     <priority>0</priority>
   </url>
   

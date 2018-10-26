@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bootstrap on Microlith</title>
+    <link>http://example.org/bootstrap/</link>
+    <description>Recent content in Bootstrap on Microlith</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Oct 2018 18:00:28 -0600</lastBuildDate>
+    
+	<atom:link href="http://example.org/bootstrap/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Get Microlith</title>
+      <link>http://example.org/bootstrap/go_get/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/bootstrap/go_get/</guid>
+      <description>Use go get to fetch Microlith:
+go get -u gopkg.in/microlith.v0  </description>
+    </item>
+    
+    <item>
+      <title>Create An Application</title>
+      <link>http://example.org/bootstrap/create/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/bootstrap/create/</guid>
+      <description>Microlith applications are a single Go executable that serves an entire top-level domain, such as example.com. To create an application, create an executable in ${GOPATH}/src/example.com/main.go that calls microlith.Main().
+package main import ( microlith &amp;quot;gopkg.in/microlith.v0&amp;quot; ) func main() { microlith.Main() }  The name of the executable is significant to Microlith. It must be named after the top-level domain name it logically serves. In this case, example.com.
+The import path of the source code is also significant to Microlith.</description>
+    </item>
+    
+    <item>
+      <title>Route53</title>
+      <link>http://example.org/bootstrap/route53/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/bootstrap/route53/</guid>
+      <description>Microlith uses Route53 DNS as its global router. This requires a one-time, non-automatable setup. Once set up, a domain name can be reused for multiple Microlith applications.
+Domain Name You will need a domain name hosted in Route53. If you have an existing domain, it can be reused. Microlith will not alter the settings of the domain name, only manage a set of subdomain A records for each application.</description>
+    </item>
+    
+    <item>
+      <title>Bootstrap Your Application</title>
+      <link>http://example.org/bootstrap/bootstrap/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/bootstrap/bootstrap/</guid>
+      <description>The bootstrap process will host for your application in AWS. This includes a Git repository for your source code and a continuous deployment pipeline with test and production environments for your application. It will then initialize a git repository in your local source tree, create an initial commit and push, and wait for a full build and deploy to go green.
+The process will take several minutes for the initial deploy.</description>
+    </item>
+    
+    <item>
+      <title>Done</title>
+      <link>http://example.org/bootstrap/done/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/bootstrap/done/</guid>
+      <description>Once the build completes and deploys, your application has been bootstrapped.
+You can validate that it is running by making a HTTP request against your test and production instances. You should receive a &amp;ldquo;Missing authentication token&amp;rdquo; message since no endpoints are defined.
+curl -v https://test.my-domain.com/ curl -v https://prod.my-domain.com/  From now on, git push origin master deploys your application:
+git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  If you receive a 403 when trying to push on Mac OS X, the credentials stored in the Keychain have expired.</description>
+    </item>
+    
+  </channel>
+</rss>

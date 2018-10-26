@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tutorial on Microlith</title>
+    <link>http://example.org/tutorial/</link>
+    <description>Recent content in Tutorial on Microlith</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Oct 2018 18:22:27 -0600</lastBuildDate>
+    
+	<atom:link href="http://example.org/tutorial/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>The Root Domain</title>
+      <link>http://example.org/tutorial/root/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/tutorial/root/</guid>
+      <description>The root domain is the starting point for a Microlith application. It has a specialized API exposed via the top-level microlith package.
+The Origin Start by creating a single endpoint on the origin of your root domain. This endpoint responds to GET / with a 200 OK and a response body of &amp;quot;Hello, world!&amp;quot;.
+You add endpoints by defining an API with the microlith.Scope() function. You must pass a unique name and a handler function for each defined endpoint.</description>
+    </item>
+    
+    <item>
+      <title>Services</title>
+      <link>http://example.org/tutorial/services/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/tutorial/services/</guid>
+      <description>Services implement the business logic of your Microlith application. At the code level, a service is an object which implements the tld.ServiceBuilder interface.
+Let&amp;rsquo;s refactor our domain into a pair of services: a hello and a world service. Then we&amp;rsquo;ll refactor our origin endpoint to call those services to build a response.
+Create a Service We will create a word service that returns a fixed word. The word service will have one endpoint that responds to GET / with a 200 OK and the word as JSON.</description>
+    </item>
+    
+    <item>
+      <title>Resources</title>
+      <link>http://example.org/tutorial/resources/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/tutorial/resources/</guid>
+      <description>Each service is an AWS::Serverless service composed of resources and asynchronous actions. You add resources and actions via the service builder in your Build() method. Microlith supports a subset of the full AWS::Serverless specification. You can find documentation on the supported resources and actions in the GoDocs:
+ REST APIs S3 Buckets Kinesis Streams DynamoDB Tables Cron Jobs CloudWatch Log Readers  </description>
+    </item>
+    
+    <item>
+      <title>Channels</title>
+      <link>http://example.org/tutorial/channels/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/tutorial/channels/</guid>
+      <description>Services need to communicate, but cannot Call() each other. To communicate between services, Microlith provides broadcast channels. A Channel is a Stream that is shared between all services in a domain. It can be published to and processed from just like a stream.
+Channels are created by calling either the microlith.Channel() function to create a channel in the root domain, or by calling the Channel() method on a domain builder to create a channel in a subdomain.</description>
+    </item>
+    
+    <item>
+      <title>Globals</title>
+      <link>http://example.org/tutorial/globals/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/tutorial/globals/</guid>
+      <description>Some business logic needs to be shared between multiple domains, but services and subdomains cannot access each other. To share logic across the entire application, Microlith provides Global services and channels.
+Global services are addressable by all services and origins in any domain. Global services are created by calling the microlith.GlobalService() function with a tld.ServiceBuilder. The built service can be passed directly to subdomains and services.
+Global channels are addressable by any service or origin in any domain and any global service.</description>
+    </item>
+    
+    <item>
+      <title>Subdomains</title>
+      <link>http://example.org/tutorial/subdomains/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/tutorial/subdomains/</guid>
+      <description>Creating a subdomain is similar to creating a service. At the code level, a subdomain is an object that implements the tld.DomainBuilder interface and is registered under the root domain.
+We will create a subdomain that mirrors the root domain. It will have a hello service and use the global world service and requests channel. The origin will have an endpoint that calls these services and constructs the response.</description>
+    </item>
+    
+  </channel>
+</rss>

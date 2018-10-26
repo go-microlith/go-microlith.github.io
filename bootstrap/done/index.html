@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Tags :: Microlith</title>
+    <title>Done :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1540514675" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/tags/">
+  <body class="" data-url="/bootstrap/done/">
     <nav id="sidebar" class="">
 
 
@@ -115,7 +115,7 @@
   
     
     <li data-nav-id="/bootstrap/" title="Bootstrap" class="dd-item 
-        
+        parent
         
         
         ">
@@ -215,7 +215,7 @@
  
   
     
-      <li data-nav-id="/bootstrap/done/" title="Done" class="dd-item ">
+      <li data-nav-id="/bootstrap/done/" title="Done" class="dd-item active">
         <a href="/bootstrap/done/">
         Done
         
@@ -558,7 +558,19 @@
                     
           
           
-            Tags
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/bootstrap/'>Bootstrap</a> > Done
+          
+         
+          
+         
           
            
                   </span>
@@ -566,7 +578,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#teardown-instructions">Teardown Instructions</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -578,7 +597,7 @@
         
         <div id="body-inner">
           
-            <h1>Tags</h1>
+            <h1>Done</h1>
           
 
         
@@ -586,9 +605,44 @@
 
 
 
+<p>Once the build completes and deploys, your application has been bootstrapped.</p>
+
+<p>You can validate that it is running by making a HTTP request against your test and production instances.  You should receive a &ldquo;Missing authentication token&rdquo; message since no endpoints are defined.</p>
+
+<pre><code class="language-bash">curl -v https://test.my-domain.com/
+curl -v https://prod.my-domain.com/
+</code></pre>
+
+<p>From now on, <code>git push origin master</code> deploys your application:</p>
+
+<pre><code class="language-bash">git add .
+git commit -m &quot;My changes&quot;
+git push origin master
+</code></pre>
+
+<p>If you receive a <code>403</code> when trying to push on Mac OS X, the credentials stored in the Keychain have expired.  You will need to delete them to push again, as documented in Step 3  <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-https-unixes.html">here</a>.</p>
+
+<h2 id="teardown-instructions">Teardown Instructions</h2>
+
+<p>The bootstrap process creates three stacks: <code>example-com</code>, <code>example-com-test</code>, and <code>example-com-prod</code>.</p>
+
+<p>To tear down the application:</p>
+
+<ol>
+<li>Empty any buckets in the <code>-test</code> and <code>-prod</code> stacks</li>
+<li>Delete the <code>-test</code> and <code>-prod</code> stacks</li>
+<li>Empty the bootstrap bucket in the <code>example-com</code> stack</li>
+<li>Disable termination protection on the <code>example-com</code> stack</li>
+<li>Delete the <code>example-com</code> stack</li>
+</ol>
+
+<p>If you delete the <code>example-com</code> stack first, it will delete the IAM role and you will be unable to tear down the <code>-test</code> and <code>-prod</code> stacks.  If this happens, you must manually recreate the deleted <code>DeployRole</code> exactly (including the generated name) to tear down the stacks.  Termination protection is enabled on the <code>example-com</code> stack to prevent this.</p>
+
+
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -640,6 +694,110 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
                 
                 
 
@@ -824,102 +982,6 @@
             
         
                     
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
             
             
@@ -946,8 +1008,10 @@
 
 
         
+            <a class="nav nav-prev" href="/bootstrap/bootstrap/" title="Bootstrap Your Application"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/architecture/" title="Architecture" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -977,3 +1041,4 @@
 
   </body>
 </html>
+

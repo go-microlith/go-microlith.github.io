@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Tags :: Microlith</title>
+    <title>Architecture :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1540514675" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/tags/">
+  <body class="" data-url="/architecture/">
     <nav id="sidebar" class="">
 
 
@@ -242,8 +242,8 @@
   
     
     <li data-nav-id="/architecture/" title="Architecture" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/architecture/">
@@ -552,33 +552,30 @@
                         </a>
                     </span>
                   
-                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
-                  
                   <span class="links">
                     
           
           
-            Tags
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > Architecture
+          
+         
           
            
                   </span>
                 </div>
-                
-                    <div class="progress">
-    <div class="wrapper">
-
-    </div>
-</div>
-
                 
               </div>
             </div>
             
 
         
+          <div id="chapter">
+        
         <div id="body-inner">
-          
-            <h1>Tags</h1>
           
 
         
@@ -586,10 +583,27 @@
 
 
 
+<h1 id="architecture">Architecture</h1>
+
+<p>Microlith is built on a service-oriented model called the Domain model.  In the Domain model, Services are units of business logic.  The model provides abstractions to group services, route external traffic to them, and to communicate internally between them.</p>
+
+<p>There are five core concepts to Microlith&rsquo;s architecture:</p>
+
+<ul>
+<li><code>Service</code>s contain business logic</li>
+<li><code>Domain</code>s group and route to services</li>
+<li><code>Channel</code>s communicate between services</li>
+<li>The <code>Application</code> groups and routes to domains.</li>
+<li><code>Global</code>s are shared between domains</li>
+</ul>
+
+
 <footer class=" footline" >
 	
 </footer>
 
+        
+            </div> 
         
         </div> 
         
@@ -736,6 +750,106 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                 
                 
 
@@ -824,102 +938,6 @@
             
         
                     
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
             
             
@@ -946,8 +964,10 @@
 
 
         
+            <a class="nav nav-prev" href="/bootstrap/done/" title="Done"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/architecture/services/" title="Services" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 

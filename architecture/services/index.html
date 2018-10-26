@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Tags :: Microlith</title>
+    <title>Services :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1540514675" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/tags/">
+  <body class="" data-url="/architecture/services/">
     <nav id="sidebar" class="">
 
 
@@ -242,7 +242,7 @@
   
     
     <li data-nav-id="/architecture/" title="Architecture" class="dd-item 
-        
+        parent
         
         
         ">
@@ -266,7 +266,7 @@
  
   
     
-      <li data-nav-id="/architecture/services/" title="Services" class="dd-item ">
+      <li data-nav-id="/architecture/services/" title="Services" class="dd-item active">
         <a href="/architecture/services/">
         Services
         
@@ -558,7 +558,19 @@
                     
           
           
-            Tags
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/architecture/'>Architecture</a> > Services
+          
+         
+          
+         
           
            
                   </span>
@@ -578,17 +590,25 @@
         
         <div id="body-inner">
           
-            <h1>Tags</h1>
+            <h1>Services</h1>
           
 
         
 
 
+<p>Business logic for an application is factored into Services.  A Service is a REST API, a set of resources, and a set of asynchronous actions.</p>
+
+<p>Services follow an AWS::Serverless model, containing resources such as Buckets, Tables, and Streams along with Lambda functions to asynchronously react to events on those resources.  All external access to the resources goes through endpoints on a REST API.</p>
+
+<p>All resources in the service are available to all Lambdas in the service, but services cannot access resources outside of the ones they declare nor other services.</p>
+
+<p>Services are not directly routable from the internet.  Services must live in a container that makes calls on them.</p>
 
 
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -736,6 +756,107 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                 
                 
 
@@ -824,102 +945,6 @@
             
         
                     
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
             
             
@@ -946,8 +971,10 @@
 
 
         
+            <a class="nav nav-prev" href="/architecture/" title="Architecture"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/architecture/domains/" title="Domains" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -977,3 +1004,4 @@
 
   </body>
 </html>
+

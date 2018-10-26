@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Tags :: Microlith</title>
+    <title>Bootstrap :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1540514675" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/tags/">
+  <body class="" data-url="/bootstrap/">
     <nav id="sidebar" class="">
 
 
@@ -115,8 +115,8 @@
   
     
     <li data-nav-id="/bootstrap/" title="Bootstrap" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/bootstrap/">
@@ -552,37 +552,55 @@
                         </a>
                     </span>
                   
-                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
-                  
                   <span class="links">
                     
           
           
-            Tags
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > Bootstrap
+          
+         
           
            
                   </span>
                 </div>
-                
-                    <div class="progress">
-    <div class="wrapper">
-
-    </div>
-</div>
-
                 
               </div>
             </div>
             
 
         
+          <div id="chapter">
+        
         <div id="body-inner">
-          
-            <h1>Tags</h1>
           
 
         
 
+
+
+
+<h1 id="bootstrap">Bootstrap</h1>
+
+<p>Bootstrap will step you through getting your first Microlith application set up via the automated bootstrap process.</p>
+
+<p>By the end of the bootstrap, you will be able to &ldquo;push to prod&rdquo;:</p>
+
+<pre><code class="language-bash"># Deploy your application
+git add .
+git commit -m &quot;My changes&quot;
+git push origin master
+
+# Use your test and production environments
+curl -v https://test.my-domain.com/
+curl -v https://prod.my-domain.com/
+</code></pre>
+
+<div class="notices tip" ><p>Be sure that your <a href="https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html">AWS credentials are available to the AWS SDK for Go</a> with no arguments.  The configured region will be overridden and the bootstrap process will always deploy to the <code>us-east-1</code> region.</p>
+</div>
 
 
 
@@ -590,6 +608,8 @@
 	
 </footer>
 
+        
+            </div> 
         
         </div> 
         
@@ -640,101 +660,6 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -748,6 +673,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -920,6 +848,102 @@
             
         
                     
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
                         
             
             
@@ -946,8 +970,10 @@
 
 
         
+            <a class="nav nav-prev" href="/intro/" title="Introduction"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/bootstrap/go_get/" title="Get Microlith" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 

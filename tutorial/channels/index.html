@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Tags :: Microlith</title>
+    <title>Channels :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1540514675" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/tags/">
+  <body class="" data-url="/tutorial/channels/">
     <nav id="sidebar" class="">
 
 
@@ -369,7 +369,7 @@
   
     
     <li data-nav-id="/tutorial/" title="Tutorial" class="dd-item 
-        
+        parent
         
         
         ">
@@ -450,7 +450,7 @@
  
   
     
-      <li data-nav-id="/tutorial/channels/" title="Channels" class="dd-item ">
+      <li data-nav-id="/tutorial/channels/" title="Channels" class="dd-item active">
         <a href="/tutorial/channels/">
         Channels
         
@@ -558,7 +558,19 @@
                     
           
           
-            Tags
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/tutorial/'>Tutorial</a> > Channels
+          
+         
+          
+         
           
            
                   </span>
@@ -566,7 +578,17 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#create-a-channel">Create a Channel</a></li>
+<li><a href="#update-the-word-service">Update the Word Service</a></li>
+<li><a href="#emit-events">Emit Events</a></li>
+<li><a href="#ship-it">Ship It</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -578,7 +600,7 @@
         
         <div id="body-inner">
           
-            <h1>Tags</h1>
+            <h1>Channels</h1>
           
 
         
@@ -586,9 +608,123 @@
 
 
 
+<p>Services need to communicate, but cannot <code>Call()</code> each other.  To communicate between services, Microlith provides broadcast channels.  A Channel is a Stream that is shared between all services in a domain.  It can be published to and processed from just like a stream.</p>
+
+<p>Channels are created by calling either the <code>microlith.Channel()</code> function to create a channel in the root domain, or by calling the <code>Channel()</code> method on a domain builder to create a channel in a subdomain.  The returned reference can then be passed to a service so the service can interact with the channel.</p>
+
+<h2 id="create-a-channel">Create a Channel</h2>
+
+<p>Let&rsquo;s create a channel that logs an event when a request is made against the &ldquo;hello-world&rdquo; endpoint in the Origin.  First, create the channel and an event type in the origin.</p>
+
+<p>In your <code>root.go</code>:</p>
+
+<pre><code class="language-go">var (
+  requests = microlith.Channel(&quot;requests&quot;)
+
+  // ... Same as before ...
+)
+
+type Request struct {
+  At time.Time
+}
+</code></pre>
+
+<h2 id="update-the-word-service">Update the Word Service</h2>
+
+<p>Next, we need to pass the channel to the services that will use it and start processing events sent over the channel.  First, update the constructor for the <code>word</code> service so that it takes the channel as an argument.</p>
+
+<p>In your <code>word.go</code>:</p>
+
+<pre><code class="language-go">type Word struct {
+  // ... Same as before ...
+
+  requests *strm.Stream
+}
+
+// NewWord constructs an instance of the &quot;word&quot; service that returns the word
+// and processes the requests channel.
+func NewWord(word string, requests *strm.Stream) *Word {
+  return &amp;Word{
+    word:     word,
+    requests: requests,
+  }
+}
+</code></pre>
+
+<p>Next, process events on the channel by creating a <code>strm.Processor</code> in the builder.  Implement a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_Kinesis.md">Kinesis Lambda</a> method to handle the events.  Use the <code>Subscribe()</code> method to subscribe to the channel.</p>
+
+<pre><code class="language-go">func (word *Word) Build(service *tld.Service) {
+  // ... Same as before ...
+
+  processor := service.Processor(&quot;requests&quot;, word.processRequests)
+  processor.Subscribe(word.requests, strm.StartingPositionTrimHorizon)
+}
+
+func (word *Word) processRequests(ctx context.Context, evt events.KinesisEvent) error {
+  scanner := strm.NewScanner(evt)
+
+  for scanner.Next() {
+    partitionKey := &quot;&quot;
+    request := new(Request)
+    if err := scanner.Scan(&amp;partitionKey, request); err != nil {
+      return err
+    }
+
+    log.Printf(&quot;Request made at %s&quot;, request.At.Format(time.RFC3339Nano))
+  }
+
+  return nil
+}
+</code></pre>
+
+<h2 id="emit-events">Emit Events</h2>
+
+<p>Now that the services are updated to subscribe to the channel, we need to provide the channel to the services and start publishing events.</p>
+
+<p>Use the new constructors to pass the channel to the services.  In your <code>root.go</code>:</p>
+
+<pre><code class="language-go">var (
+  requests = microlith.Channel(&quot;requests&quot;)
+
+  helloSvc = NewWord(&quot;hello&quot;, requests)
+  worldSvc = NewWord(&quot;world&quot;, requests)
+)
+</code></pre>
+
+<p>Finally, publish an event to the channel on every request:</p>
+
+<pre><code class="language-go">var publisher = strm.NewPublisher(requests)
+
+func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+  defer publisher.Flush(ctx)
+  if err := publisher.Publish(ctx, &quot;partition-key&quot;, &amp;Request{At: time.Now()}); err != nil {
+    return rest.Respond(http.StatusInternalServerError, err)
+  }
+
+  // ... Same as before ...
+}
+</code></pre>
+
+<h2 id="ship-it">Ship It</h2>
+
+<p>Now both services will process an event every time a request is made against the <code>hello-world</code> endpoint.  Commit and push to deploy your changes.</p>
+
+<pre><code class="language-bash">git add .
+git commit -m &quot;Added a channel&quot;
+git push origin master
+</code></pre>
+
+<p>Make a request against the <code>GET /</code> endpoint and your processors will soon emit a message to the logs.</p>
+
+<pre><code class="language-bash"># Trigger a publish
+curl -v https://prod.my-domain.com/
+</code></pre>
+
+
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -832,6 +968,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -845,53 +982,8 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -936,6 +1028,58 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -946,8 +1090,10 @@
 
 
         
+            <a class="nav nav-prev" href="/tutorial/resources/" title="Resources"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/tutorial/globals/" title="Globals" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -977,3 +1123,4 @@
 
   </body>
 </html>
+
