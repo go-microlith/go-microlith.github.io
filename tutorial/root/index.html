@@ -12,19 +12,19 @@
     <title>The Root Domain :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1540514675" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1540514675" rel="stylesheet">
-    <link href="/css/hybrid.css?1540514675" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1540514675" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1540514675" rel="stylesheet">
-    <link href="/css/auto-complete.css?1540514675" rel="stylesheet">
-    <link href="/css/theme.css?1540514675" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1540514675" rel="stylesheet">
+    <link href="/css/nucleus.css?1540520735" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1540520735" rel="stylesheet">
+    <link href="/css/hybrid.css?1540520735" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1540520735" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1540520735" rel="stylesheet">
+    <link href="/css/auto-complete.css?1540520735" rel="stylesheet">
+    <link href="/css/theme.css?1540520735" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1540520735" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1540514675" rel="stylesheet">
+      <link href="/css/theme-blue.css?1540520735" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1540514675"></script>
+    <script src="/js/jquery-2.x.min.js?1540520735"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1540514675"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1540514675"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1540520735"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1540520735"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/example.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1540514675"></script>
+<script type="text/javascript" src="/js/search.js?1540520735"></script>
 
     
   </div>
@@ -158,9 +158,9 @@
  
   
     
-      <li data-nav-id="/bootstrap/create/" title="Create An Application" class="dd-item ">
+      <li data-nav-id="/bootstrap/create/" title="Your First Application" class="dd-item ">
         <a href="/bootstrap/create/">
-        Create An Application
+        Your First Application
         
         </a>
     </li>
@@ -508,6 +508,76 @@
  
 
           
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/examples/" title="Examples" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/examples/">
+          Examples
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/tutorial/" title="Tutorial" class="dd-item ">
+        <a href="/examples/tutorial/">
+        Tutorial
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/blog/" title="Blog" class="dd-item ">
+        <a href="/examples/blog/">
+        Blog
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
          
     </ul>
 
@@ -606,13 +676,15 @@
 
 
 
-<p>The root domain is the starting point for a Microlith application.  It has a specialized API exposed via the top-level <code>microlith</code> package.</p>
+<p>The root domain is the starting point for a Microlith application.  It has a specialized API exposed via the top-level &ldquo;microlith&rdquo; package.</p>
+
+<p>We will start by adding a &ldquo;Hello, world!&rdquo; endpoint to our application.</p>
 
 <h2 id="the-origin">The Origin</h2>
 
-<p>Start by creating a single endpoint on the origin of your root domain.  This endpoint responds to <code>GET /</code> with a <code>200 OK</code> and a response body of <code>&quot;Hello, world!&quot;</code>.</p>
+<p>You add endpoints by defining an API with the <a href="https://godoc.org/gopkg.in/microlith.v0/#Scope">microlith.Scope()</a> function.</p>
 
-<p>You add endpoints by defining an API with the <code>microlith.Scope()</code> function.  You must pass a unique name and a handler function for each defined endpoint.  This function must match the signature of an <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_ApiGatewayEvent.md">API Gateway Lambda Function</a>.</p>
+<p>You must pass a unique name and a handler function for each defined endpoint.  This function must match the signature of an <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_ApiGatewayEvent.md">API Gateway Lambda Function</a>.</p>
 
 <p>In <code>${GOPATH}/src/example.com/root.go</code>:</p>
 
@@ -650,8 +722,10 @@ git push origin master
 
 <p>Once your application has deployed, you can make requests against your endpoint:</p>
 
-<pre><code class="language-bash">curl -v https://prod.my-domain.com/
+<pre><code class="language-bash">curl https://prod.my-domain.com/
 </code></pre>
+
+<p>You should receive a response of &ldquo;Hello, world!&rdquo;</p>
 
 <div class="notices tip" ><p>Freshly deployed Lambdas perform a cold start when the first request is received.  When manual testing, you application may return a <code>500 Internal Server Error</code> on the first few requests after deployment until the Lambdas warm up.  If it does, wait a few seconds and retry the request a couple of times until it returns the expected response.</p>
 </div>
@@ -1017,6 +1091,54 @@ git push origin master
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
             
         
         
@@ -1036,20 +1158,20 @@ git push origin master
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1540514675"></script>
-    <script src="/js/jquery.sticky.js?1540514675"></script>
-    <script src="/js/featherlight.min.js?1540514675"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1540514675"></script>
-    <script src="/js/highlight.pack.js?1540514675"></script>
+    <script src="/js/clipboard.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1540520735"></script>
+    <script src="/js/jquery.sticky.js?1540520735"></script>
+    <script src="/js/featherlight.min.js?1540520735"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1540520735"></script>
+    <script src="/js/highlight.pack.js?1540520735"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1540514675"></script>
-    <script src="/js/learn.js?1540514675"></script>
-    <script src="/js/hugo-learn.js?1540514675"></script>
+    <script src="/js/modernizr.custom.71422.js?1540520735"></script>
+    <script src="/js/learn.js?1540520735"></script>
+    <script src="/js/hugo-learn.js?1540520735"></script>
 
-    <link href="/mermaid/mermaid.css?1540514675" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1540514675"></script>
+    <link href="/mermaid/mermaid.css?1540520735" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1540520735"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://example.org/examples/tutorial/</loc>
+    <lastmod>2018-10-25T18:58:57-06:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://example.org/bootstrap/go_get/</loc>
     <lastmod>2018-10-25T18:10:01-06:00</lastmod>
   </url>
@@ -23,8 +28,8 @@
   </url>
   
   <url>
-    <loc>http://example.org/bootstrap/create/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+    <loc>http://example.org/examples/blog/</loc>
+    <lastmod>2018-10-25T18:58:57-06:00</lastmod>
   </url>
   
   <url>
@@ -34,6 +39,11 @@
   
   <url>
     <loc>http://example.org/tutorial/services/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/bootstrap/create/</loc>
     <lastmod>2018-10-25T18:10:01-06:00</lastmod>
   </url>
   
@@ -80,6 +90,11 @@
   <url>
     <loc>http://example.org/tutorial/channels/</loc>
     <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/examples/</loc>
+    <lastmod>2018-10-25T18:58:57-06:00</lastmod>
   </url>
   
   <url>

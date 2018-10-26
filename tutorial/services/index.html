@@ -12,19 +12,19 @@
     <title>Services :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1540514675" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1540514675" rel="stylesheet">
-    <link href="/css/hybrid.css?1540514675" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1540514675" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1540514675" rel="stylesheet">
-    <link href="/css/auto-complete.css?1540514675" rel="stylesheet">
-    <link href="/css/theme.css?1540514675" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1540514675" rel="stylesheet">
+    <link href="/css/nucleus.css?1540520735" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1540520735" rel="stylesheet">
+    <link href="/css/hybrid.css?1540520735" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1540520735" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1540520735" rel="stylesheet">
+    <link href="/css/auto-complete.css?1540520735" rel="stylesheet">
+    <link href="/css/theme.css?1540520735" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1540520735" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1540514675" rel="stylesheet">
+      <link href="/css/theme-blue.css?1540520735" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1540514675"></script>
+    <script src="/js/jquery-2.x.min.js?1540520735"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1540514675"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1540514675"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1540520735"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1540520735"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/example.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1540514675"></script>
+<script type="text/javascript" src="/js/search.js?1540520735"></script>
 
     
   </div>
@@ -158,9 +158,9 @@
  
   
     
-      <li data-nav-id="/bootstrap/create/" title="Create An Application" class="dd-item ">
+      <li data-nav-id="/bootstrap/create/" title="Your First Application" class="dd-item ">
         <a href="/bootstrap/create/">
-        Create An Application
+        Your First Application
         
         </a>
     </li>
@@ -508,6 +508,76 @@
  
 
           
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/examples/" title="Examples" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/examples/">
+          Examples
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/tutorial/" title="Tutorial" class="dd-item ">
+        <a href="/examples/tutorial/">
+        Tutorial
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/blog/" title="Blog" class="dd-item ">
+        <a href="/examples/blog/">
+        Blog
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
          
     </ul>
 
@@ -587,7 +657,11 @@
 <li><a href="#add-an-endpoint">Add An Endpoint</a></li>
 <li><a href="#implement-a-client">Implement a Client</a></li>
 </ul></li>
-<li><a href="#use-the-service">Use the Service</a></li>
+<li><a href="#use-the-service">Use the Service</a>
+<ul>
+<li><a href="#register-the-services">Register the Services</a></li>
+<li><a href="#call-the-services">Call the Services</a></li>
+</ul></li>
 <li><a href="#ship-it">Ship It</a></li>
 </ul></li>
 </ul>
@@ -611,17 +685,15 @@
 
 
 
-<p>Services implement the business logic of your Microlith application.  At the code level, a service is an object which implements the <code>tld.ServiceBuilder</code> interface.</p>
+<p>Services implement the business logic of your Microlith application.  At the code level, a service is an object which implements the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#ServiceBuilder">tld.ServiceBuilder</a> interface.</p>
 
-<p>Let&rsquo;s refactor our domain into a pair of services: a <code>hello</code> and a <code>world</code> service.  Then we&rsquo;ll refactor our origin endpoint to call those services to build a response.</p>
+<p>Let&rsquo;s refactor our domain into a pair of services: a &ldquo;hello&rdquo; and a &ldquo;world&rdquo; service.  Then we&rsquo;ll refactor our origin endpoint to call those services to build a response.</p>
 
 <h2 id="create-a-service">Create a Service</h2>
 
-<p>We will create a word service that returns a fixed word.  The word service will have one endpoint that responds to <code>GET /</code> with a <code>200 OK</code> and the word as JSON.  We will then create instances of the service as our <code>hello</code> and <code>world</code> services.</p>
+<p>We will create a &ldquo;word&rdquo; service that returns a fixed word.  The word service will have one endpoint that responds with the word as JSON.</p>
 
-<p>To create the service, create an object named <code>Word</code> that implements the <code>tld.ServiceBuilder</code> interface.</p>
-
-<p>In <code>${GOPATH}/src/example.com/word.go</code>:</p>
+<p>To create the service, create an service object in <code>${GOPATH}/src/example.com/word.go</code>:</p>
 
 <pre><code class="language-go">package main
 
@@ -652,7 +724,7 @@ func (word *Word) Build(service *tld.Service) {
 
 <h3 id="add-an-endpoint">Add An Endpoint</h3>
 
-<p>To add an endpoint, use the <code>Scope()</code> method on the service builder.  This method behaves the same as <code>microlith.Scope()</code> did on the origin.  We will capture the endpoint in an instance variable so we can use it in the next step.</p>
+<p>To add an endpoint, use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#API.Scope">Scope()</a> method on the service builder.  We will capture the endpoint in an instance variable so we can use it in the next step.</p>
 
 <pre><code class="language-go">func (word *Word) Build(service *tld.Service) {
   service.Scope(&quot;/&quot;, func(scope *rest.Scope) {
@@ -667,7 +739,9 @@ func (word *Word) handler(ctx context.Context, req events.APIGatewayProxyRequest
 
 <h3 id="implement-a-client">Implement a Client</h3>
 
-<p>To implement a client, add public methods to your service.  To make calls against your service, create a <code>rest.Client</code> in your service builder and use the <code>Call()</code> method to call endpoints.</p>
+<p>To implement a client, add public methods to your service.</p>
+
+<p>To make calls against your service, use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#ServiceClient">tld.ServiceClient()</a> function create a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Client">rest.Client</a> in your service builder.  Use the client to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Client.Call">Call()</a> endpoints.</p>
 
 <pre><code class="language-go">func (word *Word) Build(service *tld.Service) {
   // ... Same as before ...
@@ -703,9 +777,15 @@ func (word *Word) Word(ctx context.Context) (string, error) {
 
 <h2 id="use-the-service">Use the Service</h2>
 
-<p>Now that we have the <code>word</code> service, we can use it in our origin to factor out our business logic.  We will create two instances of the service returning &ldquo;hello&rdquo; and &ldquo;world&rdquo; and then call those from our origin to construct our response.</p>
+<p>Now that we have a &ldquo;word&rdquo; service, we can use it in our origin to factor out our business logic.</p>
 
-<p>First, you must create and register the services with your domain using the <code>microlith.Service()</code> function.  In <code>root.go</code>:</p>
+<p>We will create two instances of the service returning &ldquo;hello&rdquo; and &ldquo;world&rdquo;.  Then, we will call those from our origin to construct our response.</p>
+
+<h3 id="register-the-services">Register the Services</h3>
+
+<p>First, you must create and register the services with your domain using the <a href="https://godoc.org/gopkg.in/microlith.v0/#Service">microlith.Service()</a> function.</p>
+
+<p>In <code>root.go</code>:</p>
 
 <pre><code class="language-go">var (
   helloSvc = NewWord(&quot;hello&quot;)
@@ -720,7 +800,9 @@ func init() {
 }
 </code></pre>
 
-<p>Next, use your the client methods in your handler to call the services and construct the response.</p>
+<h3 id="call-the-services">Call the Services</h3>
+
+<p>Next, use your the client methods on your service object to call the services.  Construct a response to the user from the responses to the service calls.</p>
 
 <pre><code class="language-go">func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
   hello, err := helloSvc.Word(ctx)
@@ -752,7 +834,7 @@ git push origin master
 <pre><code class="language-bash">curl -v https://prod.my-domain.com/
 </code></pre>
 
-<div class="notices tip" ><p>You might notice that this deploy takes longer than the last deploy.  This is because Microlith uses <a href="https://aws.amazon.com/blogs/compute/implementing-safe-aws-lambda-deployments-with-aws-codedeploy/">safe Lambda deploys</a>.  By default, the test environment transitions traffic using the <code>AllAtOnce</code> configuration and the production environment uses the <code>Canary10Percent5Minutes</code> configuration.  These are both configurable via the bootstrap process.</p>
+<div class="notices tip" ><p>You might notice that this deploy takes longer than the last deploy.  This is because Microlith uses <a href="https://aws.amazon.com/blogs/compute/implementing-safe-aws-lambda-deployments-with-aws-codedeploy/">safe Lambda deploys</a>.  By default, the test environment transitions traffic using the &ldquo;AllAtOnce&rdquo; configuration and the production environment uses the &ldquo;Canary10Percent5Minutes&rdquo; configuration.  These are both configurable via the bootstrap process.</p>
 </div>
 
 
@@ -1119,6 +1201,54 @@ git push origin master
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
             
         
         
@@ -1138,20 +1268,20 @@ git push origin master
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1540514675"></script>
-    <script src="/js/jquery.sticky.js?1540514675"></script>
-    <script src="/js/featherlight.min.js?1540514675"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1540514675"></script>
-    <script src="/js/highlight.pack.js?1540514675"></script>
+    <script src="/js/clipboard.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1540520735"></script>
+    <script src="/js/jquery.sticky.js?1540520735"></script>
+    <script src="/js/featherlight.min.js?1540520735"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1540520735"></script>
+    <script src="/js/highlight.pack.js?1540520735"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1540514675"></script>
-    <script src="/js/learn.js?1540514675"></script>
-    <script src="/js/hugo-learn.js?1540514675"></script>
+    <script src="/js/modernizr.custom.71422.js?1540520735"></script>
+    <script src="/js/learn.js?1540520735"></script>
+    <script src="/js/hugo-learn.js?1540520735"></script>
 
-    <link href="/mermaid/mermaid.css?1540514675" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1540514675"></script>
+    <link href="/mermaid/mermaid.css?1540520735" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1540520735"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

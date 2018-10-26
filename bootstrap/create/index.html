@@ -9,22 +9,22 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Create An Application :: Microlith</title>
+    <title>Your First Application :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1540514675" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1540514675" rel="stylesheet">
-    <link href="/css/hybrid.css?1540514675" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1540514675" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1540514675" rel="stylesheet">
-    <link href="/css/auto-complete.css?1540514675" rel="stylesheet">
-    <link href="/css/theme.css?1540514675" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1540514675" rel="stylesheet">
+    <link href="/css/nucleus.css?1540520735" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1540520735" rel="stylesheet">
+    <link href="/css/hybrid.css?1540520735" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1540520735" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1540520735" rel="stylesheet">
+    <link href="/css/auto-complete.css?1540520735" rel="stylesheet">
+    <link href="/css/theme.css?1540520735" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1540520735" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1540514675" rel="stylesheet">
+      <link href="/css/theme-blue.css?1540520735" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1540514675"></script>
+    <script src="/js/jquery-2.x.min.js?1540520735"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1540514675"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1540514675"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1540520735"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1540520735"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/example.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1540514675"></script>
+<script type="text/javascript" src="/js/search.js?1540520735"></script>
 
     
   </div>
@@ -158,9 +158,9 @@
  
   
     
-      <li data-nav-id="/bootstrap/create/" title="Create An Application" class="dd-item active">
+      <li data-nav-id="/bootstrap/create/" title="Your First Application" class="dd-item active">
         <a href="/bootstrap/create/">
-        Create An Application
+        Your First Application
         
         </a>
     </li>
@@ -508,6 +508,76 @@
  
 
           
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/examples/" title="Examples" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/examples/">
+          Examples
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/tutorial/" title="Tutorial" class="dd-item ">
+        <a href="/examples/tutorial/">
+        Tutorial
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/blog/" title="Blog" class="dd-item ">
+        <a href="/examples/blog/">
+        Blog
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
          
     </ul>
 
@@ -566,7 +636,7 @@
             
           
           
-            <a href='/'>Microlith</a> > <a href='/bootstrap/'>Bootstrap</a> > Create An Application
+            <a href='/'>Microlith</a> > <a href='/bootstrap/'>Bootstrap</a> > Your First Application
           
          
           
@@ -578,7 +648,15 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#create-an-application">Create an Application</a></li>
+<li><a href="#build">Build</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -590,13 +668,19 @@
         
         <div id="body-inner">
           
-            <h1>Create An Application</h1>
+            <h1>Your First Application</h1>
           
 
         
 
 
-<p>Microlith applications are a single Go executable that serves an entire top-level domain, such as <a href="https://example.com">example.com</a>.  To create an application, create an executable in <code>${GOPATH}/src/example.com/main.go</code> that calls <code>microlith.Main()</code>.</p>
+
+
+<p>Microlith applications are a single Go executable that serves an entire top-level domain, such as <a href="https://example.com">example.com</a>.</p>
+
+<h2 id="create-an-application">Create an Application</h2>
+
+<p>To create an application, create an executable in <code>${GOPATH}/src/example.com/main.go</code> and call <a href="https://godoc.org/gopkg.in/microlith.v0/#Main">microlith.Main()</a>:</p>
 
 <pre><code class="language-go">package main
 
@@ -609,16 +693,18 @@ func main() {
 }
 </code></pre>
 
-<p>The name of the executable is significant to Microlith.  It must be named after the top-level domain name it logically serves.  In this case, <code>example.com</code>.</p>
+<p>The name of the executable is significant to Microlith.  It must be named after the top-level domain name it logically serves.  In this case, &ldquo;example.com&rdquo;.</p>
 
-<p>The import path of the source code is also significant to Microlith.  By default, the main executable must live in the root of your repo at the root of your Go workspace&rsquo;s source tree.  In this case, <code>${GOPATH}/src/example.com</code></p>
+<p>The import path of the source code is also significant to Microlith.  By default, the main executable must live in the root of your repo at the root of your Go workspace&rsquo;s source tree.  In this case, &ldquo;${GOPATH}/src/example.com&rdquo;</p>
+
+<h2 id="build">Build</h2>
 
 <p>Now, build your application:</p>
 
 <pre><code class="language-bash">go install example.com
 </code></pre>
 
-<p>Your application is now ready to be bootstrapped.  Before you can do that, you need to set up Route53.</p>
+<p>Your application is now ready to be bootstrapped.  Before you can do that, you need to set up <a href="/bootstrap/route53">Route53</a>.</p>
 
 
 <footer class=" footline" >
@@ -983,6 +1069,54 @@ func main() {
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
             
         
         
@@ -1002,20 +1136,20 @@ func main() {
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1540514675"></script>
-    <script src="/js/jquery.sticky.js?1540514675"></script>
-    <script src="/js/featherlight.min.js?1540514675"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1540514675"></script>
-    <script src="/js/highlight.pack.js?1540514675"></script>
+    <script src="/js/clipboard.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1540520735"></script>
+    <script src="/js/jquery.sticky.js?1540520735"></script>
+    <script src="/js/featherlight.min.js?1540520735"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1540520735"></script>
+    <script src="/js/highlight.pack.js?1540520735"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1540514675"></script>
-    <script src="/js/learn.js?1540514675"></script>
-    <script src="/js/hugo-learn.js?1540514675"></script>
+    <script src="/js/modernizr.custom.71422.js?1540520735"></script>
+    <script src="/js/learn.js?1540520735"></script>
+    <script src="/js/hugo-learn.js?1540520735"></script>
 
-    <link href="/mermaid/mermaid.css?1540514675" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1540514675"></script>
+    <link href="/mermaid/mermaid.css?1540520735" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1540520735"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

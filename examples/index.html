@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Route53 :: Microlith</title>
+    <title>Examples :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1540520735" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/bootstrap/route53/">
+  <body class="" data-url="/examples/">
     <nav id="sidebar" class="">
 
 
@@ -115,7 +115,7 @@
   
     
     <li data-nav-id="/bootstrap/" title="Bootstrap" class="dd-item 
-        parent
+        
         
         
         ">
@@ -177,7 +177,7 @@
  
   
     
-      <li data-nav-id="/bootstrap/route53/" title="Route53" class="dd-item active">
+      <li data-nav-id="/bootstrap/route53/" title="Route53" class="dd-item ">
         <a href="/bootstrap/route53/">
         Route53
         
@@ -515,8 +515,8 @@
   
     
     <li data-nav-id="/examples/" title="Examples" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/examples/">
@@ -622,8 +622,6 @@
                         </a>
                     </span>
                   
-                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
-                  
                   <span class="links">
                     
           
@@ -632,13 +630,7 @@
             
           
           
-            
-            
-          
-          
-            <a href='/'>Microlith</a> > <a href='/bootstrap/'>Bootstrap</a> > Route53
-          
-         
+            <a href='/'>Microlith</a> > Examples
           
          
           
@@ -646,39 +638,14 @@
                   </span>
                 </div>
                 
-                    <div class="progress">
-    <div class="wrapper">
-<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#domain-name">Domain Name</a>
-<ul>
-<li><a href="#register-a-domain-in-the-aws-console">Register a Domain in the AWS Console</a></li>
-</ul></li>
-<li><a href="#email-validation">Email Validation</a>
-<ul>
-<li><a href="#email-alias-recommended">Email Alias (Recommended)</a></li>
-<li><a href="#whois">WHOIS</a>
-<ul>
-<li><a href="#configure-whois-in-the-aws-console">Configure WHOIS in the AWS Console</a></li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul>
-</nav>
-    </div>
-</div>
-
-                
               </div>
             </div>
             
 
         
+          <div id="chapter">
+        
         <div id="body-inner">
-          
-            <h1>Route53</h1>
           
 
         
@@ -686,69 +653,17 @@
 
 
 
-<p>Microlith uses Route53 DNS as its global router.  This requires a one-time, non-automatable setup.  Once set up, a domain name can be reused for multiple Microlith applications.</p>
+<h1 id="examples">Examples</h1>
 
-<div class="notices tip" ><p>You will need the Domain Name and the Hosted Zone ID to bootstrap your application.  For the remainder of the documentation, we will assume you own <code>my-domain.com</code> in hosted zone <code>Z1234567890</code>.</p>
-</div>
-
-
-<h2 id="domain-name">Domain Name</h2>
-
-<p>You will need a <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar.html">domain name hosted in Route53</a>.  If you have an existing domain, it can be reused.  Microlith will not alter the settings of the domain name, only manage a set of subdomain &ldquo;A&rdquo; records for each application.</p>
-
-<h3 id="register-a-domain-in-the-aws-console">Register a Domain in the AWS Console</h3>
-
-<p>To register or transfer a domain name from the AWS Console:</p>
-
-<ol>
-<li>Navigate to Route53</li>
-<li>Navigate to &ldquo;Registered Domains&rdquo;</li>
-<li>Click either the &ldquo;Register Domain&rdquo; or &ldquo;Transfer Domain&rdquo; button</li>
-<li>Follow the prompts</li>
-</ol>
-
-<h2 id="email-validation">Email Validation</h2>
-
-<p>Microlith issues SSL certificates against your domain via AWS Certificate Manager <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-email.html">using email validation</a>.  You must have a valid contact email able to respond to confirmation emails.  There are two options, one if you have email at the domain and another if you don&rsquo;t.</p>
-
-<h3 id="email-alias-recommended">Email Alias (Recommended)</h3>
-
-<p>If you receive email at &ldquo;my-domain.com&rdquo;, you may receive confirmation emails automatically.  By default, Amazon will send confirmation emails to:</p>
-
-<ul>
-<li>administrator@my-domain.com</li>
-<li>hostmaster@my-domain.com</li>
-<li>postmaster@my-domain.com</li>
-<li>webmaster@my-domain.com</li>
-<li>admin@my-domain.com</li>
-</ul>
-
-<p>If these email addresses are not valid at your domain name, configure an email alias.</p>
-
-<h3 id="whois">WHOIS</h3>
-
-<p>If you do not receive email at your domain, you must <a href="https://docs.aws.amazon.com/acm/latest/userguide/setup-email.html">configure your WHOIS information</a>.</p>
-
-<p>Your domain name must have a valid Domain, Technical, and/or Administrative contact with an email address.  You must explicitly disable privacy protection on these contacts so the email addresses are visible in the WHOIS database.</p>
-
-<h4 id="configure-whois-in-the-aws-console">Configure WHOIS in the AWS Console</h4>
-
-<ol>
-<li>Navigate to Route53</li>
-<li>Navigate to &ldquo;Registered Domains&rdquo;</li>
-<li>Choose the domain name you wish to use for Microlith</li>
-<li>Click the &ldquo;Edit Contacts&rdquo; button</li>
-<li>Add email addresses to your Domain, Technical, and/or Administrative contacts</li>
-<li>Set &ldquo;Privacy Protection&rdquo; to &ldquo;Disable&rdquo; on the contacts</li>
-<li>Click the &ldquo;Save&rdquo; button</li>
-</ol>
+<p>Lorem Ipsum.</p>
 
 
 <footer class=" footline" >
 	
 </footer>
 
-
+        
+            </div> 
         
         </div> 
         
@@ -799,7 +714,6 @@
             
                 
                     
-                    
                 
                 
 
@@ -813,8 +727,21 @@
             
                 
                     
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
                         
-                        
+            
+            
+                
                     
                 
                 
@@ -847,26 +774,6 @@
             
             
                 
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
                     
                 
                 
@@ -1111,6 +1018,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1118,6 +1026,25 @@
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -1135,22 +1062,6 @@
             
         
                     
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
             
         
                     
@@ -1161,10 +1072,10 @@
 
 
         
-            <a class="nav nav-prev" href="/bootstrap/create/" title="Your First Application"> <i class="fas fa-chevron-left"></i></a>
+            <a class="nav nav-prev" href="/tutorial/subdomains/" title="Subdomains"> <i class="fas fa-chevron-left"></i></a>
         
         
-            <a class="nav nav-next" href="/bootstrap/bootstrap/" title="Bootstrap Your Application" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+            <a class="nav nav-next" href="/examples/tutorial/" title="Tutorial" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -1194,4 +1105,3 @@
 
   </body>
 </html>
-

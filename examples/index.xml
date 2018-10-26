@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Examples on Microlith</title>
+    <link>http://example.org/examples/</link>
+    <description>Recent content in Examples on Microlith</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Oct 2018 18:58:57 -0600</lastBuildDate>
+    
+	<atom:link href="http://example.org/examples/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Tutorial</title>
+      <link>http://example.org/examples/tutorial/</link>
+      <pubDate>Thu, 25 Oct 2018 18:58:57 -0600</pubDate>
+      
+      <guid>http://example.org/examples/tutorial/</guid>
+      <description>The complete code from the tutorial is available in the  tutorial.com repository.
+Clone The repository should be cloned to the root of your Go workspace&amp;rsquo;s source tree, i.e. ${GOPATH}/src/tutorial.com.
+# Clone the repo to the root of your Go workspace&#39;s source tree mkdir -p &amp;quot;${GOPATH}/src/tutorial.com&amp;quot; git clone https://github.com/go-microlith/tutorial.com &amp;quot;${GOPATH}/src/tutorial.com&amp;quot; # Microlith will recreate this rm -rf &amp;quot;${GOPATH}/src/tutorial.com/.git/&amp;quot; # Build the application go install tutorial.com  Bootstrap Assuming you own the domain name my-domain.</description>
+    </item>
+    
+    <item>
+      <title>Blog</title>
+      <link>http://example.org/examples/blog/</link>
+      <pubDate>Thu, 25 Oct 2018 18:58:57 -0600</pubDate>
+      
+      <guid>http://example.org/examples/blog/</guid>
+      <description>A blogging application with social features is available in the  blog.com repository.
+It provides a basic API for performing CRUD operations on blog posts. It extends this API with comments on blog posts and with Facebook-style reactions (&amp;ldquo;Like&amp;rdquo;, &amp;ldquo;Love&amp;rdquo;, etc.) on both posts and comments.
+Clone The repository should be cloned to the root of your Go workspace&amp;rsquo;s source tree, i.e. ${GOPATH}/src/blog.com:
+# Clone the repo to the root of your Go workspace&#39;s source tree mkdir -p &amp;quot;${GOPATH}/src/blog.</description>
+    </item>
+    
+  </channel>
+</rss>

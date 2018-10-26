@@ -12,19 +12,19 @@
     <title>Services :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1540514675" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1540514675" rel="stylesheet">
-    <link href="/css/hybrid.css?1540514675" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1540514675" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1540514675" rel="stylesheet">
-    <link href="/css/auto-complete.css?1540514675" rel="stylesheet">
-    <link href="/css/theme.css?1540514675" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1540514675" rel="stylesheet">
+    <link href="/css/nucleus.css?1540520735" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1540520735" rel="stylesheet">
+    <link href="/css/hybrid.css?1540520735" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1540520735" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1540520735" rel="stylesheet">
+    <link href="/css/auto-complete.css?1540520735" rel="stylesheet">
+    <link href="/css/theme.css?1540520735" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1540520735" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1540514675" rel="stylesheet">
+      <link href="/css/theme-blue.css?1540520735" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1540514675"></script>
+    <script src="/js/jquery-2.x.min.js?1540520735"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1540514675"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1540514675"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1540520735"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1540520735"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/example.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1540514675"></script>
+<script type="text/javascript" src="/js/search.js?1540520735"></script>
 
     
   </div>
@@ -158,9 +158,9 @@
  
   
     
-      <li data-nav-id="/bootstrap/create/" title="Create An Application" class="dd-item ">
+      <li data-nav-id="/bootstrap/create/" title="Your First Application" class="dd-item ">
         <a href="/bootstrap/create/">
-        Create An Application
+        Your First Application
         
         </a>
     </li>
@@ -508,6 +508,76 @@
  
 
           
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/examples/" title="Examples" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/examples/">
+          Examples
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/tutorial/" title="Tutorial" class="dd-item ">
+        <a href="/examples/tutorial/">
+        Tutorial
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/blog/" title="Blog" class="dd-item ">
+        <a href="/examples/blog/">
+        Blog
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
          
     </ul>
 
@@ -578,7 +648,15 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#serverless">Serverless</a></li>
+<li><a href="#scope">Scope</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -596,9 +674,15 @@
         
 
 
+
+
 <p>Business logic for an application is factored into Services.  A Service is a REST API, a set of resources, and a set of asynchronous actions.</p>
 
+<h2 id="serverless">Serverless</h2>
+
 <p>Services follow an AWS::Serverless model, containing resources such as Buckets, Tables, and Streams along with Lambda functions to asynchronously react to events on those resources.  All external access to the resources goes through endpoints on a REST API.</p>
+
+<h2 id="scope">Scope</h2>
 
 <p>All resources in the service are available to all Lambdas in the service, but services cannot access resources outside of the ones they declare nor other services.</p>
 
@@ -964,6 +1048,54 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
             
         
         
@@ -983,20 +1115,20 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1540514675"></script>
-    <script src="/js/jquery.sticky.js?1540514675"></script>
-    <script src="/js/featherlight.min.js?1540514675"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1540514675"></script>
-    <script src="/js/highlight.pack.js?1540514675"></script>
+    <script src="/js/clipboard.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1540520735"></script>
+    <script src="/js/jquery.sticky.js?1540520735"></script>
+    <script src="/js/featherlight.min.js?1540520735"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1540520735"></script>
+    <script src="/js/highlight.pack.js?1540520735"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1540514675"></script>
-    <script src="/js/learn.js?1540514675"></script>
-    <script src="/js/hugo-learn.js?1540514675"></script>
+    <script src="/js/modernizr.custom.71422.js?1540520735"></script>
+    <script src="/js/learn.js?1540520735"></script>
+    <script src="/js/hugo-learn.js?1540520735"></script>
 
-    <link href="/mermaid/mermaid.css?1540514675" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1540514675"></script>
+    <link href="/mermaid/mermaid.css?1540520735" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1540520735"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

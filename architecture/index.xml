@@ -18,8 +18,8 @@
       
       <guid>http://example.org/architecture/services/</guid>
       <description>Business logic for an application is factored into Services. A Service is a REST API, a set of resources, and a set of asynchronous actions.
-Services follow an AWS::Serverless model, containing resources such as Buckets, Tables, and Streams along with Lambda functions to asynchronously react to events on those resources. All external access to the resources goes through endpoints on a REST API.
-All resources in the service are available to all Lambdas in the service, but services cannot access resources outside of the ones they declare nor other services.</description>
+Serverless Services follow an AWS::Serverless model, containing resources such as Buckets, Tables, and Streams along with Lambda functions to asynchronously react to events on those resources. All external access to the resources goes through endpoints on a REST API.
+Scope All resources in the service are available to all Lambdas in the service, but services cannot access resources outside of the ones they declare nor other services.</description>
     </item>
     
     <item>
@@ -29,7 +29,7 @@ All resources in the service are available to all Lambdas in the service, but se
       
       <guid>http://example.org/architecture/domains/</guid>
       <description>Services are grouped into a Domain. A Domain is a REST API, a set of services, and set of channels.
-Domains route using REST. The API, called the Origin, handles all external traffic. It receives requests, makes calls on the services to collect state and perform business logic, and then constructs a response to the user.</description>
+Routing Domains route using REST. The API, called the Origin, handles all external traffic. It receives requests, makes calls on the services to collect state and perform business logic, and then constructs a response to the user.</description>
     </item>
     
     <item>
@@ -38,7 +38,7 @@ Domains route using REST. The API, called the Origin, handles all external traff
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://example.org/architecture/channels/</guid>
-      <description>To communicate between services, you can create Channels. Channels provide asynchronous broadcast messaging to all services in a domain.
+      <description>Services need to communicate, but cannot call endpoints on each other. To communicate between services, Microlith provides broadcast channels.
 Any service can publish events onto channels it has references to. When a service publishes an event on a channel, all subscribed processors in all services receive that event.</description>
     </item>
     
@@ -49,7 +49,7 @@ Any service can publish events onto channels it has references to. When a servic
       
       <guid>http://example.org/architecture/application/</guid>
       <description>An Application is the top-level container in a Microlith app. An application is a root domain, a set of named subdomains, and a set of global services and channels.
-An Application routes using DNS. The root domain is mounted under the top-level DNS name specified in the bootstrap process. All subdomains are mounted relative to the root domain.</description>
+Routing An Application routes using DNS. The root domain is mounted under the top-level DNS name specified in the bootstrap process. All subdomains are mounted relative to the root domain.</description>
     </item>
     
     <item>
@@ -58,8 +58,9 @@ An Application routes using DNS. The root domain is mounted under the top-level 
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://example.org/architecture/globals/</guid>
-      <description>Global services share business logic across domains. They can be called by all services and origins.
-Global channels broadcast messages among all services and origins.</description>
+      <description>Some business logic needs to be shared between multiple domains, but services and subdomains cannot access each other. To share logic across the entire application, Microlith provides Global services and channels.
+Services Global services share business logic across domains. They can be called by all services and origins.
+Channels Global channels broadcast messages among all services and origins.</description>
     </item>
     
   </channel>

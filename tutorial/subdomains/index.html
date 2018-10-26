@@ -12,19 +12,19 @@
     <title>Subdomains :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1540514675" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1540514675" rel="stylesheet">
-    <link href="/css/hybrid.css?1540514675" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1540514675" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1540514675" rel="stylesheet">
-    <link href="/css/auto-complete.css?1540514675" rel="stylesheet">
-    <link href="/css/theme.css?1540514675" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1540514675" rel="stylesheet">
+    <link href="/css/nucleus.css?1540520735" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1540520735" rel="stylesheet">
+    <link href="/css/hybrid.css?1540520735" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1540520735" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1540520735" rel="stylesheet">
+    <link href="/css/auto-complete.css?1540520735" rel="stylesheet">
+    <link href="/css/theme.css?1540520735" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1540520735" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1540514675" rel="stylesheet">
+      <link href="/css/theme-blue.css?1540520735" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1540514675"></script>
+    <script src="/js/jquery-2.x.min.js?1540520735"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1540514675"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1540514675"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1540520735"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1540520735"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/example.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1540514675"></script>
+<script type="text/javascript" src="/js/search.js?1540520735"></script>
 
     
   </div>
@@ -158,9 +158,9 @@
  
   
     
-      <li data-nav-id="/bootstrap/create/" title="Create An Application" class="dd-item ">
+      <li data-nav-id="/bootstrap/create/" title="Your First Application" class="dd-item ">
         <a href="/bootstrap/create/">
-        Create An Application
+        Your First Application
         
         </a>
     </li>
@@ -508,6 +508,76 @@
  
 
           
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/examples/" title="Examples" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/examples/">
+          Examples
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/tutorial/" title="Tutorial" class="dd-item ">
+        <a href="/examples/tutorial/">
+        Tutorial
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/blog/" title="Blog" class="dd-item ">
+        <a href="/examples/blog/">
+        Blog
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
          
     </ul>
 
@@ -582,8 +652,15 @@
 <ul>
 <li>
 <ul>
-<li><a href="#create-a-subdomain">Create a Subdomain</a></li>
+<li><a href="#create-the-subdomain">Create the Subdomain</a>
+<ul>
+<li><a href="#add-an-endpoint">Add an Endpoint</a></li>
+<li><a href="#implement-a-client">Implement a Client</a></li>
+</ul></li>
+<li><a href="#use-the-subdomain">Use the Subdomain</a>
+<ul>
 <li><a href="#call-the-subdomain">Call the Subdomain</a></li>
+</ul></li>
 <li><a href="#ship-it">Ship It</a></li>
 </ul></li>
 </ul>
@@ -607,15 +684,13 @@
 
 
 
-<p>Creating a subdomain is similar to creating a service.  At the code level, a subdomain is an object that implements the <code>tld.DomainBuilder</code> interface and is registered under the root domain.</p>
+<p>Creating a subdomain is similar to creating a service.  At the code level, a subdomain is an object that implements the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#DomainBuilder">tld.DomainBuilder</a> interface and is registered under the root domain.</p>
 
-<p>We will create a subdomain that mirrors the root domain.  It will have a <code>hello</code> service and use the global <code>world</code> service and <code>requests</code> channel.  The origin will have an endpoint that calls these services and constructs the response.</p>
+<p>Let&rsquo;s create a subdomain named &ldquo;sub.domain&rdquo; that returns &ldquo;Hello, subdomain world!&rdquo;.  It will have a &ldquo;hello&rdquo; service and use the global &ldquo;world&rdquo; service and &ldquo;requests&rdquo; channel.  The subdomain&rsquo;s origin will have an endpoint that calls these services and constructs the response.</p>
 
-<h2 id="create-a-subdomain">Create a Subdomain</h2>
+<h2 id="create-the-subdomain">Create the Subdomain</h2>
 
-<p>Let&rsquo;s create a subdomain named &ldquo;sub.domain&rdquo; that responds to <code>GET /</code> with a <code>200 OK</code> and a response body of <code>&quot;Hello, subdomain world!&quot;</code>.</p>
-
-<p>First, let&rsquo;s create an object that implements the <code>tld.DomainBuilder</code> interface.  The constructor will take references to the global <code>world</code> service and the <code>requests</code> channel, and will construct a new instance of the <code>hello</code> service.  In the builder, we need to register the instance of the <code>hello</code> service with the domain.</p>
+<p>First, create a subdomain object.  The constructor will take references to the global &ldquo;world&rdquo; service and the &ldquo;requests&rdquo; channel, and will construct a new instance of the &ldquo;hello&rdquo; service.  In the builder, we need to register the instance of the &ldquo;hello&rdquo; service with the domain.</p>
 
 <p>In <code>${GOPATH}/src/example.com/sub.domain.go</code>:</p>
 
@@ -660,6 +735,8 @@ func (sub *Sub) Build(domain *tld.Domain) {
 }
 </code></pre>
 
+<h3 id="add-an-endpoint">Add an Endpoint</h3>
+
 <p>Next, we need to add an endpoint on the subdomain&rsquo;s origin.  The handler for the
 endpoint will call the <code>hello</code> and <code>world</code> services and construct a response to
 return to the user.</p>
@@ -687,6 +764,8 @@ func (sub *Sub) handler(ctx context.Context, req events.APIGatewayProxyRequest) 
   return rest.Respond(http.StatusOK, helloSubdomainWorld)
 }
 </code></pre>
+
+<h3 id="implement-a-client">Implement a Client</h3>
 
 <p>Finally, let&rsquo;s add a public client method to the subdomain so we can call it
 from the root domain.  We&rsquo;ll need to create a REST client in the builder using
@@ -725,7 +804,7 @@ func (sub *Sub) HelloSubdomainWorld(ctx context.Context) (string, error) {
 }
 </code></pre>
 
-<h2 id="call-the-subdomain">Call the Subdomain</h2>
+<h2 id="use-the-subdomain">Use the Subdomain</h2>
 
 <p>Mount an instance of this subdomain in the root domain of your application using the <code>microlith.Subdomain()</code> function.  In <code>root.go</code>:</p>
 
@@ -741,6 +820,8 @@ func init() {
   microlith.Subdomain(&quot;sub.domain&quot;, subDomain)
 }
 </code></pre>
+
+<h3 id="call-the-subdomain">Call the Subdomain</h3>
 
 <p>The subdomain can be called from the root domain origin, from services in the root domain, or directly via its domain name.  Let&rsquo;s add an endpoint to the root domain&rsquo;s origin that calls the subdomain.</p>
 
@@ -1148,6 +1229,57 @@ curl -v https://prod.my-domain.com/proxy/to/subdomain
             
         
                     
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
             
         
         
@@ -1158,7 +1290,7 @@ curl -v https://prod.my-domain.com/proxy/to/subdomain
             <a class="nav nav-prev" href="/tutorial/globals/" title="Globals"> <i class="fas fa-chevron-left"></i></a>
         
         
-            <a class="nav nav-next" href="/tutorial/root/" title="The Root Domain" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+            <a class="nav nav-next" href="/examples/" title="Examples" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -1167,20 +1299,20 @@ curl -v https://prod.my-domain.com/proxy/to/subdomain
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1540514675"></script>
-    <script src="/js/jquery.sticky.js?1540514675"></script>
-    <script src="/js/featherlight.min.js?1540514675"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1540514675"></script>
-    <script src="/js/highlight.pack.js?1540514675"></script>
+    <script src="/js/clipboard.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1540520735"></script>
+    <script src="/js/jquery.sticky.js?1540520735"></script>
+    <script src="/js/featherlight.min.js?1540520735"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1540520735"></script>
+    <script src="/js/highlight.pack.js?1540520735"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1540514675"></script>
-    <script src="/js/learn.js?1540514675"></script>
-    <script src="/js/hugo-learn.js?1540514675"></script>
+    <script src="/js/modernizr.custom.71422.js?1540520735"></script>
+    <script src="/js/learn.js?1540520735"></script>
+    <script src="/js/hugo-learn.js?1540520735"></script>
 
-    <link href="/mermaid/mermaid.css?1540514675" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1540514675"></script>
+    <link href="/mermaid/mermaid.css?1540520735" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1540520735"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

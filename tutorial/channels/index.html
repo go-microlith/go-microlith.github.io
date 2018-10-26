@@ -12,19 +12,19 @@
     <title>Channels :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1540514675" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1540514675" rel="stylesheet">
-    <link href="/css/hybrid.css?1540514675" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1540514675" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1540514675" rel="stylesheet">
-    <link href="/css/auto-complete.css?1540514675" rel="stylesheet">
-    <link href="/css/theme.css?1540514675" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1540514675" rel="stylesheet">
+    <link href="/css/nucleus.css?1540520735" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1540520735" rel="stylesheet">
+    <link href="/css/hybrid.css?1540520735" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1540520735" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1540520735" rel="stylesheet">
+    <link href="/css/auto-complete.css?1540520735" rel="stylesheet">
+    <link href="/css/theme.css?1540520735" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1540520735" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1540514675" rel="stylesheet">
+      <link href="/css/theme-blue.css?1540520735" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1540514675"></script>
+    <script src="/js/jquery-2.x.min.js?1540520735"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1540514675"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1540514675"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1540520735"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1540520735"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/example.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1540514675"></script>
+<script type="text/javascript" src="/js/search.js?1540520735"></script>
 
     
   </div>
@@ -158,9 +158,9 @@
  
   
     
-      <li data-nav-id="/bootstrap/create/" title="Create An Application" class="dd-item ">
+      <li data-nav-id="/bootstrap/create/" title="Your First Application" class="dd-item ">
         <a href="/bootstrap/create/">
-        Create An Application
+        Your First Application
         
         </a>
     </li>
@@ -508,6 +508,76 @@
  
 
           
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/examples/" title="Examples" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/examples/">
+          Examples
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/tutorial/" title="Tutorial" class="dd-item ">
+        <a href="/examples/tutorial/">
+        Tutorial
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/examples/blog/" title="Blog" class="dd-item ">
+        <a href="/examples/blog/">
+        Blog
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
          
     </ul>
 
@@ -583,8 +653,16 @@
 <li>
 <ul>
 <li><a href="#create-a-channel">Create a Channel</a></li>
-<li><a href="#update-the-word-service">Update the Word Service</a></li>
-<li><a href="#emit-events">Emit Events</a></li>
+<li><a href="#update-the-word-service">Update the Word Service</a>
+<ul>
+<li><a href="#update-the-constructor">Update the Constructor</a></li>
+<li><a href="#process-events">Process Events</a></li>
+</ul></li>
+<li><a href="#emit-events">Emit Events</a>
+<ul>
+<li><a href="#use-the-updated-constructor">Use the Updated Constructor</a></li>
+<li><a href="#publish-events">Publish Events</a></li>
+</ul></li>
 <li><a href="#ship-it">Ship It</a></li>
 </ul></li>
 </ul>
@@ -608,15 +686,13 @@
 
 
 
-<p>Services need to communicate, but cannot <code>Call()</code> each other.  To communicate between services, Microlith provides broadcast channels.  A Channel is a Stream that is shared between all services in a domain.  It can be published to and processed from just like a stream.</p>
+<p>Channels are created by calling either the <a href="https://godoc.org/gopkg.in/microlith.v0/#Channel">microlith.Channel()</a> function to create a channel in the root domain, or by calling the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Domain.Channel">microlith.Channel()</a> method on a domain builder to create a channel in a subdomain.  The returned reference can then be passed to a service so the service can interact with the channel.</p>
 
-<p>Channels are created by calling either the <code>microlith.Channel()</code> function to create a channel in the root domain, or by calling the <code>Channel()</code> method on a domain builder to create a channel in a subdomain.  The returned reference can then be passed to a service so the service can interact with the channel.</p>
+<p>Let&rsquo;s create a channel that logs an event when a request is made against the &ldquo;hello-world&rdquo; endpoint in the Origin.</p>
 
 <h2 id="create-a-channel">Create a Channel</h2>
 
-<p>Let&rsquo;s create a channel that logs an event when a request is made against the &ldquo;hello-world&rdquo; endpoint in the Origin.  First, create the channel and an event type in the origin.</p>
-
-<p>In your <code>root.go</code>:</p>
+<p>First, create the channel and an event type in the origin.  In your <code>root.go</code>:</p>
 
 <pre><code class="language-go">var (
   requests = microlith.Channel(&quot;requests&quot;)
@@ -631,9 +707,11 @@ type Request struct {
 
 <h2 id="update-the-word-service">Update the Word Service</h2>
 
-<p>Next, we need to pass the channel to the services that will use it and start processing events sent over the channel.  First, update the constructor for the <code>word</code> service so that it takes the channel as an argument.</p>
+<p>Next, we need to pass the channel to the services that will use it and start processing events sent over the channel.</p>
 
-<p>In your <code>word.go</code>:</p>
+<h3 id="update-the-constructor">Update the Constructor</h3>
+
+<p>First, update the constructor for the word service so that it takes the channel as an argument.  In your <code>word.go</code>:</p>
 
 <pre><code class="language-go">type Word struct {
   // ... Same as before ...
@@ -651,7 +729,9 @@ func NewWord(word string, requests *strm.Stream) *Word {
 }
 </code></pre>
 
-<p>Next, process events on the channel by creating a <code>strm.Processor</code> in the builder.  Implement a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_Kinesis.md">Kinesis Lambda</a> method to handle the events.  Use the <code>Subscribe()</code> method to subscribe to the channel.</p>
+<h3 id="process-events">Process Events</h3>
+
+<p>Next, process events on the channel by creating a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Processor">strm.Processor</a> in the builder.  Implement a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_Kinesis.md">Kinesis Lambda</a> method to handle the events.  Use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Processor.Subscribe">Subscribe()</a> method to subscribe to the channel.</p>
 
 <pre><code class="language-go">func (word *Word) Build(service *tld.Service) {
   // ... Same as before ...
@@ -681,6 +761,8 @@ func (word *Word) processRequests(ctx context.Context, evt events.KinesisEvent) 
 
 <p>Now that the services are updated to subscribe to the channel, we need to provide the channel to the services and start publishing events.</p>
 
+<h3 id="use-the-updated-constructor">Use the Updated Constructor</h3>
+
 <p>Use the new constructors to pass the channel to the services.  In your <code>root.go</code>:</p>
 
 <pre><code class="language-go">var (
@@ -691,7 +773,9 @@ func (word *Word) processRequests(ctx context.Context, evt events.KinesisEvent) 
 )
 </code></pre>
 
-<p>Finally, publish an event to the channel on every request:</p>
+<h3 id="publish-events">Publish Events</h3>
+
+<p>Finally, publish an event to the channel on every request.  Be sure to always <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher.Flush">Flush()</a> publishers to ensure that any batched messages are sent.</p>
 
 <pre><code class="language-go">var publisher = strm.NewPublisher(requests)
 
@@ -707,17 +791,16 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 
 <h2 id="ship-it">Ship It</h2>
 
-<p>Now both services will process an event every time a request is made against the <code>hello-world</code> endpoint.  Commit and push to deploy your changes.</p>
+<p>Now both services will process an event every time a request is made against the &ldquo;hello-world&rdquo; endpoint.  Commit and push to deploy your changes.</p>
 
 <pre><code class="language-bash">git add .
 git commit -m &quot;Added a channel&quot;
 git push origin master
 </code></pre>
 
-<p>Make a request against the <code>GET /</code> endpoint and your processors will soon emit a message to the logs.</p>
+<p>Make a request against your application and the processors will soon emit a message to their CloudWatch logs.</p>
 
-<pre><code class="language-bash"># Trigger a publish
-curl -v https://prod.my-domain.com/
+<pre><code class="language-bash">curl -v https://prod.my-domain.com/
 </code></pre>
 
 
@@ -1083,6 +1166,54 @@ curl -v https://prod.my-domain.com/
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
             
         
         
@@ -1102,20 +1233,20 @@ curl -v https://prod.my-domain.com/
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.min.js?1540514675"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1540514675"></script>
-    <script src="/js/jquery.sticky.js?1540514675"></script>
-    <script src="/js/featherlight.min.js?1540514675"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1540514675"></script>
-    <script src="/js/highlight.pack.js?1540514675"></script>
+    <script src="/js/clipboard.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.min.js?1540520735"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1540520735"></script>
+    <script src="/js/jquery.sticky.js?1540520735"></script>
+    <script src="/js/featherlight.min.js?1540520735"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1540520735"></script>
+    <script src="/js/highlight.pack.js?1540520735"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1540514675"></script>
-    <script src="/js/learn.js?1540514675"></script>
-    <script src="/js/hugo-learn.js?1540514675"></script>
+    <script src="/js/modernizr.custom.71422.js?1540520735"></script>
+    <script src="/js/learn.js?1540520735"></script>
+    <script src="/js/hugo-learn.js?1540520735"></script>
 
-    <link href="/mermaid/mermaid.css?1540514675" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1540514675"></script>
+    <link href="/mermaid/mermaid.css?1540520735" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1540520735"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

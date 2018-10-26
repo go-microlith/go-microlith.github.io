@@ -12,13 +12,24 @@
     
     
     <item>
+      <title>Tutorial</title>
+      <link>http://example.org/examples/tutorial/</link>
+      <pubDate>Thu, 25 Oct 2018 18:58:57 -0600</pubDate>
+      
+      <guid>http://example.org/examples/tutorial/</guid>
+      <description>The complete code from the tutorial is available in the  tutorial.com repository.
+Clone The repository should be cloned to the root of your Go workspace&amp;rsquo;s source tree, i.e. ${GOPATH}/src/tutorial.com.
+# Clone the repo to the root of your Go workspace&#39;s source tree mkdir -p &amp;quot;${GOPATH}/src/tutorial.com&amp;quot; git clone https://github.com/go-microlith/tutorial.com &amp;quot;${GOPATH}/src/tutorial.com&amp;quot; # Microlith will recreate this rm -rf &amp;quot;${GOPATH}/src/tutorial.com/.git/&amp;quot; # Build the application go install tutorial.com  Bootstrap Assuming you own the domain name my-domain.</description>
+    </item>
+    
+    <item>
       <title>Get Microlith</title>
       <link>http://example.org/bootstrap/go_get/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://example.org/bootstrap/go_get/</guid>
-      <description>Use go get to fetch Microlith:
-go get -u gopkg.in/microlith.v0  </description>
+      <description>Microlith is a standard Go library. Just use &amp;ldquo;go get&amp;rdquo;:
+go get gopkg.in/microlith.v0  Now you&amp;rsquo;re ready to create your first application.</description>
     </item>
     
     <item>
@@ -28,8 +39,8 @@ go get -u gopkg.in/microlith.v0  </description>
       
       <guid>http://example.org/architecture/services/</guid>
       <description>Business logic for an application is factored into Services. A Service is a REST API, a set of resources, and a set of asynchronous actions.
-Services follow an AWS::Serverless model, containing resources such as Buckets, Tables, and Streams along with Lambda functions to asynchronously react to events on those resources. All external access to the resources goes through endpoints on a REST API.
-All resources in the service are available to all Lambdas in the service, but services cannot access resources outside of the ones they declare nor other services.</description>
+Serverless Services follow an AWS::Serverless model, containing resources such as Buckets, Tables, and Streams along with Lambda functions to asynchronously react to events on those resources. All external access to the resources goes through endpoints on a REST API.
+Scope All resources in the service are available to all Lambdas in the service, but services cannot access resources outside of the ones they declare nor other services.</description>
     </item>
     
     <item>
@@ -38,20 +49,22 @@ All resources in the service are available to all Lambdas in the service, but se
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://example.org/tutorial/root/</guid>
-      <description>The root domain is the starting point for a Microlith application. It has a specialized API exposed via the top-level microlith package.
-The Origin Start by creating a single endpoint on the origin of your root domain. This endpoint responds to GET / with a 200 OK and a response body of &amp;quot;Hello, world!&amp;quot;.
-You add endpoints by defining an API with the microlith.Scope() function. You must pass a unique name and a handler function for each defined endpoint.</description>
+      <description>The root domain is the starting point for a Microlith application. It has a specialized API exposed via the top-level &amp;ldquo;microlith&amp;rdquo; package.
+We will start by adding a &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application.
+The Origin You add endpoints by defining an API with the microlith.Scope() function.
+You must pass a unique name and a handler function for each defined endpoint. This function must match the signature of an API Gateway Lambda Function.</description>
     </item>
     
     <item>
-      <title>Create An Application</title>
-      <link>http://example.org/bootstrap/create/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      <title>Blog</title>
+      <link>http://example.org/examples/blog/</link>
+      <pubDate>Thu, 25 Oct 2018 18:58:57 -0600</pubDate>
       
-      <guid>http://example.org/bootstrap/create/</guid>
-      <description>Microlith applications are a single Go executable that serves an entire top-level domain, such as example.com. To create an application, create an executable in ${GOPATH}/src/example.com/main.go that calls microlith.Main().
-package main import ( microlith &amp;quot;gopkg.in/microlith.v0&amp;quot; ) func main() { microlith.Main() }  The name of the executable is significant to Microlith. It must be named after the top-level domain name it logically serves. In this case, example.com.
-The import path of the source code is also significant to Microlith.</description>
+      <guid>http://example.org/examples/blog/</guid>
+      <description>A blogging application with social features is available in the  blog.com repository.
+It provides a basic API for performing CRUD operations on blog posts. It extends this API with comments on blog posts and with Facebook-style reactions (&amp;ldquo;Like&amp;rdquo;, &amp;ldquo;Love&amp;rdquo;, etc.) on both posts and comments.
+Clone The repository should be cloned to the root of your Go workspace&amp;rsquo;s source tree, i.e. ${GOPATH}/src/blog.com:
+# Clone the repo to the root of your Go workspace&#39;s source tree mkdir -p &amp;quot;${GOPATH}/src/blog.</description>
     </item>
     
     <item>
@@ -61,7 +74,7 @@ The import path of the source code is also significant to Microlith.</descriptio
       
       <guid>http://example.org/architecture/domains/</guid>
       <description>Services are grouped into a Domain. A Domain is a REST API, a set of services, and set of channels.
-Domains route using REST. The API, called the Origin, handles all external traffic. It receives requests, makes calls on the services to collect state and perform business logic, and then constructs a response to the user.</description>
+Routing Domains route using REST. The API, called the Origin, handles all external traffic. It receives requests, makes calls on the services to collect state and perform business logic, and then constructs a response to the user.</description>
     </item>
     
     <item>
@@ -71,8 +84,19 @@ Domains route using REST. The API, called the Origin, handles all external traff
       
       <guid>http://example.org/tutorial/services/</guid>
       <description>Services implement the business logic of your Microlith application. At the code level, a service is an object which implements the tld.ServiceBuilder interface.
-Let&amp;rsquo;s refactor our domain into a pair of services: a hello and a world service. Then we&amp;rsquo;ll refactor our origin endpoint to call those services to build a response.
-Create a Service We will create a word service that returns a fixed word. The word service will have one endpoint that responds to GET / with a 200 OK and the word as JSON.</description>
+Let&amp;rsquo;s refactor our domain into a pair of services: a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service. Then we&amp;rsquo;ll refactor our origin endpoint to call those services to build a response.
+Create a Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word. The word service will have one endpoint that responds with the word as JSON.</description>
+    </item>
+    
+    <item>
+      <title>Your First Application</title>
+      <link>http://example.org/bootstrap/create/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://example.org/bootstrap/create/</guid>
+      <description>Microlith applications are a single Go executable that serves an entire top-level domain, such as example.com.
+Create an Application To create an application, create an executable in ${GOPATH}/src/example.com/main.go and call microlith.Main():
+package main import ( microlith &amp;quot;gopkg.in/microlith.v0&amp;quot; ) func main() { microlith.Main() }  The name of the executable is significant to Microlith. It must be named after the top-level domain name it logically serves. In this case, &amp;ldquo;example.com&amp;rdquo;.</description>
     </item>
     
     <item>
@@ -81,7 +105,7 @@ Create a Service We will create a word service that returns a fixed word. The wo
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://example.org/architecture/channels/</guid>
-      <description>To communicate between services, you can create Channels. Channels provide asynchronous broadcast messaging to all services in a domain.
+      <description>Services need to communicate, but cannot call endpoints on each other. To communicate between services, Microlith provides broadcast channels.
 Any service can publish events onto channels it has references to. When a service publishes an event on a channel, all subscribed processors in all services receive that event.</description>
     </item>
     
@@ -102,7 +126,8 @@ Any service can publish events onto channels it has references to. When a servic
       
       <guid>http://example.org/bootstrap/route53/</guid>
       <description>Microlith uses Route53 DNS as its global router. This requires a one-time, non-automatable setup. Once set up, a domain name can be reused for multiple Microlith applications.
-Domain Name You will need a domain name hosted in Route53. If you have an existing domain, it can be reused. Microlith will not alter the settings of the domain name, only manage a set of subdomain A records for each application.</description>
+You will need the Domain Name and the Hosted Zone ID to bootstrap your application. For the remainder of the documentation, we will assume you own my-domain.com in hosted zone Z1234567890.
+ Domain Name You will need a domain name hosted in Route53.</description>
     </item>
     
     <item>
@@ -112,7 +137,7 @@ Domain Name You will need a domain name hosted in Route53. If you have an existi
       
       <guid>http://example.org/architecture/application/</guid>
       <description>An Application is the top-level container in a Microlith app. An application is a root domain, a set of named subdomains, and a set of global services and channels.
-An Application routes using DNS. The root domain is mounted under the top-level DNS name specified in the bootstrap process. All subdomains are mounted relative to the root domain.</description>
+Routing An Application routes using DNS. The root domain is mounted under the top-level DNS name specified in the bootstrap process. All subdomains are mounted relative to the root domain.</description>
     </item>
     
     <item>
@@ -121,7 +146,8 @@ An Application routes using DNS. The root domain is mounted under the top-level 
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://example.org/bootstrap/bootstrap/</guid>
-      <description>The bootstrap process will host for your application in AWS. This includes a Git repository for your source code and a continuous deployment pipeline with test and production environments for your application. It will then initialize a git repository in your local source tree, create an initial commit and push, and wait for a full build and deploy to go green.
+      <description>The bootstrap process will host for your application in AWS.
+This includes a Git repository for your source code and a continuous deployment pipeline with test and production environments for your application. It will then initialize a git repository in your local source tree, create an initial commit and push, and wait for a full build and deploy to go green.
 The process will take several minutes for the initial deploy.</description>
     </item>
     
@@ -131,8 +157,8 @@ The process will take several minutes for the initial deploy.</description>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://example.org/tutorial/channels/</guid>
-      <description>Services need to communicate, but cannot Call() each other. To communicate between services, Microlith provides broadcast channels. A Channel is a Stream that is shared between all services in a domain. It can be published to and processed from just like a stream.
-Channels are created by calling either the microlith.Channel() function to create a channel in the root domain, or by calling the Channel() method on a domain builder to create a channel in a subdomain.</description>
+      <description>Channels are created by calling either the microlith.Channel() function to create a channel in the root domain, or by calling the microlith.Channel() method on a domain builder to create a channel in a subdomain. The returned reference can then be passed to a service so the service can interact with the channel.
+Let&amp;rsquo;s create a channel that logs an event when a request is made against the &amp;ldquo;hello-world&amp;rdquo; endpoint in the Origin.</description>
     </item>
     
     <item>
@@ -142,9 +168,9 @@ Channels are created by calling either the microlith.Channel() function to creat
       
       <guid>http://example.org/bootstrap/done/</guid>
       <description>Once the build completes and deploys, your application has been bootstrapped.
-You can validate that it is running by making a HTTP request against your test and production instances. You should receive a &amp;ldquo;Missing authentication token&amp;rdquo; message since no endpoints are defined.
-curl -v https://test.my-domain.com/ curl -v https://prod.my-domain.com/  From now on, git push origin master deploys your application:
-git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  If you receive a 403 when trying to push on Mac OS X, the credentials stored in the Keychain have expired.</description>
+Call Your Application You can validate that it is running by making a HTTP request against your test and production instances. You should receive a &amp;ldquo;Missing authentication token&amp;rdquo; message since no endpoints are defined.
+curl -v https://test.my-domain.com/ curl -v https://prod.my-domain.com/  Deploy Your Application From now on, git push origin master deploys your application:
+git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  If you receive a &amp;ldquo;403&amp;rdquo; when trying to push on Mac OS X, the credentials stored in the Keychain have expired.</description>
     </item>
     
     <item>
@@ -153,8 +179,9 @@ git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  I
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://example.org/architecture/globals/</guid>
-      <description>Global services share business logic across domains. They can be called by all services and origins.
-Global channels broadcast messages among all services and origins.</description>
+      <description>Some business logic needs to be shared between multiple domains, but services and subdomains cannot access each other. To share logic across the entire application, Microlith provides Global services and channels.
+Services Global services share business logic across domains. They can be called by all services and origins.
+Channels Global channels broadcast messages among all services and origins.</description>
     </item>
     
     <item>
@@ -163,9 +190,10 @@ Global channels broadcast messages among all services and origins.</description>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://example.org/tutorial/globals/</guid>
-      <description>Some business logic needs to be shared between multiple domains, but services and subdomains cannot access each other. To share logic across the entire application, Microlith provides Global services and channels.
-Global services are addressable by all services and origins in any domain. Global services are created by calling the microlith.GlobalService() function with a tld.ServiceBuilder. The built service can be passed directly to subdomains and services.
-Global channels are addressable by any service or origin in any domain and any global service.</description>
+      <description>Global services are addressable by all services and origins in any domain. The built service can be passed directly to subdomains and services.
+Global channels are addressable by any service or origin in any domain and any global service. The returned reference can be passed to domains and services.
+Let&amp;rsquo;s promote the &amp;ldquo;world&amp;rdquo; service to a global service and the &amp;ldquo;requests&amp;rdquo; channel to a global channel.
+Promote the World Service To promote the &amp;ldquo;world&amp;rdquo; service, we need to use the microlith.</description>
     </item>
     
     <item>
@@ -175,7 +203,7 @@ Global channels are addressable by any service or origin in any domain and any g
       
       <guid>http://example.org/tutorial/subdomains/</guid>
       <description>Creating a subdomain is similar to creating a service. At the code level, a subdomain is an object that implements the tld.DomainBuilder interface and is registered under the root domain.
-We will create a subdomain that mirrors the root domain. It will have a hello service and use the global world service and requests channel. The origin will have an endpoint that calls these services and constructs the response.</description>
+Let&amp;rsquo;s create a subdomain named &amp;ldquo;sub.domain&amp;rdquo; that returns &amp;ldquo;Hello, subdomain world!&amp;rdquo;. It will have a &amp;ldquo;hello&amp;rdquo; service and use the global &amp;ldquo;world&amp;rdquo; service and &amp;ldquo;requests&amp;rdquo; channel. The subdomain&amp;rsquo;s origin will have an endpoint that calls these services and constructs the response.</description>
     </item>
     
   </channel>
