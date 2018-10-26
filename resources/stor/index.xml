@@ -42,7 +42,7 @@ All operations support optional builders to refine the operations.</description>
       <guid>http://example.org/resources/stor/watcher/</guid>
       <description>If change streaming is enabled on a table, changes to the table can be processed using a Watcher Lambda function. Only tables can be watched, not secondary indexes.
 To create a watcher, call the Watcher() method on a service builder.
-// Create a watcher watcher = service.Watcher(&amp;quot;process-changes&amp;quot;, func(ctx context.Context, evt events.DynamoDBEvent) error { // ... }) // Watch for changes on the table watcher.Watch(table, strm.StartingPositionTrimHorizon)  </description>
+// Create a watcher watcher := service.Watcher(&amp;quot;process-changes&amp;quot;, func(ctx context.Context, evt events.DynamoDBEvent) error { // ... }) // Watch for changes on the table watcher.Watch(table, strm.StartingPositionTrimHorizon)  </description>
     </item>
     
   </channel>

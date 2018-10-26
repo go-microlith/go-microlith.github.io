@@ -12,19 +12,19 @@
     <title>APIs :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1540591084" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1540591084" rel="stylesheet">
-    <link href="/css/hybrid.css?1540591084" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1540591084" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1540591084" rel="stylesheet">
-    <link href="/css/auto-complete.css?1540591084" rel="stylesheet">
-    <link href="/css/theme.css?1540591084" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1540591084" rel="stylesheet">
+    <link href="/css/nucleus.css?1540594737" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1540594737" rel="stylesheet">
+    <link href="/css/hybrid.css?1540594737" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1540594737" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1540594737" rel="stylesheet">
+    <link href="/css/auto-complete.css?1540594737" rel="stylesheet">
+    <link href="/css/theme.css?1540594737" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1540594737" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1540591084" rel="stylesheet">
+      <link href="/css/theme-blue.css?1540594737" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1540591084"></script>
+    <script src="/js/jquery-2.x.min.js?1540594737"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1540591084"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1540591084"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1540594737"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1540594737"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/example.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1540591084"></script>
+<script type="text/javascript" src="/js/search.js?1540594737"></script>
 
     
   </div>
@@ -522,78 +522,6 @@
  
   
     
-    <li data-nav-id="/resources/rest/" title="APIs" class="dd-item 
-        parent
-        active
-        
-        ">
-      <a href="/resources/rest/">
-          APIs
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-          
-        
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/resources/rest/define/" title="Define an API" class="dd-item ">
-        <a href="/resources/rest/define/">
-        Define
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/resources/rest/call/" title="Call an API" class="dd-item ">
-        <a href="/resources/rest/call/">
-        Call
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-              
-    </li>
-  
- 
-
-            
-          
-            
-            
-
-
- 
-  
-    
     <li data-nav-id="/resources/blob/" title="Buckets" class="dd-item 
         
         
@@ -842,6 +770,78 @@
       <li data-nav-id="/resources/stor/watcher/" title="Watching for Changes" class="dd-item ">
         <a href="/resources/stor/watcher/">
         Watch
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/resources/rest/" title="APIs" class="dd-item 
+        parent
+        active
+        
+        ">
+      <a href="/resources/rest/">
+          APIs
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/resources/rest/define/" title="Define an API" class="dd-item ">
+        <a href="/resources/rest/define/">
+        Define
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/resources/rest/call/" title="Call an API" class="dd-item ">
+        <a href="/resources/rest/call/">
+        Call
         
         </a>
     </li>
@@ -1127,138 +1127,35 @@
 
 <h1 id="rest-apis">REST APIs</h1>
 
-<p>Microlith supports REST APIs built with API Gateway.</p>
+<h2 id="define">Define</h2>
 
-<p>Defining APIs</p>
+<pre><code class="language-go">var endpoint *rest.Endpoint
 
-<p>APIs follow the AWS API Gateway design, based on Swagger.  Define your API by
-calling the Scope() method on a service or domain builder.  Within your scope,
-use the builder DSL to define your API.</p>
-
-<p>Scopes</p>
-
-<p>Scope names are paths, such as &ldquo;/foo&rdquo; or &ldquo;/foo/bar&rdquo;.  Scopes can contain
-path parameters enclosed in curly braces, such as &ldquo;/{foo-id}&rdquo;.  Scopes can
-define nested scopes which are prefixed by their parent scope.</p>
-
-<p>// Define a scope
-  service.Scope(&ldquo;/foo&rdquo;, func(scope *Scope) {
-    // Define a nested scope with a path parameter
-    scope.Scope(&ldquo;/{foo-id}&rdquo;, func(scope *Scope) {
-      // &hellip;
-    })
-  })</p>
-
-<p>Endpoints</p>
-
-<p>Endpoints are Lambda functions that handle HTTP requests.  They are created with
-methods named after HTTP methods.</p>
-
-<p>var echoEndpoint *Endpoint</p>
-
-<p>service.Scope(&ldquo;/&rdquo;, func(scope *Scope) {
-    echoEndpoint = scope.Get(&ldquo;echo&rdquo;, echoHandler)
-  })</p>
-
-<p>All of the endpoint creation methods take an optional request builder to define
-query parameters and headers as well as responses.</p>
-
-<p>service.Scope(&ldquo;/&rdquo;, func(scope *Scope) {
-    scope.Get(&ldquo;echo&rdquo;, echoHandler, func(endpoint *Endpoint) {
-      endpoint.QueryParameter(&ldquo;a-query-param&rdquo;, false)
-      endpoint.Header(&ldquo;x-request-header&rdquo;, false)</p>
-
-<pre><code>  endpoint.Response(http.StatusOK, func(response *Response) {
-    response.Header(&quot;x-response-header&quot;, false)
+service.Scope(&quot;/hello&quot;, func(scope *rest.Scope) {
+  endpoint = scope.Get(&quot;world&quot;, func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+    return rest.Respond(http.StatusOK, &quot;Hello, world!&quot;)
   })
-
-  echoEndpoint = endpoint
 })
+
+
+client := tld.ServiceClient(service)
 </code></pre>
 
-<p>})</p>
+<h2 id="call">Call</h2>
 
-<p>Within the handler functions, use the RequestBody() and Respond() helpers to
-parse a JSON request body and respond using JSON.  If Respond() is passed an
-error value, the error message is placed in the &lsquo;X-Microlith-Error&rsquo; header.</p>
+<pre><code class="language-go">resp, err := client.Call(endpoint, nil)
+if err != nil {
+  // ...
+}
 
-<p>// Handler function
-  func echoHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-    var body map[string]interface{}
-    if err := RequestBody(&amp;body); err != nil {
-      return Respond(http.StatusBadRequest, err)
-    }</p>
-
-<pre><code>return Respond(http.StatusOK, body)
+switch resp.StatusCode {
+case http.StatusOK:
+  var body map[string]interface{}
+  return body, rest.ResponseBody(resp, &amp;body)
+default:
+  return nil, rest.ErrorResponse(resp, nil)
+}
 </code></pre>
-
-<p>}</p>
-
-<p>Calling APIs</p>
-
-<p>Call APIs by creating a Client and calling the Call() method.  This takes the
-endpoint to call and an optional request body for non HEAD and GET requests.
-Call() can be passed an optional request builder to set the path and query
-parameters and request headers.  The Call() method returns a standard
-http.Response.</p>
-
-<p>requestBody := map[string]interface{}{&ldquo;Foo&rdquo;: &ldquo;bar&rdquo;}
-  responseBody := map[string]interface{}{}</p>
-
-<p>// Construct a new client
-  var client = NewClient(&ldquo;<a href="http://localhost:8080/&quot;">http://localhost:8080/&quot;</a>)</p>
-
-<p>// Call an endpoint
-  resp, err := client.Call(echoEndpoint, requestBody, func(request *Request) {
-    request.QueryParameter(&ldquo;foo&rdquo;, &ldquo;bar&rdquo;)
-    request.Header(&ldquo;x-foo&rdquo;, &ldquo;bar&rdquo;)
-  })
-  if err != nil {
-    log.Panic(err)
-  }</p>
-
-<p>Use the ResponseBody() and ErrorResponse() helpers to parse the response.
-ResponseBody() parses the response body as JSON.  ErrorResponse() creates an
-error out of the &lsquo;X-Microlith-Error&rsquo; header.  If the second argument to
-ErrorResponse() is a non-nil error, the response body is deserialized into it.</p>
-
-<p>switch resp.StatusCode {
-    case http.StatusOK:
-      if err := ResponseBody(resp, &amp;responseBody); err != nil {
-        log.Panic(err)
-      }
-    default:
-      err := ErrorResponse(resp, nil)
-      log.Panic(err)
-  }</p>
-
-<p>Shared Endpoint Properties</p>
-
-<p>To define request parameters and responses that are shared, define them on the
-scope.  Endpoints in the scope and all nested scopes will automatically inherit
-them.  Inherited request parameters and responses can be overridden in nested
-scopes or in individual endpoints.</p>
-
-<p>microlith.Scope(&ldquo;/foo&rdquo;, func(scope *Scope) {
-    scope.Header(&ldquo;x-header&rdquo;, true)</p>
-
-<pre><code>scope.Get(&quot;requires-header&quot;, handler)
-scope.Put(&quot;does-not-require-header&quot;, handler, func(endpoint *Endpoint) {
-  endpoint.Header(&quot;x-header&quot;, false)
-})
-
-scope.Scope(&quot;/bar&quot;, func(scope *Scope) {
-  scope.Get(&quot;requires-header&quot;, handler)
-})
-
-scope.Scope(&quot;/baz&quot;, func(scope *Scope) {
-  scope.Header(&quot;x-header&quot;, false)
-
-  scope.Get(&quot;does-not-require-header&quot;, handler)
-})
-</code></pre>
-
-<p>})</p>
 
 
 <footer class=" footline" >
@@ -1621,57 +1518,8 @@ scope.Scope(&quot;/baz&quot;, func(scope *Scope) {
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
                         
                         
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -1865,6 +1713,7 @@ scope.Scope(&quot;/baz&quot;, func(scope *Scope) {
             
                 
                     
+                    
                 
                 
 
@@ -1872,6 +1721,25 @@ scope.Scope(&quot;/baz&quot;, func(scope *Scope) {
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -1924,6 +1792,38 @@ scope.Scope(&quot;/baz&quot;, func(scope *Scope) {
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
             
         
                     
@@ -1982,7 +1882,7 @@ scope.Scope(&quot;/baz&quot;, func(scope *Scope) {
 
 
         
-            <a class="nav nav-prev" href="/resources/" title="Resources"> <i class="fas fa-chevron-left"></i></a>
+            <a class="nav nav-prev" href="/resources/stor/watcher/" title="Watching for Changes"> <i class="fas fa-chevron-left"></i></a>
         
         
             <a class="nav nav-next" href="/resources/rest/define/" title="Define an API" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
@@ -1994,20 +1894,20 @@ scope.Scope(&quot;/baz&quot;, func(scope *Scope) {
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1540591084"></script>
-    <script src="/js/perfect-scrollbar.min.js?1540591084"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1540591084"></script>
-    <script src="/js/jquery.sticky.js?1540591084"></script>
-    <script src="/js/featherlight.min.js?1540591084"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1540591084"></script>
-    <script src="/js/highlight.pack.js?1540591084"></script>
+    <script src="/js/clipboard.min.js?1540594737"></script>
+    <script src="/js/perfect-scrollbar.min.js?1540594737"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1540594737"></script>
+    <script src="/js/jquery.sticky.js?1540594737"></script>
+    <script src="/js/featherlight.min.js?1540594737"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1540594737"></script>
+    <script src="/js/highlight.pack.js?1540594737"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1540591084"></script>
-    <script src="/js/learn.js?1540591084"></script>
-    <script src="/js/hugo-learn.js?1540591084"></script>
+    <script src="/js/modernizr.custom.71422.js?1540594737"></script>
+    <script src="/js/learn.js?1540594737"></script>
+    <script src="/js/hugo-learn.js?1540594737"></script>
 
-    <link href="/mermaid/mermaid.css?1540591084" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1540591084"></script>
+    <link href="/mermaid/mermaid.css?1540594737" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1540594737"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
