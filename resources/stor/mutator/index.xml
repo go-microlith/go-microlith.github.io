@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Working with Tables on Microlith</title>
+    <link>http://microlith-framework.com/resources/stor/mutator/</link>
+    <description>Recent content in Working with Tables on Microlith</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Oct 2018 18:10:01 -0600</lastBuildDate>
+    
+	<atom:link href="http://microlith-framework.com/resources/stor/mutator/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>CRUD Operations</title>
+      <link>http://microlith-framework.com/resources/stor/mutator/crud/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/stor/mutator/crud/</guid>
+      <description>Mutators support CRUD operations on individual items. Every operation takes a key to identify the object to operate on and/or a value. These keys and values can be either non-nil map[string]interface{} values or structs. If a value is used as a key, it must include the key fields specified when the table is created.
+Put The Put() inserts or overwrites a value in the table. The item passed must include the key fields.</description>
+    </item>
+    
+    <item>
+      <title>Query Operations</title>
+      <link>http://microlith-framework.com/resources/stor/mutator/query/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/stor/mutator/query/</guid>
+      <description>The Query and Scan operations operate a page of results at a time. They return a Result object to process the items in the results.
+// Query the first page of results from the table result, err := mutator.Query(ctx, func(query *Query) { query.KeyCondition( expression.Name(&amp;quot;Foo&amp;quot;).Equal(expression.Value(&amp;quot;bar&amp;quot;)), ) }) if err != nil { log.Panic(err) }  To fetch and process all of the pages, the Result object contains the last evaluated key</description>
+    </item>
+    
+    <item>
+      <title>Batch Operations</title>
+      <link>http://microlith-framework.com/resources/stor/mutator/batch/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/stor/mutator/batch/</guid>
+      <description>Batch operations on tables are supported via top-level functions.
+Get The operation retrieves multiple items from multiple tables at once.
+Create Call the GetBatch() function and pass it a builder. Use the builder to Get() items from tables via their Keys(). You can use Consistent() reads and Project() only select attributes into the result.
+You can perform up to 100 operations in a batch on one or more tables in a batch.</description>
+    </item>
+    
+  </channel>
+</rss>

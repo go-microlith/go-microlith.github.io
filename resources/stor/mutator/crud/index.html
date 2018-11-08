@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Categories :: Microlith</title>
+    <title>CRUD Operations :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1541713428" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/resources/stor/mutator/crud/">
     <nav id="sidebar" class="">
 
 
@@ -439,7 +439,7 @@
   
     
     <li data-nav-id="/resources/" title="Resources" class="dd-item 
-        
+        parent
         
         
         ">
@@ -610,7 +610,7 @@
   
     
     <li data-nav-id="/resources/stor/" title="Tables" class="dd-item 
-        
+        parent
         
         
         ">
@@ -637,7 +637,7 @@
   
     
     <li data-nav-id="/resources/stor/mutator/" title="Working with Tables" class="dd-item 
-        
+        parent
         
         
         ">
@@ -661,7 +661,7 @@
  
   
     
-      <li data-nav-id="/resources/stor/mutator/crud/" title="CRUD Operations" class="dd-item ">
+      <li data-nav-id="/resources/stor/mutator/crud/" title="CRUD Operations" class="dd-item active">
         <a href="/resources/stor/mutator/crud/">
         CRUD
         
@@ -989,7 +989,31 @@
                     
           
           
-            Categories
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/resources/'>Resources</a> > <a href='/resources/stor/'>Tables</a> > <a href='/resources/stor/mutator/'>Working with Tables</a> > CRUD Operations
+          
+         
+          
+         
+          
+         
+          
+         
           
            
                   </span>
@@ -997,7 +1021,17 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#put">Put</a></li>
+<li><a href="#get">Get</a></li>
+<li><a href="#update">Update</a></li>
+<li><a href="#delete">Delete</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -1009,7 +1043,7 @@
         
         <div id="body-inner">
           
-            <h1>Categories</h1>
+            <h1>CRUD Operations</h1>
           
 
         
@@ -1017,9 +1051,67 @@
 
 
 
+<p>Mutators support CRUD operations on individual items.  Every operation takes a key to identify the object to operate on and/or a value.  These keys and values can be either non-nil <code>map[string]interface{}</code> values or <code>struct</code>s.  If a value is used as a key, it must include the key fields specified when the table is created.</p>
+
+<h2 id="put">Put</h2>
+
+<p>The <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#Mutator.Put">Put()</a> inserts or overwrites a value in the table.  The item passed must include the key fields.</p>
+
+<pre><code class="language-go">for _, album := range []Album{suchSweetThunder, threeSuites, aLoveSupreme} {
+  if err := mutator.Put(ctx, album); err != nil {
+    log.Panic(err)
+  }
+}
+</code></pre>
+
+<h2 id="get">Get</h2>
+
+<p>The <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#Mutator.Get">Get()</a> operation fetches a single item from the table.  The key value must contain the key fields.  You must provide a value to deserialize the fetched item, if found.</p>
+
+<pre><code class="language-go">key := Album{
+  Name:   &quot;Three Suites&quot;,
+  Artist: &quot;Duke Ellington and His Orchestra&quot;,
+}
+var value Album
+
+found, err := mutator.Get(ctx, key, &amp;value)
+if err != nil {
+  log.Panic(err)
+}
+</code></pre>
+
+<h2 id="update">Update</h2>
+
+<p>The <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#Mutator.Update">Update()</a> operation mutates an existing item in-place.  The update operation always requires passing a builder so the attributes to update can be given as an expression.</p>
+
+<pre><code class="language-go">threeSuites.Year = 1990
+threeSuites.UpdatedAt = time.Now()
+
+if err := mutator.Update(ctx, threeSuites, func(update *Update) {
+  update.Update(
+    expression.
+      Set(expression.Name(&quot;Year&quot;),      expression.Value(threeSuites.Year)).
+      Set(expression.Name(&quot;UpdatedAt&quot;), expression.Value(threeSuites.UpdatedAt)),
+  )
+}); err != nil {
+  log.Panic(err)
+}
+</code></pre>
+
+<h2 id="delete">Delete</h2>
+
+<p>The <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#Mutator.Delete">Delete()</a> operation removes an item from the table.</p>
+
+<pre><code class="language-go">if err := mutator.Delete(ctx, suchSweetThunder); err != nil {
+  log.Panic(err)
+}
+</code></pre>
+
+
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -1311,116 +1403,6 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -1437,34 +1419,8 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
                         
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
-            
-            
-                
                     
                 
                 
@@ -1473,79 +1429,6 @@
                     
                     
 
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
                     
                         
             
@@ -1635,6 +1518,225 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                 
                 
 
@@ -1653,8 +1755,10 @@
 
 
         
+            <a class="nav nav-prev" href="/resources/stor/mutator/" title="Working with Tables"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/resources/stor/mutator/query/" title="Query Operations" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -1684,3 +1788,4 @@
 
   </body>
 </html>
+

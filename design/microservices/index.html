@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Categories :: Microlith</title>
+    <title>Microservices :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1541713428" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/design/microservices/">
     <nav id="sidebar" class="">
 
 
@@ -242,7 +242,7 @@
   
     
     <li data-nav-id="/design/" title="Design" class="dd-item 
-        
+        parent
         
         
         ">
@@ -266,7 +266,7 @@
  
   
     
-      <li data-nav-id="/design/microservices/" title="Microservices" class="dd-item ">
+      <li data-nav-id="/design/microservices/" title="Microservices" class="dd-item active">
         <a href="/design/microservices/">
         Microservices
         
@@ -989,7 +989,19 @@
                     
           
           
-            Categories
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/design/'>Design</a> > Microservices
+          
+         
+          
+         
           
            
                   </span>
@@ -997,7 +1009,16 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#services">Services</a></li>
+<li><a href="#domains">Domains</a></li>
+<li><a href="#applications">Applications</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -1009,7 +1030,7 @@
         
         <div id="body-inner">
           
-            <h1>Categories</h1>
+            <h1>Microservices</h1>
           
 
         
@@ -1017,9 +1038,41 @@
 
 
 
+<p>Microlith uses a microservices-based model called the Domain model.  It has three main concepts: Services, Domains, and Applications.</p>
+
+<h2 id="services">Services</h2>
+
+<p>Services are atomic units of business logic and are the base building block of a Microlith application.</p>
+
+<p>Services are implemented as AWS::Serverless services, containing resources such as <a href="/resources/blob">Buckets</a>, <a href="/resources/stor">Tables</a>, and <a href="/resources/strm">Streams</a> to store and communicate state.</p>
+
+<p>A service&rsquo;s external interface is a REST API.  Endpoints on the API implement business logic by <a href="/resources/blob/manipulator">manipulating</a> buckets, <a href="/resources/stor/mutator">mutating</a> tables, and <a href="/resources/strm/publish">publishing</a> to streams.</p>
+
+<p>Asynchronous business logic such as <a href="/resources/blob/observer">observing</a> objects in a bucket, <a href="/resources/stor/watcher">watching</a> changes to tables, and <a href="/resources/strm/processor">processing</a> events published to a stream is implemented by attaching Lambdas to resources.  Services additionally support non-resource actions, such as scheduling <a href="/resources/cron">cron jobs</a> and <a href="/resources/inst">reading</a> Lambdas&rsquo; logs.</p>
+
+<p>Unlike a standard AWS::Serverless service, the API is not publicly routable.  Microlith services must live in a container that makes calls on them, such as a Domain or Application.</p>
+
+<h2 id="domains">Domains</h2>
+
+<p>Domains are containers for services.  They compose the business logic of the services to build larger, richer, and more complex units of business logic.</p>
+
+<p>A domain&rsquo;s external interface is a REST API mounted under a publicly routable DNS name.  Endpoints on this API, named the Origin, implement business logic by making calls on the services in the domain.</p>
+
+<p>Services themselves cannot make calls on their peers in the domain.  To coordinate between them, domains provide broadcast Channels.  Channels are streams that are shared between all of the services in a domain.  Any service can publish events to a channel and/or process events published to a channel.</p>
+
+<h2 id="applications">Applications</h2>
+
+<p>Applications are containers for domains.  They route traffic to domains and share state between domains.  Each Microlith application is a single Application container.</p>
+
+<p>Applications route traffic using DNS.  Every application contains at least one domain, called the Root domain.  This domain is mounted under a base DNS name, such as &ldquo;example.com&rdquo;.  Applications can contain named subdomains which are mounted relative to the DNS name of root domain, such as &ldquo;foo.example.com&rdquo;, &ldquo;bar.example.com&rdquo;, and &ldquo;foo.bar.example.com&rdquo;.</p>
+
+<p>To coordinate between domains, applications provide Globals.  The globals are a set of services and channels that make a &ldquo;pseudo-domain&rdquo; that is shared between all domains.  Origins can call global services just like their internal services, and services can use global channels just like normal channels.  Unlike peer services in a domain, Global services can be called directly by services in a domain.</p>
+
+
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -1167,6 +1220,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1179,6 +1233,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -1196,6 +1251,9 @@
             
                 
                     
+                        
+                        
+                    
                 
                 
 
@@ -1222,38 +1280,6 @@
                     
                     
 
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
                     
                         
             
@@ -1302,85 +1328,6 @@
                     
             
         
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
                     
                         
             
@@ -1477,6 +1424,117 @@
             
         
                     
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
                         
             
             
@@ -1653,8 +1711,10 @@
 
 
         
+            <a class="nav nav-prev" href="/design/" title="Design"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/design/monolith/" title="Monolith" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -1684,3 +1744,4 @@
 
   </body>
 </html>
+

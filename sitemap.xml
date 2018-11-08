@@ -3,227 +3,202 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://example.org/examples/tutorial/</loc>
+    <loc>http://microlith-framework.com/examples/tutorial/</loc>
     <lastmod>2018-10-25T18:58:57-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/resources/blob/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/blob/create/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/cron/create/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/inst/create/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/strm/create/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/stor/create/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/rest/define/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/bootstrap/go_get/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/architecture/services/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/tutorial/root/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/intro/</loc>
-    <lastmod>2018-10-25T18:05:05-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/examples/blog/</loc>
-    <lastmod>2018-10-25T18:58:57-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/rest/call/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/architecture/domains/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/strm/publisher/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/tutorial/services/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/strm/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/blob/manipulator/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/stor/mutator/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/bootstrap/create/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/bootstrap/</loc>
-    <lastmod>2018-10-25T18:00:28-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/architecture/</loc>
+    <loc>http://microlith-framework.com/design/microservices/</loc>
     <lastmod>2018-10-25T18:18:21-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/architecture/channels/</loc>
+    <loc>http://microlith-framework.com/resources/blob/</loc>
     <lastmod>2018-10-25T18:10:01-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/tutorial/channels/</loc>
+    <loc>http://microlith-framework.com/resources/stor/mutator/crud/</loc>
     <lastmod>2018-10-25T18:10:01-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/resources/blob/observer/</loc>
+    <loc>http://microlith-framework.com/bootstrap/go_get/</loc>
     <lastmod>2018-10-25T18:10:01-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/resources/strm/processor/</loc>
+    <loc>http://microlith-framework.com/tutorial/root/</loc>
     <lastmod>2018-10-25T18:10:01-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/bootstrap/route53/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+    <loc>http://microlith-framework.com/intro/</loc>
+    <lastmod>2018-10-25T18:05:05-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/resources/stor/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/stor/watcher/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/tutorial/</loc>
-    <lastmod>2018-10-25T18:22:27-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/rest/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/architecture/application/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/bootstrap/bootstrap/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/tutorial/globals/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/cron/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/bootstrap/done/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/architecture/globals/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/resources/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/tutorial/subdomains/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://example.org/examples/</loc>
+    <loc>http://microlith-framework.com/examples/blog/</loc>
     <lastmod>2018-10-25T18:58:57-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/resources/inst/</loc>
+    <loc>http://microlith-framework.com/design/monolith/</loc>
+    <lastmod>2018-10-25T18:18:21-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/rest/call/</loc>
     <lastmod>2018-10-25T18:10:01-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/</loc>
+    <loc>http://microlith-framework.com/resources/strm/publisher/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/stor/mutator/query/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/tutorial/services/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/strm/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/blob/manipulator/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/stor/mutator/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/bootstrap/create/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/bootstrap/</loc>
     <lastmod>2018-10-25T18:00:28-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/categories/</loc>
+    <loc>http://microlith-framework.com/design/</loc>
+    <lastmod>2018-10-25T18:18:21-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/stor/mutator/batch/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/tutorial/channels/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/blob/observer/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/strm/processor/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/bootstrap/route53/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/stor/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/stor/watcher/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/tutorial/</loc>
+    <lastmod>2018-10-25T18:22:27-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/rest/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/bootstrap/bootstrap/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/tutorial/globals/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/bootstrap/done/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/cron/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/tutorial/subdomains/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/examples/</loc>
+    <lastmod>2018-10-25T18:58:57-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/resources/inst/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/cleanup/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/</loc>
+    <lastmod>2018-10-25T18:00:28-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://example.org/tags/</loc>
+    <loc>http://microlith-framework.com/tags/</loc>
     <priority>0</priority>
   </url>
   

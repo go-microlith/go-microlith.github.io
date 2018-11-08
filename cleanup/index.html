@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Categories :: Microlith</title>
+    <title>Teardown Instructions :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1541713428" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/cleanup/">
     <nav id="sidebar" class="">
 
 
@@ -924,8 +924,8 @@
   
     
     <li data-nav-id="/cleanup/" title="Teardown Instructions" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/cleanup/">
@@ -989,7 +989,13 @@
                     
           
           
-            Categories
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > Teardown Instructions
+          
+         
           
            
                   </span>
@@ -997,7 +1003,14 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#process">Process</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -1009,11 +1022,32 @@
         
         <div id="body-inner">
           
-            <h1>Categories</h1>
+            <h1>Teardown Instructions</h1>
           
 
         
 
+
+
+
+<p>The teardown for an application is a straightforward manual procedure in the AWS Console.</p>
+
+<p>The bootstrap process creates three main CloudFormation stacks: <code>example-com</code>, <code>example-com-test</code>, and <code>example-com-prod</code>.  It also creates multiple nested stacks.  The stacks must be deleted in the correct order, and user data in a stack must be manually deleted before a stack can be torn down.</p>
+
+<h2 id="process">Process</h2>
+
+<ol>
+<li>On Mac OS X, delete the CodeCommit repository key from Keychain, as described in step 3 <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-https-unixes.html">here</a>.</li>
+<li>Empty any buckets in the <code>example-com-test</code> and <code>example-com-prod</code> stacks and any of their nested stacks,</li>
+<li>Delete the <code>example-com-test</code> and <code>example-com-prod</code> stacks root stacks.  Their nested stacks will be torn down automatically.</li>
+<li>Wait for the <code>example-com-test</code> and <code>example-com-prod</code> stacks to fully delete (i.e., disappear from the CloudFormation console)</li>
+<li>Empty the bootstrap bucket in the <code>example-com</code> stack</li>
+<li>Disable termination protection on the <code>example-com</code> stack</li>
+<li>Delete the <code>example-com</code> stack</li>
+</ol>
+
+<div class="notices warning" ><p>If you delete the &ldquo;example-com&rdquo; stack before the &ldquo;-test&rdquo; and &ldquo;-prod&rdquo; stacks have been fully deleted, it will delete the IAM role and you will be unable to tear down the &ldquo;example-com-test&rdquo; and &ldquo;example-com-prod&rdquo; stacks.  If this happens, you must manually recreate the deleted &ldquo;DeployRole&rdquo; exactly (including the generated name) to tear down the stacks.  Termination protection is enabled on the &ldquo;example-com&rdquo; stack to prevent this.</p>
+</div>
 
 
 
@@ -1635,6 +1669,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1652,6 +1687,8 @@
         
 
 
+        
+            <a class="nav nav-prev" href="/examples/blog/" title="Blog"> <i class="fas fa-chevron-left"></i></a>
         
         
             <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>

@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Categories :: Microlith</title>
+    <title>Batch Operations :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1541713428" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/resources/stor/mutator/batch/">
     <nav id="sidebar" class="">
 
 
@@ -439,7 +439,7 @@
   
     
     <li data-nav-id="/resources/" title="Resources" class="dd-item 
-        
+        parent
         
         
         ">
@@ -610,7 +610,7 @@
   
     
     <li data-nav-id="/resources/stor/" title="Tables" class="dd-item 
-        
+        parent
         
         
         ">
@@ -637,7 +637,7 @@
   
     
     <li data-nav-id="/resources/stor/mutator/" title="Working with Tables" class="dd-item 
-        
+        parent
         
         
         ">
@@ -699,7 +699,7 @@
  
   
     
-      <li data-nav-id="/resources/stor/mutator/batch/" title="Batch Operations" class="dd-item ">
+      <li data-nav-id="/resources/stor/mutator/batch/" title="Batch Operations" class="dd-item active">
         <a href="/resources/stor/mutator/batch/">
         Batch
         
@@ -989,7 +989,31 @@
                     
           
           
-            Categories
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/resources/'>Resources</a> > <a href='/resources/stor/'>Tables</a> > <a href='/resources/stor/mutator/'>Working with Tables</a> > Batch Operations
+          
+         
+          
+         
+          
+         
+          
+         
           
            
                   </span>
@@ -997,7 +1021,18 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#get">Get</a>
+<ul>
+<li><a href="#create">Create</a></li>
+</ul></li>
+<li><a href="#write">Write</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -1009,7 +1044,7 @@
         
         <div id="body-inner">
           
-            <h1>Categories</h1>
+            <h1>Batch Operations</h1>
           
 
         
@@ -1017,9 +1052,82 @@
 
 
 
+<p>Batch operations on tables are supported via top-level functions.</p>
+
+<h2 id="get">Get</h2>
+
+<p>The  operation retrieves multiple items from multiple tables at once.</p>
+
+<h3 id="create">Create</h3>
+
+<p>Call the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#GetBatch">GetBatch()</a> function and pass it a builder.  Use the builder to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#BatchGet.Get">Get()</a> items from tables via their <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#BatchGetGet.Keys">Keys()</a>.  You can use <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#BatchGetGet.Consistent">Consistent()</a> reads and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#BatchGetGet.Project">Project()</a> only select attributes into the result.</p>
+
+<p>You can perform up to 100 operations in a batch on one or more tables in a batch.</p>
+
+<pre><code class="language-go">result, err := stor.GetBatch(ctx, func(batch *stor.BatchGet) {
+  batch.Get(albums, func(get *stor.BatchGetGet) {
+    get.Keys(threeSuites, aLoveSupreme)
+    get.Project(expression.NamesList(expression.Name(&quot;Artist&quot;), expression.Name(&quot;Name&quot;), expression.Name(&quot;Year&quot;)))
+    get.Consistent()
+  })
+})
+if err != nil {
+  log.Panic(err)
+}
+</code></pre>
+
+<p>The returned result provides <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#Scanner">Scanners</a> to iterate over the retrieved items.</p>
+
+<pre><code class="language-go">scanner := result.Table(albums)
+for scanner.Next() {
+  var album Album
+  if err := scanner.Scan(&amp;album); err != nil {
+    log.Panic(err)
+  }
+
+  fmt.Printf(&quot;%s released %q in %4d&quot;, album.Artist, album.Name, album.Year)
+}
+</code></pre>
+
+<p>If not all of the reads completed, the result provides a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#BatchGetResult.More">More()</a>/<a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#BatchGetResult.Continue">Continue()</a> mechanism to complete the remaining reads.</p>
+
+<pre><code class="language-go">if result.More() {
+  result, err = result.Continue(ctx)
+  if err != nil {
+    log.Panic(err)
+  }
+}
+</code></pre>
+
+<h2 id="write">Write</h2>
+
+<p>The <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#WriteBatch">WriteBatch()</a> operations performs multiple put and/or delete operations on multiple tables at once.</p>
+
+<pre><code class="language-go">
+
+result, err := stor.WriteBatch(ctx, func(batch *stor.BatchWrite) {
+  batch.Put(albums, suchSweetThunder)
+})
+if err != nil {
+  log.Panic(err)
+}
+</code></pre>
+
+<p>If not all of the writes completed, the results provides a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#BatchWriteResult.More">More()</a>/<a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#BatchWriteResult.Continue">Continue()</a> mechanism to complete the remaining writes.</p>
+
+<pre><code class="language-go">if result.More() {
+  result, err = result.Continue(ctx)
+  if err != nil {
+    log.Panic(err)
+  }
+}
+</code></pre>
+
+
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -1311,116 +1419,6 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -1437,34 +1435,8 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
                         
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
-            
-            
-                
                     
                 
                 
@@ -1473,79 +1445,6 @@
                     
                     
 
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
                     
                         
             
@@ -1635,6 +1534,228 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                 
                 
 
@@ -1653,8 +1774,10 @@
 
 
         
+            <a class="nav nav-prev" href="/resources/stor/mutator/query/" title="Query Operations"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/resources/stor/watcher/" title="Watching for Changes" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -1684,3 +1807,4 @@
 
   </body>
 </html>
+

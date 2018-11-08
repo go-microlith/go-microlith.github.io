@@ -2,54 +2,53 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tutorial on Microlith</title>
-    <link>http://example.org/tutorial/</link>
+    <link>http://microlith-framework.com/tutorial/</link>
     <description>Recent content in Tutorial on Microlith</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Oct 2018 18:22:27 -0600</lastBuildDate>
     
-	<atom:link href="http://example.org/tutorial/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://microlith-framework.com/tutorial/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>The Root Domain</title>
-      <link>http://example.org/tutorial/root/</link>
+      <title>Hello, world!</title>
+      <link>http://microlith-framework.com/tutorial/root/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/tutorial/root/</guid>
-      <description>The root domain is the starting point for a Microlith application. It has a specialized API exposed via the top-level &amp;ldquo;microlith&amp;rdquo; package.
-We will start by adding a &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application.
-The Origin You add endpoints by defining an API with the microlith.Scope() function.
-You must pass a unique name and a handler function for each defined endpoint. This function must match the signature of an API Gateway Lambda Function.</description>
+      <guid>http://microlith-framework.com/tutorial/root/</guid>
+      <description>We will start by adding a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application and redeploying. We will add the endpoint to the origin of the root domain. The root domain has a specialized API exposed via the top-level &amp;ldquo;microlith&amp;rdquo; package.
+The Handler First, we will create a handler function. The handler function must match the signature of a API Gateway Lambda. The body of the handler uses the Respond() helper to return a 200 response code and the string &amp;ldquo;Hello, world!</description>
     </item>
     
     <item>
       <title>Services</title>
-      <link>http://example.org/tutorial/services/</link>
+      <link>http://microlith-framework.com/tutorial/services/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/tutorial/services/</guid>
-      <description>Services implement the business logic of your Microlith application. At the code level, a service is an object which implements the tld.ServiceBuilder interface.
+      <guid>http://microlith-framework.com/tutorial/services/</guid>
+      <description>Services implement the business logic of your Microlith application.
 Let&amp;rsquo;s refactor our domain into a pair of services: a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service. Then we&amp;rsquo;ll refactor our origin endpoint to call those services to build a response.
-Create a Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word. The word service will have one endpoint that responds with the word as JSON.</description>
+Create a Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word. At the code level, a service is an object which implements the tld.ServiceBuilder interface.
+// Word is a service that returns a fixed word type Word struct { word string client *rest.</description>
     </item>
     
     <item>
       <title>Channels</title>
-      <link>http://example.org/tutorial/channels/</link>
+      <link>http://microlith-framework.com/tutorial/channels/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/tutorial/channels/</guid>
+      <guid>http://microlith-framework.com/tutorial/channels/</guid>
       <description>Channels are created by calling either the microlith.Channel() function to create a channel in the root domain, or by calling the microlith.Channel() method on a domain builder to create a channel in a subdomain. The returned reference can then be passed to a service so the service can interact with the channel.
 Let&amp;rsquo;s create a channel that logs an event when a request is made against the &amp;ldquo;hello-world&amp;rdquo; endpoint in the Origin.</description>
     </item>
     
     <item>
       <title>Globals</title>
-      <link>http://example.org/tutorial/globals/</link>
+      <link>http://microlith-framework.com/tutorial/globals/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/tutorial/globals/</guid>
+      <guid>http://microlith-framework.com/tutorial/globals/</guid>
       <description>Global services are addressable by all services and origins in any domain. The built service can be passed directly to subdomains and services.
 Global channels are addressable by any service or origin in any domain and any global service. The returned reference can be passed to domains and services.
 Let&amp;rsquo;s promote the &amp;ldquo;world&amp;rdquo; service to a global service and the &amp;ldquo;requests&amp;rdquo; channel to a global channel.
@@ -58,10 +57,10 @@ Promote the World Service To promote the &amp;ldquo;world&amp;rdquo; service, we
     
     <item>
       <title>Subdomains</title>
-      <link>http://example.org/tutorial/subdomains/</link>
+      <link>http://microlith-framework.com/tutorial/subdomains/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/tutorial/subdomains/</guid>
+      <guid>http://microlith-framework.com/tutorial/subdomains/</guid>
       <description>Creating a subdomain is similar to creating a service. At the code level, a subdomain is an object that implements the tld.DomainBuilder interface and is registered under the root domain.
 Let&amp;rsquo;s create a subdomain named &amp;ldquo;sub.domain&amp;rdquo; that returns &amp;ldquo;Hello, subdomain world!&amp;rdquo;. It will have a &amp;ldquo;hello&amp;rdquo; service and use the global &amp;ldquo;world&amp;rdquo; service and &amp;ldquo;requests&amp;rdquo; channel. The subdomain&amp;rsquo;s origin will have an endpoint that calls these services and constructs the response.</description>
     </item>

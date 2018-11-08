@@ -2,31 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>APIs on Microlith</title>
-    <link>http://example.org/resources/rest/</link>
+    <link>http://microlith-framework.com/resources/rest/</link>
     <description>Recent content in APIs on Microlith</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Oct 2018 18:10:01 -0600</lastBuildDate>
     
-	<atom:link href="http://example.org/resources/rest/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://microlith-framework.com/resources/rest/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Define an API</title>
-      <link>http://example.org/resources/rest/define/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/resources/rest/define/</guid>
-      <description>APIs follow the AWS API Gateway design, based on Swagger. Define your API by calling the Scope() method on a service or domain builder. Within your scope, use the builder DSL to define your API.
-Scopes Scope names are paths, such as &amp;ldquo;/foo&amp;rdquo; or &amp;ldquo;/foo/bar&amp;rdquo;. Scopes can contain path parameters enclosed in curly braces, such as &amp;ldquo;/{foo-id}&amp;rdquo;. Scopes can define nested scopes which are prefixed by their parent scope.</description>
-    </item>
     
     <item>
       <title>Call an API</title>
-      <link>http://example.org/resources/rest/call/</link>
+      <link>http://microlith-framework.com/resources/rest/call/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/resources/rest/call/</guid>
+      <guid>http://microlith-framework.com/resources/rest/call/</guid>
       <description>Call APIs by creating a Client and calling the Call() method. This takes the endpoint to call and an optional request body for non HEAD and GET requests. Call() can be passed an optional request builder to set the path and query parameters and request headers. The Call() method returns a standard http.Response.
 requestBody := map[string]interface{}{&amp;quot;Foo&amp;quot;: &amp;quot;bar&amp;quot;} responseBody := map[string]interface{}{} // Construct a new client var client = NewClient(&amp;quot;http://localhost:8080/&amp;quot;) // Call an endpoint resp, err := client.</description>
     </item>

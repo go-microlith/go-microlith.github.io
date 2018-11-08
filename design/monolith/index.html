@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Categories :: Microlith</title>
+    <title>Monolith :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1541713428" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/design/monolith/">
     <nav id="sidebar" class="">
 
 
@@ -242,7 +242,7 @@
   
     
     <li data-nav-id="/design/" title="Design" class="dd-item 
-        
+        parent
         
         
         ">
@@ -285,7 +285,7 @@
  
   
     
-      <li data-nav-id="/design/monolith/" title="Monolith" class="dd-item ">
+      <li data-nav-id="/design/monolith/" title="Monolith" class="dd-item active">
         <a href="/design/monolith/">
         Monolith
         
@@ -989,7 +989,19 @@
                     
           
           
-            Categories
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/design/'>Design</a> > Monolith
+          
+         
+          
+         
           
            
                   </span>
@@ -997,7 +1009,15 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#init-phase">Init Phase</a></li>
+<li><a href="#main-phase">Main Phase</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -1009,7 +1029,7 @@
         
         <div id="body-inner">
           
-            <h1>Categories</h1>
+            <h1>Monolith</h1>
           
 
         
@@ -1017,9 +1037,31 @@
 
 
 
+<p>Microlith packages an entire application into a single executable binary.  It does this by taking advantage of the init/main phase distinction in Go.</p>
+
+<h2 id="init-phase">Init Phase</h2>
+
+<p>Microlith represents a Domain model application as a tree of Go objects.  During the init phase, Microlith provides a builder DSL to construct this tree.  Lambda functions are given as Go callback functions.  The init phase ends when <a href="https://godoc.org/gopkg.in/microlith.v0#Main">microlith.Main()</a> is called.</p>
+
+<p>The init phase must build this tree deterministically.  Microlith relies on every running instance of the executable having an identical copy of this tree.  Non-determinism leads to undefined behavior.</p>
+
+<p>The init phase will be run on every process start in multiple environments.  It must not perform operations requiring external dependencies such as I/O, and should avoid complex, time-consuming algorithms.</p>
+
+<p>The init phase must fail fast.  Any errors encountered by Microlith during this phase will result in a <a href="https://godoc.org/builtin#panic">panic()</a>.  Any user errors should likewise result in a panic, and any calls to <a href="https://godoc.org/builtin#recover">recover()</a> should re-panic.</p>
+
+<h2 id="main-phase">Main Phase</h2>
+
+<p>The main phase of the executable is completely controlled by the framework.  The call to <code>microlith.Main()</code> inverts control and never returns it to the user.  The only user code called during the main phase are the callbacks provided during the init phase.</p>
+
+<p>Microlith deploys each callback as a separate Lambda function.  Each function must be designed as if it was in a stand-alone executable and must not must not share mutable runtime state between functions.  For example, mutating a shared variable in one function will not be reflected in other functions.</p>
+
+<p>Because AWS Lambda can start and stop function processes at will, all non-local state must be considered transient between requests.  For example, incrementing a private counter variable on every request will not behave as expected.  All Lambdas must assume they are processing the first and only request.</p>
+
+
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -1167,6 +1209,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1179,6 +1222,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1196,6 +1242,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -1206,35 +1253,6 @@
                     
             
         
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
                     
             
         
@@ -1244,6 +1262,9 @@
             
                 
                     
+                        
+                        
+                    
                 
                 
 
@@ -1251,9 +1272,6 @@
                     
                     
 
-                    
-            
-        
                     
                         
             
@@ -1302,85 +1320,6 @@
                     
             
         
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
                     
                         
             
@@ -1477,6 +1416,117 @@
             
         
                     
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
                         
             
             
@@ -1653,8 +1703,10 @@
 
 
         
+            <a class="nav nav-prev" href="/design/microservices/" title="Microservices"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/tutorial/" title="Tutorial" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -1684,3 +1736,4 @@
 
   </body>
 </html>
+

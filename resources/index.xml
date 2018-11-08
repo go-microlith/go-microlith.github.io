@@ -2,14 +2,36 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Resources on Microlith</title>
-    <link>http://example.org/resources/</link>
+    <link>http://microlith-framework.com/resources/</link>
     <description>Recent content in Resources on Microlith</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Oct 2018 18:10:01 -0600</lastBuildDate>
     
-	<atom:link href="http://example.org/resources/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://microlith-framework.com/resources/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Schedued Jobs</title>
+      <link>http://microlith-framework.com/resources/cron/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/cron/</guid>
+      <description>Jobs are Lambda functions that are invoked on a schedule. The schedule can be a simple time interval or a complex calendar, both expressed using CloudWatch Schedule Expressions.
+Schedule a Job To schedule a job, use the Job() method on a service builder, providing a unique job name, a schedule, and a Lambda function.
+service.Job(&amp;quot;purge-cache&amp;quot;, &amp;quot;rate(15 minutes)&amp;quot;, func(ctx context.Context, evt events.CloudWatchEvent) error { return json.NewEncoder(os.Stdout).Encode(evt.Details) })  Cron syntax for the schedule is also supported.</description>
+    </item>
+    
+    <item>
+      <title>Log Readers</title>
+      <link>http://microlith-framework.com/resources/inst/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/inst/</guid>
+      <description>All output from Lambdas is captured as CloudWatch Logs. Readers are Lambda functions that process the resulting log stream.
+Create a Reader To create a log reader, call the Reader() method on a service builder, providing a unique reader name and a Lambda function to process the log messages.
+onErrors := service.Reader(&amp;quot;on-errors&amp;quot;, func(ctx context.Context, evt events.CloudwatchLogsEvent) error { data, err := evt.AWSLogs.Parse() if err != nil { return err } for _, logEvent := range data.</description>
+    </item>
     
   </channel>
 </rss>

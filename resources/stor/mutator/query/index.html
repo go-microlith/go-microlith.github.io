@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Categories :: Microlith</title>
+    <title>Query Operations :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1541713428" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/categories/">
+  <body class="" data-url="/resources/stor/mutator/query/">
     <nav id="sidebar" class="">
 
 
@@ -439,7 +439,7 @@
   
     
     <li data-nav-id="/resources/" title="Resources" class="dd-item 
-        
+        parent
         
         
         ">
@@ -610,7 +610,7 @@
   
     
     <li data-nav-id="/resources/stor/" title="Tables" class="dd-item 
-        
+        parent
         
         
         ">
@@ -637,7 +637,7 @@
   
     
     <li data-nav-id="/resources/stor/mutator/" title="Working with Tables" class="dd-item 
-        
+        parent
         
         
         ">
@@ -680,7 +680,7 @@
  
   
     
-      <li data-nav-id="/resources/stor/mutator/query/" title="Query Operations" class="dd-item ">
+      <li data-nav-id="/resources/stor/mutator/query/" title="Query Operations" class="dd-item active">
         <a href="/resources/stor/mutator/query/">
         Query
         
@@ -989,7 +989,31 @@
                     
           
           
-            Categories
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Microlith</a> > <a href='/resources/'>Resources</a> > <a href='/resources/stor/'>Tables</a> > <a href='/resources/stor/mutator/'>Working with Tables</a> > Query Operations
+          
+         
+          
+         
+          
+         
+          
+         
           
            
                   </span>
@@ -1009,17 +1033,59 @@
         
         <div id="body-inner">
           
-            <h1>Categories</h1>
+            <h1>Query Operations</h1>
           
 
         
 
 
+<p>The Query and Scan operations operate a page of results at a time.  They return
+a Result object to process the items in the results.</p>
+
+<pre><code class="language-go">// Query the first page of results from the table
+result, err := mutator.Query(ctx, func(query *Query) {
+  query.KeyCondition(
+    expression.Name(&quot;Foo&quot;).Equal(expression.Value(&quot;bar&quot;)),
+  )
+})
+if err != nil {
+  log.Panic(err)
+}
+</code></pre>
+
+<p>To fetch and process all of the pages, the Result object contains the last
+evaluated key</p>
+
+<pre><code class="language-go">// Scan the entire table into an array
+var results []map[string]interface{}
+result, err := mutator.Scan(ctx)
+for {
+  if err != nil {
+    log.Panic(err)
+  }
+
+  for result.Next() {
+    var result map[string]interface{}
+    if err := result.Scan(result); err != nil {
+      log.Panic(err)
+    }
+    results = append(results, result)
+  }
+
+  if result.LastEvaluatedKey() == nil {
+    break
+  }
+  result, err = mutator.Scan(ctx, func(scan *Scan) {
+    scan.ExclusiveStartKey(result.LastEvaluatedKey())
+  })
+}
+</code></pre>
 
 
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -1311,116 +1377,6 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -1437,34 +1393,8 @@
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
                         
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
-            
-            
-                
                     
                 
                 
@@ -1473,79 +1403,6 @@
                     
                     
 
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
                     
                         
             
@@ -1635,6 +1492,228 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                 
                 
 
@@ -1653,8 +1732,10 @@
 
 
         
+            <a class="nav nav-prev" href="/resources/stor/mutator/crud/" title="CRUD Operations"> <i class="fas fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/intro/" title="Introduction" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/resources/stor/mutator/batch/" title="Batch Operations" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -1684,3 +1765,4 @@
 
   </body>
 </html>
+

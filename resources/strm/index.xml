@@ -2,41 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Streams on Microlith</title>
-    <link>http://example.org/resources/strm/</link>
+    <link>http://microlith-framework.com/resources/strm/</link>
     <description>Recent content in Streams on Microlith</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Oct 2018 18:10:01 -0600</lastBuildDate>
     
-	<atom:link href="http://example.org/resources/strm/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://microlith-framework.com/resources/strm/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Create a Stream</title>
-      <link>http://example.org/resources/strm/create/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/resources/strm/create/</guid>
-      <description>Create a stream by calling Stream() on a service builder:
-userSignups := service.Stream(&amp;quot;user-signups&amp;quot;)  </description>
-    </item>
     
     <item>
       <title>Publishing to Streams</title>
-      <link>http://example.org/resources/strm/publisher/</link>
+      <link>http://microlith-framework.com/resources/strm/publisher/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/resources/strm/publisher/</guid>
+      <guid>http://microlith-framework.com/resources/strm/publisher/</guid>
       <description>To publish to a stream, create a Publisher object and Publish() messages. The publisher automatically encodes the messages to JSON and batches messages before sending. Be sure to Flush() your publisher to ensure the final batch is sent.
 // Create a publisher var publisher = NewPublisher(userSignups) func someHandler(ctx context.Context) error { // Be sure to Flush() the publisher defer publisher.Flush(ctx) // Write messages to the stream if err := publisher.Publish(ctx, &amp;quot;partition-one&amp;quot;, &amp;quot;value-one&amp;quot;); err !</description>
     </item>
     
     <item>
       <title>Process Messages from Streams</title>
-      <link>http://example.org/resources/strm/processor/</link>
+      <link>http://microlith-framework.com/resources/strm/processor/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/resources/strm/processor/</guid>
+      <guid>http://microlith-framework.com/resources/strm/processor/</guid>
       <description>Processors are Lambda functions that processes messages published to a stream. Each processor may subscribe to multiple streams and is called when messages are published to any of the streams.
 Messages are given to processors in batches. To simplify this, create a Scanner to loop through the batch and process individual messages.
 To create a process, call the Processor() method on a service builder.

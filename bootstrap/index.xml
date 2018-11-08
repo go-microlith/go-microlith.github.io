@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Bootstrap on Microlith</title>
-    <link>http://example.org/bootstrap/</link>
+    <link>http://microlith-framework.com/bootstrap/</link>
     <description>Recent content in Bootstrap on Microlith</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Oct 2018 18:00:28 -0600</lastBuildDate>
     
-	<atom:link href="http://example.org/bootstrap/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://microlith-framework.com/bootstrap/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Get Microlith</title>
-      <link>http://example.org/bootstrap/go_get/</link>
+      <link>http://microlith-framework.com/bootstrap/go_get/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/bootstrap/go_get/</guid>
+      <guid>http://microlith-framework.com/bootstrap/go_get/</guid>
       <description>Microlith is a standard Go library. Just use &amp;ldquo;go get&amp;rdquo;:
-go get gopkg.in/microlith.v0  Now you&amp;rsquo;re ready to create your first application.</description>
+go get gopkg.in/microlith.v0  </description>
     </item>
     
     <item>
       <title>Your First Application</title>
-      <link>http://example.org/bootstrap/create/</link>
+      <link>http://microlith-framework.com/bootstrap/create/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/bootstrap/create/</guid>
+      <guid>http://microlith-framework.com/bootstrap/create/</guid>
       <description>Microlith applications are a single Go executable that serves an entire top-level domain, such as example.com.
 Create an Application To create an application, create an executable in ${GOPATH}/src/example.com/main.go and call microlith.Main():
 package main import ( microlith &amp;quot;gopkg.in/microlith.v0&amp;quot; ) func main() { microlith.Main() }  The name of the executable is significant to Microlith. It must be named after the top-level domain name it logically serves. In this case, &amp;ldquo;example.com&amp;rdquo;.</description>
@@ -34,36 +34,34 @@ package main import ( microlith &amp;quot;gopkg.in/microlith.v0&amp;quot; ) func
     
     <item>
       <title>Route53</title>
-      <link>http://example.org/bootstrap/route53/</link>
+      <link>http://microlith-framework.com/bootstrap/route53/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/bootstrap/route53/</guid>
-      <description>Microlith uses Route53 DNS as its global router. This requires a one-time, non-automatable setup. Once set up, a domain name can be reused for multiple Microlith applications.
+      <guid>http://microlith-framework.com/bootstrap/route53/</guid>
+      <description>* Almost Zero Configuration
+Microlith uses Route53 DNS as its global router. This requires a one-time, non-automatable setup. Once complete, the configuration can be reused for all of your Microlith applications.
 You will need the Domain Name and the Hosted Zone ID to bootstrap your application. For the remainder of the documentation, we will assume you own my-domain.com in hosted zone Z1234567890.
  Domain Name You will need a domain name hosted in Route53.</description>
     </item>
     
     <item>
       <title>Bootstrap Your Application</title>
-      <link>http://example.org/bootstrap/bootstrap/</link>
+      <link>http://microlith-framework.com/bootstrap/bootstrap/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/bootstrap/bootstrap/</guid>
-      <description>The bootstrap process will host for your application in AWS.
-This includes a Git repository for your source code and a continuous deployment pipeline with test and production environments for your application. It will then initialize a git repository in your local source tree, create an initial commit and push, and wait for a full build and deploy to go green.
-The process will take several minutes for the initial deploy.</description>
+      <guid>http://microlith-framework.com/bootstrap/bootstrap/</guid>
+      <description>Your application has a built-in command to deploy itself into a self-hosted AWS environment. This environments includes a Git repository for your source code and a continuous deployment pipeline for your application with test and production environments. The bootstrap process will then initialize a git repository in your local source tree, create an initial commit, push, and wait for a full build and deploy to go green. Finally, it will healthcheck your deployed application.</description>
     </item>
     
     <item>
       <title>Done</title>
-      <link>http://example.org/bootstrap/done/</link>
+      <link>http://microlith-framework.com/bootstrap/done/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/bootstrap/done/</guid>
-      <description>Once the build completes and deploys, your application has been bootstrapped.
-Call Your Application You can validate that it is running by making a HTTP request against your test and production instances. You should receive a &amp;ldquo;Missing authentication token&amp;rdquo; message since no endpoints are defined.
-curl -v https://test.my-domain.com/ curl -v https://prod.my-domain.com/  Deploy Your Application From now on, git push origin master deploys your application:
-git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  If you receive a &amp;ldquo;403&amp;rdquo; when trying to push on Mac OS X, the credentials stored in the Keychain have expired.</description>
+      <guid>http://microlith-framework.com/bootstrap/done/</guid>
+      <description>Congratulations, your application is now bootstrapped! From now on, git push origin master deploys your application:
+git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  If you receive a &amp;ldquo;403&amp;rdquo; when trying to push on Mac OS X, the credentials stored in the Keychain have expired. You will need to delete them to push again, as documented in Step 3 here.
+ </description>
     </item>
     
   </channel>

@@ -2,127 +2,74 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Microlith</title>
-    <link>http://example.org/</link>
+    <link>http://microlith-framework.com/</link>
     <description>Recent content on Microlith</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Oct 2018 18:00:28 -0600</lastBuildDate>
     
-	<atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://microlith-framework.com/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Tutorial</title>
-      <link>http://example.org/examples/tutorial/</link>
+      <link>http://microlith-framework.com/examples/tutorial/</link>
       <pubDate>Thu, 25 Oct 2018 18:58:57 -0600</pubDate>
       
-      <guid>http://example.org/examples/tutorial/</guid>
+      <guid>http://microlith-framework.com/examples/tutorial/</guid>
       <description>The complete code from the tutorial is available in the  tutorial.com repository.
 Clone The repository should be cloned to the root of your Go workspace&amp;rsquo;s source tree, i.e. ${GOPATH}/src/tutorial.com.
 # Clone the repo to the root of your Go workspace&#39;s source tree mkdir -p &amp;quot;${GOPATH}/src/tutorial.com&amp;quot; git clone https://github.com/go-microlith/tutorial.com &amp;quot;${GOPATH}/src/tutorial.com&amp;quot; # Microlith will recreate this rm -rf &amp;quot;${GOPATH}/src/tutorial.com/.git/&amp;quot; # Build the application go install tutorial.com  Bootstrap Assuming you own the domain name my-domain.</description>
     </item>
     
     <item>
-      <title>Create a Bucket</title>
-      <link>http://example.org/resources/blob/create/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      <title>Microservices</title>
+      <link>http://microlith-framework.com/design/microservices/</link>
+      <pubDate>Thu, 25 Oct 2018 18:18:21 -0600</pubDate>
       
-      <guid>http://example.org/resources/blob/create/</guid>
-      <description>Create a bucket by calling Bucket() on a service builder.
-images := service.Bucket(&amp;quot;images&amp;quot;)  </description>
+      <guid>http://microlith-framework.com/design/microservices/</guid>
+      <description>Microlith uses a microservices-based model called the Domain model. It has three main concepts: Services, Domains, and Applications.
+Services Services are atomic units of business logic and are the base building block of a Microlith application.
+Services are implemented as AWS::Serverless services, containing resources such as Buckets, Tables, and Streams to store and communicate state.
+A service&amp;rsquo;s external interface is a REST API. Endpoints on the API implement business logic by manipulating buckets, mutating tables, and publishing to streams.</description>
     </item>
     
     <item>
-      <title>Create a Cron Job</title>
-      <link>http://example.org/resources/cron/create/</link>
+      <title>CRUD Operations</title>
+      <link>http://microlith-framework.com/resources/stor/mutator/crud/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/resources/cron/create/</guid>
-      <description>Jobs can be scheduled either using CloudWatch events syntax or cron syntax. To use CloudWatch syntax, call ScheduledJob() on a service builder. To use cron syntax, call the CronJob() method.
-// Create a job that runs every 15 minutes service.ScheduledJob(&amp;quot;scheduled-job-id&amp;quot;, &amp;quot;15 minutes&amp;quot;, func(ctx context.Context, evt events.CloudWatchEvent) error { // ... }) // Create a job that runs every day a noon UTC service.CronJob(&amp;quot;cron-job-id&amp;quot;, &amp;quot;0 12 * * ? *&amp;quot;, func(ctx context.</description>
-    </item>
-    
-    <item>
-      <title>Create a Log Reader</title>
-      <link>http://example.org/resources/inst/create/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/resources/inst/create/</guid>
-      <description>Readers can be attached one or more Lambda functions and processes the CloudWatch logs the functions produce. Log messages can be filtered to reduce message volume.
-To create a log reader, call the Reader() method on a service builder.
-// Create a reader for logs containing the word &amp;quot;error&amp;quot; onErrors := service.Reader(&amp;quot;on-errors&amp;quot;, func(ctx context.Context, evt events.CloudwatchLogsEvent) error { // ... }) // Create some Lambda functions processor := service.Processor(...) observer := service.</description>
-    </item>
-    
-    <item>
-      <title>Create a Stream</title>
-      <link>http://example.org/resources/strm/create/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/resources/strm/create/</guid>
-      <description>Create a stream by calling Stream() on a service builder:
-userSignups := service.Stream(&amp;quot;user-signups&amp;quot;)  </description>
-    </item>
-    
-    <item>
-      <title>Create a Table</title>
-      <link>http://example.org/resources/stor/create/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/resources/stor/create/</guid>
-      <description>Create a table by calling the Table() method on a service builder.
-// Create a table var hashKey = StringAttribute(&amp;quot;hash-key&amp;quot;) var rangeKey = StringAttribute(&amp;quot;range-key&amp;quot;) var table = service.Table(&amp;quot;the-id&amp;quot;, hashKey, rangeKey, ChangeTypeNewAndOld)  To create secondary indexes on a table, use the GlobalIndex() and LocalIndex() methods.
-// Create a Global Secondary Index var gsiHashKey = StringAttribute(&amp;quot;gsi-hash-key&amp;quot;) var gsiRangeKey = StringAttribute(&amp;quot;gsi-range-key&amp;quot;) var gsi = table.GlobalIndex(&amp;quot;gsi&amp;quot;, gsiHashKey, gsiRangeKey, ProjectionTypeAll) // Create a Local Secondary Index var lsiRangeKey = StringAttribute(&amp;quot;lsi-range-key&amp;quot;) var lsi = table.</description>
-    </item>
-    
-    <item>
-      <title>Define an API</title>
-      <link>http://example.org/resources/rest/define/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/resources/rest/define/</guid>
-      <description>APIs follow the AWS API Gateway design, based on Swagger. Define your API by calling the Scope() method on a service or domain builder. Within your scope, use the builder DSL to define your API.
-Scopes Scope names are paths, such as &amp;ldquo;/foo&amp;rdquo; or &amp;ldquo;/foo/bar&amp;rdquo;. Scopes can contain path parameters enclosed in curly braces, such as &amp;ldquo;/{foo-id}&amp;rdquo;. Scopes can define nested scopes which are prefixed by their parent scope.</description>
+      <guid>http://microlith-framework.com/resources/stor/mutator/crud/</guid>
+      <description>Mutators support CRUD operations on individual items. Every operation takes a key to identify the object to operate on and/or a value. These keys and values can be either non-nil map[string]interface{} values or structs. If a value is used as a key, it must include the key fields specified when the table is created.
+Put The Put() inserts or overwrites a value in the table. The item passed must include the key fields.</description>
     </item>
     
     <item>
       <title>Get Microlith</title>
-      <link>http://example.org/bootstrap/go_get/</link>
+      <link>http://microlith-framework.com/bootstrap/go_get/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/bootstrap/go_get/</guid>
+      <guid>http://microlith-framework.com/bootstrap/go_get/</guid>
       <description>Microlith is a standard Go library. Just use &amp;ldquo;go get&amp;rdquo;:
-go get gopkg.in/microlith.v0  Now you&amp;rsquo;re ready to create your first application.</description>
+go get gopkg.in/microlith.v0  </description>
     </item>
     
     <item>
-      <title>Services</title>
-      <link>http://example.org/architecture/services/</link>
+      <title>Hello, world!</title>
+      <link>http://microlith-framework.com/tutorial/root/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/architecture/services/</guid>
-      <description>Business logic for an application is factored into Services. A Service is a REST API, a set of resources, and a set of asynchronous actions.
-Serverless Services follow an AWS::Serverless model, containing resources such as Buckets, Tables, and Streams along with Lambda functions to asynchronously react to events on those resources. All external access to the resources goes through endpoints on a REST API.
-Scope All resources in the service are available to all Lambdas in the service, but services cannot access resources outside of the ones they declare nor other services.</description>
-    </item>
-    
-    <item>
-      <title>The Root Domain</title>
-      <link>http://example.org/tutorial/root/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/tutorial/root/</guid>
-      <description>The root domain is the starting point for a Microlith application. It has a specialized API exposed via the top-level &amp;ldquo;microlith&amp;rdquo; package.
-We will start by adding a &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application.
-The Origin You add endpoints by defining an API with the microlith.Scope() function.
-You must pass a unique name and a handler function for each defined endpoint. This function must match the signature of an API Gateway Lambda Function.</description>
+      <guid>http://microlith-framework.com/tutorial/root/</guid>
+      <description>We will start by adding a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application and redeploying. We will add the endpoint to the origin of the root domain. The root domain has a specialized API exposed via the top-level &amp;ldquo;microlith&amp;rdquo; package.
+The Handler First, we will create a handler function. The handler function must match the signature of a API Gateway Lambda. The body of the handler uses the Respond() helper to return a 200 response code and the string &amp;ldquo;Hello, world!</description>
     </item>
     
     <item>
       <title>Blog</title>
-      <link>http://example.org/examples/blog/</link>
+      <link>http://microlith-framework.com/examples/blog/</link>
       <pubDate>Thu, 25 Oct 2018 18:58:57 -0600</pubDate>
       
-      <guid>http://example.org/examples/blog/</guid>
+      <guid>http://microlith-framework.com/examples/blog/</guid>
       <description>A blogging application with social features is available in the  blog.com repository.
 It provides a basic API for performing CRUD operations on blog posts. It extends this API with comments on blog posts and with Facebook-style reactions (&amp;ldquo;Like&amp;rdquo;, &amp;ldquo;Love&amp;rdquo;, etc.) on both posts and comments.
 Clone The repository should be cloned to the root of your Go workspace&amp;rsquo;s source tree, i.e. ${GOPATH}/src/blog.com:
@@ -130,115 +77,119 @@ Clone The repository should be cloned to the root of your Go workspace&amp;rsquo
     </item>
     
     <item>
+      <title>Monolith</title>
+      <link>http://microlith-framework.com/design/monolith/</link>
+      <pubDate>Thu, 25 Oct 2018 18:18:21 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/design/monolith/</guid>
+      <description>Microlith packages an entire application into a single executable binary. It does this by taking advantage of the init/main phase distinction in Go.
+Init Phase Microlith represents a Domain model application as a tree of Go objects. During the init phase, Microlith provides a builder DSL to construct this tree. Lambda functions are given as Go callback functions. The init phase ends when microlith.Main() is called.
+The init phase must build this tree deterministically.</description>
+    </item>
+    
+    <item>
       <title>Call an API</title>
-      <link>http://example.org/resources/rest/call/</link>
+      <link>http://microlith-framework.com/resources/rest/call/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/resources/rest/call/</guid>
+      <guid>http://microlith-framework.com/resources/rest/call/</guid>
       <description>Call APIs by creating a Client and calling the Call() method. This takes the endpoint to call and an optional request body for non HEAD and GET requests. Call() can be passed an optional request builder to set the path and query parameters and request headers. The Call() method returns a standard http.Response.
 requestBody := map[string]interface{}{&amp;quot;Foo&amp;quot;: &amp;quot;bar&amp;quot;} responseBody := map[string]interface{}{} // Construct a new client var client = NewClient(&amp;quot;http://localhost:8080/&amp;quot;) // Call an endpoint resp, err := client.</description>
     </item>
     
     <item>
-      <title>Domains</title>
-      <link>http://example.org/architecture/domains/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/architecture/domains/</guid>
-      <description>Services are grouped into a Domain. A Domain is a REST API, a set of services, and set of channels.
-Routing Domains route using REST. The API, called the Origin, handles all external traffic. It receives requests, makes calls on the services to collect state and perform business logic, and then constructs a response to the user.</description>
-    </item>
-    
-    <item>
       <title>Publishing to Streams</title>
-      <link>http://example.org/resources/strm/publisher/</link>
+      <link>http://microlith-framework.com/resources/strm/publisher/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/resources/strm/publisher/</guid>
+      <guid>http://microlith-framework.com/resources/strm/publisher/</guid>
       <description>To publish to a stream, create a Publisher object and Publish() messages. The publisher automatically encodes the messages to JSON and batches messages before sending. Be sure to Flush() your publisher to ensure the final batch is sent.
 // Create a publisher var publisher = NewPublisher(userSignups) func someHandler(ctx context.Context) error { // Be sure to Flush() the publisher defer publisher.Flush(ctx) // Write messages to the stream if err := publisher.Publish(ctx, &amp;quot;partition-one&amp;quot;, &amp;quot;value-one&amp;quot;); err !</description>
     </item>
     
     <item>
-      <title>Services</title>
-      <link>http://example.org/tutorial/services/</link>
+      <title>Query Operations</title>
+      <link>http://microlith-framework.com/resources/stor/mutator/query/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/tutorial/services/</guid>
-      <description>Services implement the business logic of your Microlith application. At the code level, a service is an object which implements the tld.ServiceBuilder interface.
+      <guid>http://microlith-framework.com/resources/stor/mutator/query/</guid>
+      <description>The Query and Scan operations operate a page of results at a time. They return a Result object to process the items in the results.
+// Query the first page of results from the table result, err := mutator.Query(ctx, func(query *Query) { query.KeyCondition( expression.Name(&amp;quot;Foo&amp;quot;).Equal(expression.Value(&amp;quot;bar&amp;quot;)), ) }) if err != nil { log.Panic(err) }  To fetch and process all of the pages, the Result object contains the last evaluated key</description>
+    </item>
+    
+    <item>
+      <title>Services</title>
+      <link>http://microlith-framework.com/tutorial/services/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/tutorial/services/</guid>
+      <description>Services implement the business logic of your Microlith application.
 Let&amp;rsquo;s refactor our domain into a pair of services: a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service. Then we&amp;rsquo;ll refactor our origin endpoint to call those services to build a response.
-Create a Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word. The word service will have one endpoint that responds with the word as JSON.</description>
+Create a Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word. At the code level, a service is an object which implements the tld.ServiceBuilder interface.
+// Word is a service that returns a fixed word type Word struct { word string client *rest.</description>
     </item>
     
     <item>
       <title>Working with Buckets</title>
-      <link>http://example.org/resources/blob/manipulator/</link>
+      <link>http://microlith-framework.com/resources/blob/manipulator/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/resources/blob/manipulator/</guid>
+      <guid>http://microlith-framework.com/resources/blob/manipulator/</guid>
       <description>Objects are added, updated, and removed from a bucket using a Manipulator.
-// Create a manipulator mnip := NewManipulator(images) // Put an object into the bucket body, err := NewBufferString(&amp;quot;the-body&amp;quot;) if err != nil { log.Panic(err) } defer body.Close() if err := mnip.Put(ctx, &amp;quot;/the/key&amp;quot;, body); err != nil { log.Panic(err) } // Get the object from the bucket contents, err := mnip.Get(ctx, &amp;quot;/the/key&amp;quot;) if err != nil { log.Panic(err) } io.</description>
-    </item>
-    
-    <item>
-      <title>Working with Tables</title>
-      <link>http://example.org/resources/stor/mutator/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/resources/stor/mutator/</guid>
-      <description>To interact with a table, create a Mutator. A Mutator is a client for a DynamoDB table.
-// Create the mutator mutator := NewMutator(table)  Mutators supports queries, scans, and CRUD operations. Batch operations are supported using separate GetBatch() and WriteBatch() functions.
-For indexes, create a Querier. This works identically to a Mutator but is limited to the Query() and Scan() operations only.
-All operations support optional builders to refine the operations.</description>
+Create a manipulator by passing a reference to a bucket:
+mnip := blob.NewManipulator(images)  Get contents, err := mnip.Get(ctx, &amp;quot;/the/key&amp;quot;) if err != nil { log.Panic(err) } defer contents.Close()  io.Copy(os.Stdout, contents)  Put body, err := NewBufferString(&amp;quot;the-body&amp;quot;) if err != nil { log.Panic(err) } defer body.Close()  if err := mnip.Put(ctx, &amp;quot;/the/key&amp;quot;, body); err != nil { log.</description>
     </item>
     
     <item>
       <title>Your First Application</title>
-      <link>http://example.org/bootstrap/create/</link>
+      <link>http://microlith-framework.com/bootstrap/create/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/bootstrap/create/</guid>
+      <guid>http://microlith-framework.com/bootstrap/create/</guid>
       <description>Microlith applications are a single Go executable that serves an entire top-level domain, such as example.com.
 Create an Application To create an application, create an executable in ${GOPATH}/src/example.com/main.go and call microlith.Main():
 package main import ( microlith &amp;quot;gopkg.in/microlith.v0&amp;quot; ) func main() { microlith.Main() }  The name of the executable is significant to Microlith. It must be named after the top-level domain name it logically serves. In this case, &amp;ldquo;example.com&amp;rdquo;.</description>
     </item>
     
     <item>
-      <title>Channels</title>
-      <link>http://example.org/architecture/channels/</link>
+      <title>Batch Operations</title>
+      <link>http://microlith-framework.com/resources/stor/mutator/batch/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/architecture/channels/</guid>
-      <description>Services need to communicate, but cannot call endpoints on each other. To communicate between services, Microlith provides broadcast channels.
-Any service can publish events onto channels it has references to. When a service publishes an event on a channel, all subscribed processors in all services receive that event.</description>
+      <guid>http://microlith-framework.com/resources/stor/mutator/batch/</guid>
+      <description>Batch operations on tables are supported via top-level functions.
+Get The operation retrieves multiple items from multiple tables at once.
+Create Call the GetBatch() function and pass it a builder. Use the builder to Get() items from tables via their Keys(). You can use Consistent() reads and Project() only select attributes into the result.
+You can perform up to 100 operations in a batch on one or more tables in a batch.</description>
     </item>
     
     <item>
       <title>Channels</title>
-      <link>http://example.org/tutorial/channels/</link>
+      <link>http://microlith-framework.com/tutorial/channels/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/tutorial/channels/</guid>
+      <guid>http://microlith-framework.com/tutorial/channels/</guid>
       <description>Channels are created by calling either the microlith.Channel() function to create a channel in the root domain, or by calling the microlith.Channel() method on a domain builder to create a channel in a subdomain. The returned reference can then be passed to a service so the service can interact with the channel.
 Let&amp;rsquo;s create a channel that logs an event when a request is made against the &amp;ldquo;hello-world&amp;rdquo; endpoint in the Origin.</description>
     </item>
     
     <item>
       <title>Observing Changes</title>
-      <link>http://example.org/resources/blob/observer/</link>
+      <link>http://microlith-framework.com/resources/blob/observer/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/resources/blob/observer/</guid>
-      <description>Observers are Lambda functions that observe buckets and are executed when their contents change. Each observer may subscribe to multiple buckets and multiple events per bucket. Additionally, events can be filtered on either the prefix or suffix of the key.
-Observers cannot access buckets. This is due to a circular dependency in CloudFormation. If an observer needs to access buckets, a work around is to publish all events to a Stream and create a processor to perform the action.</description>
+      <guid>http://microlith-framework.com/resources/blob/observer/</guid>
+      <description>Observers are Lambda functions that observe buckets and are invoked when the buckets&amp;rsquo; contents change.
+Observers cannot access buckets. This is due to a circular dependency in CloudFormation. If an observer needs to access buckets, a work around is to publish all events to a Stream and create a processor to perform the action.
+ Create an Observer Create an observer by calling the Observer() function on a service builder, giving it a unique observer name and an S3 Lambda function.</description>
     </item>
     
     <item>
       <title>Process Messages from Streams</title>
-      <link>http://example.org/resources/strm/processor/</link>
+      <link>http://microlith-framework.com/resources/strm/processor/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/resources/strm/processor/</guid>
+      <guid>http://microlith-framework.com/resources/strm/processor/</guid>
       <description>Processors are Lambda functions that processes messages published to a stream. Each processor may subscribe to multiple streams and is called when messages are published to any of the streams.
 Messages are given to processors in batches. To simplify this, create a Scanner to loop through the batch and process individual messages.
 To create a process, call the Processor() method on a service builder.
@@ -247,53 +198,42 @@ To create a process, call the Processor() method on a service builder.
     
     <item>
       <title>Route53</title>
-      <link>http://example.org/bootstrap/route53/</link>
+      <link>http://microlith-framework.com/bootstrap/route53/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/bootstrap/route53/</guid>
-      <description>Microlith uses Route53 DNS as its global router. This requires a one-time, non-automatable setup. Once set up, a domain name can be reused for multiple Microlith applications.
+      <guid>http://microlith-framework.com/bootstrap/route53/</guid>
+      <description>* Almost Zero Configuration
+Microlith uses Route53 DNS as its global router. This requires a one-time, non-automatable setup. Once complete, the configuration can be reused for all of your Microlith applications.
 You will need the Domain Name and the Hosted Zone ID to bootstrap your application. For the remainder of the documentation, we will assume you own my-domain.com in hosted zone Z1234567890.
  Domain Name You will need a domain name hosted in Route53.</description>
     </item>
     
     <item>
       <title>Watching for Changes</title>
-      <link>http://example.org/resources/stor/watcher/</link>
+      <link>http://microlith-framework.com/resources/stor/watcher/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/resources/stor/watcher/</guid>
+      <guid>http://microlith-framework.com/resources/stor/watcher/</guid>
       <description>If change streaming is enabled on a table, changes to the table can be processed using a Watcher Lambda function. Only tables can be watched, not secondary indexes.
 To create a watcher, call the Watcher() method on a service builder.
 // Create a watcher watcher := service.Watcher(&amp;quot;process-changes&amp;quot;, func(ctx context.Context, evt events.DynamoDBEvent) error { // ... }) // Watch for changes on the table watcher.Watch(table, strm.StartingPositionTrimHorizon)  </description>
     </item>
     
     <item>
-      <title>Application</title>
-      <link>http://example.org/architecture/application/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://example.org/architecture/application/</guid>
-      <description>An Application is the top-level container in a Microlith app. An application is a root domain, a set of named subdomains, and a set of global services and channels.
-Routing An Application routes using DNS. The root domain is mounted under the top-level DNS name specified in the bootstrap process. All subdomains are mounted relative to the root domain.</description>
-    </item>
-    
-    <item>
       <title>Bootstrap Your Application</title>
-      <link>http://example.org/bootstrap/bootstrap/</link>
+      <link>http://microlith-framework.com/bootstrap/bootstrap/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/bootstrap/bootstrap/</guid>
-      <description>The bootstrap process will host for your application in AWS.
-This includes a Git repository for your source code and a continuous deployment pipeline with test and production environments for your application. It will then initialize a git repository in your local source tree, create an initial commit and push, and wait for a full build and deploy to go green.
-The process will take several minutes for the initial deploy.</description>
+      <guid>http://microlith-framework.com/bootstrap/bootstrap/</guid>
+      <description>Your application has a built-in command to deploy itself into a self-hosted AWS environment. This environments includes a Git repository for your source code and a continuous deployment pipeline for your application with test and production environments. The bootstrap process will then initialize a git repository in your local source tree, create an initial commit, push, and wait for a full build and deploy to go green. Finally, it will healthcheck your deployed application.</description>
     </item>
     
     <item>
       <title>Globals</title>
-      <link>http://example.org/tutorial/globals/</link>
+      <link>http://microlith-framework.com/tutorial/globals/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/tutorial/globals/</guid>
+      <guid>http://microlith-framework.com/tutorial/globals/</guid>
       <description>Global services are addressable by all services and origins in any domain. The built service can be passed directly to subdomains and services.
 Global channels are addressable by any service or origin in any domain and any global service. The returned reference can be passed to domains and services.
 Let&amp;rsquo;s promote the &amp;ldquo;world&amp;rdquo; service to a global service and the &amp;ldquo;requests&amp;rdquo; channel to a global channel.
@@ -302,35 +242,45 @@ Promote the World Service To promote the &amp;ldquo;world&amp;rdquo; service, we
     
     <item>
       <title>Done</title>
-      <link>http://example.org/bootstrap/done/</link>
+      <link>http://microlith-framework.com/bootstrap/done/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/bootstrap/done/</guid>
-      <description>Once the build completes and deploys, your application has been bootstrapped.
-Call Your Application You can validate that it is running by making a HTTP request against your test and production instances. You should receive a &amp;ldquo;Missing authentication token&amp;rdquo; message since no endpoints are defined.
-curl -v https://test.my-domain.com/ curl -v https://prod.my-domain.com/  Deploy Your Application From now on, git push origin master deploys your application:
-git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  If you receive a &amp;ldquo;403&amp;rdquo; when trying to push on Mac OS X, the credentials stored in the Keychain have expired.</description>
+      <guid>http://microlith-framework.com/bootstrap/done/</guid>
+      <description>Congratulations, your application is now bootstrapped! From now on, git push origin master deploys your application:
+git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  If you receive a &amp;ldquo;403&amp;rdquo; when trying to push on Mac OS X, the credentials stored in the Keychain have expired. You will need to delete them to push again, as documented in Step 3 here.
+ </description>
     </item>
     
     <item>
-      <title>Globals</title>
-      <link>http://example.org/architecture/globals/</link>
+      <title>Schedued Jobs</title>
+      <link>http://microlith-framework.com/resources/cron/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/architecture/globals/</guid>
-      <description>Some business logic needs to be shared between multiple domains, but services and subdomains cannot access each other. To share logic across the entire application, Microlith provides Global services and channels.
-Services Global services share business logic across domains. They can be called by all services and origins.
-Channels Global channels broadcast messages among all services and origins.</description>
+      <guid>http://microlith-framework.com/resources/cron/</guid>
+      <description>Jobs are Lambda functions that are invoked on a schedule. The schedule can be a simple time interval or a complex calendar, both expressed using CloudWatch Schedule Expressions.
+Schedule a Job To schedule a job, use the Job() method on a service builder, providing a unique job name, a schedule, and a Lambda function.
+service.Job(&amp;quot;purge-cache&amp;quot;, &amp;quot;rate(15 minutes)&amp;quot;, func(ctx context.Context, evt events.CloudWatchEvent) error { return json.NewEncoder(os.Stdout).Encode(evt.Details) })  Cron syntax for the schedule is also supported.</description>
     </item>
     
     <item>
       <title>Subdomains</title>
-      <link>http://example.org/tutorial/subdomains/</link>
+      <link>http://microlith-framework.com/tutorial/subdomains/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://example.org/tutorial/subdomains/</guid>
+      <guid>http://microlith-framework.com/tutorial/subdomains/</guid>
       <description>Creating a subdomain is similar to creating a service. At the code level, a subdomain is an object that implements the tld.DomainBuilder interface and is registered under the root domain.
 Let&amp;rsquo;s create a subdomain named &amp;ldquo;sub.domain&amp;rdquo; that returns &amp;ldquo;Hello, subdomain world!&amp;rdquo;. It will have a &amp;ldquo;hello&amp;rdquo; service and use the global &amp;ldquo;world&amp;rdquo; service and &amp;ldquo;requests&amp;rdquo; channel. The subdomain&amp;rsquo;s origin will have an endpoint that calls these services and constructs the response.</description>
+    </item>
+    
+    <item>
+      <title>Log Readers</title>
+      <link>http://microlith-framework.com/resources/inst/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/inst/</guid>
+      <description>All output from Lambdas is captured as CloudWatch Logs. Readers are Lambda functions that process the resulting log stream.
+Create a Reader To create a log reader, call the Reader() method on a service builder, providing a unique reader name and a Lambda function to process the log messages.
+onErrors := service.Reader(&amp;quot;on-errors&amp;quot;, func(ctx context.Context, evt events.CloudwatchLogsEvent) error { data, err := evt.AWSLogs.Parse() if err != nil { return err } for _, logEvent := range data.</description>
     </item>
     
   </channel>
