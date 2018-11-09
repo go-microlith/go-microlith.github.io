@@ -90,16 +90,6 @@ The init phase must build this tree deterministically.</description>
     </item>
     
     <item>
-      <title>Call an API</title>
-      <link>http://microlith-framework.com/resources/rest/call/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/resources/rest/call/</guid>
-      <description>Call APIs by creating a Client and calling the Call() method. This takes the endpoint to call and an optional request body for non HEAD and GET requests. Call() can be passed an optional request builder to set the path and query parameters and request headers. The Call() method returns a standard http.Response.
-requestBody := map[string]interface{}{&amp;quot;Foo&amp;quot;: &amp;quot;bar&amp;quot;} responseBody := map[string]interface{}{} // Construct a new client var client = NewClient(&amp;quot;http://localhost:8080/&amp;quot;) // Call an endpoint resp, err := client.</description>
-    </item>
-    
-    <item>
       <title>Services</title>
       <link>http://microlith-framework.com/tutorial/services/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
@@ -139,8 +129,8 @@ package main import ( microlith &amp;quot;gopkg.in/microlith.v0&amp;quot; ) func
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/channels/</guid>
-      <description>Channels are created by calling either the microlith.Channel() function to create a channel in the root domain, or by calling the microlith.Channel() method on a domain builder to create a channel in a subdomain. The returned reference can then be passed to a service so the service can interact with the channel.
-Let&amp;rsquo;s create a channel that logs an event when a request is made against the &amp;ldquo;hello-world&amp;rdquo; endpoint in the Origin.</description>
+      <description>Channels are streams shared between all services in a domain. Services use channels to communicate between each other. Any service can publish events to or process events from a channel. Additionally, the origin can publish events to a channel.
+Let&amp;rsquo;s create a channel for request events. The &amp;ldquo;hello-world&amp;rdquo; endpoint in the origin will publish an event every request. The &amp;ldquo;word&amp;rdquo; service will process the events and write them out to the logs.</description>
     </item>
     
     <item>
@@ -165,6 +155,17 @@ You will need the Domain Name and the Hosted Zone ID to bootstrap your applicati
 Tables are created with a hash (&amp;ldquo;partition&amp;rdquo;) key and an optional range (&amp;ldquo;sort&amp;rdquo;) key given as Attributes. Attributes can be created with the StringAttribute(), NumberAttribute(), and BinaryAttribute() functions.
 The streaming configuration must also be provided when the table is declared by passing a ChangeType value.
 var artistKey = stor.StringAttribute(&amp;quot;Artist&amp;quot;) var nameKey = stor.StringAttribute(&amp;quot;Name&amp;quot;) var albums = service.Table(&amp;quot;albums&amp;quot;, artistKey, nameKey, stor.</description>
+    </item>
+    
+    <item>
+      <title>APIs</title>
+      <link>http://microlith-framework.com/resources/rest/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/rest/</guid>
+      <description>APIs follow the AWS API Gateway design, based on Swagger.
+APIs Define paths in your API using the Scope() method. This method is available on service builders to define service APIs, on domain builders to define domain origins, and via microlith.Scope() to define the root domain&amp;rsquo;s origin API. Within your scopes, use methods named after HTTP methods to add endpoints.
+Scopes Scopes are paths, such as &amp;ldquo;/foo&amp;rdquo; or &amp;ldquo;/bar&amp;rdquo;. Paths can be multiple segments, such as &amp;ldquo;/foo/bar&amp;rdquo; and can contain variables, such as &amp;ldquo;/foo/{foo-id}&amp;rdquo;.</description>
     </item>
     
     <item>

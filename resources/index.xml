@@ -48,6 +48,17 @@ var artistKey = stor.StringAttribute(&amp;quot;Artist&amp;quot;) var nameKey = s
     </item>
     
     <item>
+      <title>APIs</title>
+      <link>http://microlith-framework.com/resources/rest/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/rest/</guid>
+      <description>APIs follow the AWS API Gateway design, based on Swagger.
+APIs Define paths in your API using the Scope() method. This method is available on service builders to define service APIs, on domain builders to define domain origins, and via microlith.Scope() to define the root domain&amp;rsquo;s origin API. Within your scopes, use methods named after HTTP methods to add endpoints.
+Scopes Scopes are paths, such as &amp;ldquo;/foo&amp;rdquo; or &amp;ldquo;/bar&amp;rdquo;. Paths can be multiple segments, such as &amp;ldquo;/foo/bar&amp;rdquo; and can contain variables, such as &amp;ldquo;/foo/{foo-id}&amp;rdquo;.</description>
+    </item>
+    
+    <item>
       <title>Schedued Jobs</title>
       <link>http://microlith-framework.com/resources/cron/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>

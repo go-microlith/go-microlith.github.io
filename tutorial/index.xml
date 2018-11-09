@@ -38,8 +38,8 @@ The &amp;ldquo;word&amp;rdquo; Service We will create a &amp;ldquo;word&amp;rdqu
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/channels/</guid>
-      <description>Channels are created by calling either the microlith.Channel() function to create a channel in the root domain, or by calling the microlith.Channel() method on a domain builder to create a channel in a subdomain. The returned reference can then be passed to a service so the service can interact with the channel.
-Let&amp;rsquo;s create a channel that logs an event when a request is made against the &amp;ldquo;hello-world&amp;rdquo; endpoint in the Origin.</description>
+      <description>Channels are streams shared between all services in a domain. Services use channels to communicate between each other. Any service can publish events to or process events from a channel. Additionally, the origin can publish events to a channel.
+Let&amp;rsquo;s create a channel for request events. The &amp;ldquo;hello-world&amp;rdquo; endpoint in the origin will publish an event every request. The &amp;ldquo;word&amp;rdquo; service will process the events and write them out to the logs.</description>
     </item>
     
     <item>

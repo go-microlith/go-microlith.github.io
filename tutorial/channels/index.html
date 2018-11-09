@@ -12,19 +12,19 @@
     <title>Channels :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541730052" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541730052" rel="stylesheet">
-    <link href="/css/hybrid.css?1541730052" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541730052" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541730052" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541730052" rel="stylesheet">
-    <link href="/css/theme.css?1541730052" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541730052" rel="stylesheet">
+    <link href="/css/nucleus.css?1541793514" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541793514" rel="stylesheet">
+    <link href="/css/hybrid.css?1541793514" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541793514" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541793514" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541793514" rel="stylesheet">
+    <link href="/css/theme.css?1541793514" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541793514" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541730052" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541793514" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541730052"></script>
+    <script src="/js/jquery-2.x.min.js?1541793514"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541730052"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541730052"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541793514"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541793514"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541730052"></script>
+<script type="text/javascript" src="/js/search.js?1541793514"></script>
 
     
   </div>
@@ -452,8 +452,6 @@
         <ul>
           
           
-            
-          
           
           
         
@@ -522,47 +520,13 @@
  
   
     
-    <li data-nav-id="/resources/rest/" title="APIs" class="dd-item 
-        
-        
-        
-        ">
-      <a href="/resources/rest/">
-          APIs
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-          
-        
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/resources/rest/call/" title="Call an API" class="dd-item ">
-        <a href="/resources/rest/call/">
-        Call
+      <li data-nav-id="/resources/rest/" title="APIs" class="dd-item ">
+        <a href="/resources/rest/">
+        APIs
         
         </a>
     </li>
      
-  
- 
-
-            
-          
-        
-        </ul>
-              
-    </li>
   
  
 
@@ -781,14 +745,18 @@
 <li>
 <ul>
 <li><a href="#create-a-channel">Create a Channel</a></li>
-<li><a href="#refactor-the-word-service">Refactor the Word Service</a>
+<li><a href="#the-word-service">The &ldquo;word&rdquo; Service</a>
 <ul>
-<li><a href="#update-the-constructor">Update the Constructor</a></li>
-<li><a href="#process-events">Process Events</a></li>
+<li><a href="#constructor">Constructor</a></li>
+<li><a href="#processor">Processor</a>
+<ul>
+<li><a href="#handler">Handler</a></li>
+<li><a href="#builder">Builder</a></li>
 </ul></li>
-<li><a href="#refactor-the-root-domain">Refactor the Root Domain</a>
+</ul></li>
+<li><a href="#root-domain">Root Domain</a>
 <ul>
-<li><a href="#use-the-updated-constructor">Use the Updated Constructor</a></li>
+<li><a href="#pass-the-channel">Pass the Channel</a></li>
 <li><a href="#publish-events">Publish Events</a></li>
 </ul></li>
 <li><a href="#ship-it">Ship It</a></li>
@@ -814,28 +782,31 @@
 
 
 
-<p>Channels are created by calling either the <a href="https://godoc.org/gopkg.in/microlith.v0/#Channel">microlith.Channel()</a> function to create a channel in the root domain, or by calling the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Domain.Channel">microlith.Channel()</a> method on a domain builder to create a channel in a subdomain.  The returned reference can then be passed to a service so the service can interact with the channel.</p>
+<p>Channels are streams shared between all services in a domain.  Services use channels to communicate between each other.  Any service can publish events to or process events from a channel.  Additionally, the origin can publish events to a channel.</p>
 
-<p>Let&rsquo;s create a channel that logs an event when a request is made against the &ldquo;hello-world&rdquo; endpoint in the Origin.</p>
+<p>Let&rsquo;s create a channel for request events. The &ldquo;hello-world&rdquo; endpoint in the origin will publish an event every request.  The &ldquo;word&rdquo; service will process the events and write them out to the logs.</p>
 
 <h2 id="create-a-channel">Create a Channel</h2>
 
-<p>First, create the channel and an event type in the origin.</p>
+<p>First, create an event type to represent requests.  We will simply record when the request occurred.</p>
 
-<pre><code class="language-go">var requests = microlith.Channel(&quot;requests&quot;)
-
-type Request struct {
+<pre><code class="language-go">type Request struct {
   At time.Time
 }
 </code></pre>
 
-<h2 id="refactor-the-word-service">Refactor the Word Service</h2>
+<p>Use the <a href="https://godoc.org/gopkg.in/microlith.v0/#Channel">microlith.Channel()</a> function to create a channel.</p>
 
-<p>Next, we need to pass the channel to the services that will use it and start processing events sent over the channel.</p>
+<pre><code class="language-go">var requests = microlith.Channel(&quot;requests&quot;)
+</code></pre>
 
-<h3 id="update-the-constructor">Update the Constructor</h3>
+<h2 id="the-word-service">The &ldquo;word&rdquo; Service</h2>
 
-<p>First, update the constructor for the word service so that it takes the channel as an argument.</p>
+<p>The &ldquo;word&rdquo; service needs to be refactored to write the request events to the logs.  We need to get a reference to the channel and then add a processor to log out the events.</p>
+
+<h3 id="constructor">Constructor</h3>
+
+<p>First, update the constructor for the word service so that it takes the channel as an argument.  The value will be needed in the builder, so we place it in an instance variable.</p>
 
 <pre><code class="language-go">type Word struct {
   // ... Same as before ...
@@ -843,8 +814,6 @@ type Request struct {
   requests *strm.Stream
 }
 
-// NewWord constructs an instance of the &quot;word&quot; service that returns the word
-// and processes the requests channel.
 func NewWord(word string, requests *strm.Stream) *Word {
   return &amp;Word{
     word:     word,
@@ -853,18 +822,17 @@ func NewWord(word string, requests *strm.Stream) *Word {
 }
 </code></pre>
 
-<h3 id="process-events">Process Events</h3>
+<h3 id="processor">Processor</h3>
 
-<p>Next, process events on the channel by creating a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Processor">strm.Processor</a> in the builder.  Implement a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_Kinesis.md">Kinesis Lambda</a> method to handle the events.  Use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Processor.Subscribe">Subscribe()</a> method to subscribe to the channel.</p>
+<p>Now that the service has a reference to the channel, it can add a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Processor">strm.Processor</a> to write the events to the log.</p>
 
-<pre><code class="language-go">func (word *Word) Build(service *tld.Service) {
-  // ... Same as before ...
+<h4 id="handler">Handler</h4>
 
-  processor := service.Processor(&quot;requests&quot;, word.processRequests)
-  processor.Process(word.requests, strm.StartingPositionTrimHorizon)
-}
+<p>Create a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_Kinesis.md">Kinesis</a> Lambda to write requests to the logs.  Like the handler for the endpoint, this will be a private instance method on our service.</p>
 
-func (word *Word) processRequests(ctx context.Context, evt events.KinesisEvent) error {
+<p>Events are passed as batches.  Create a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Scanner">Scanner</a> to iterate over the batch.</p>
+
+<pre><code class="language-go">func (word *Word) processRequests(ctx context.Context, evt events.KinesisEvent) error {
   scanner := strm.NewScanner(evt)
 
   for scanner.Next() {
@@ -881,11 +849,23 @@ func (word *Word) processRequests(ctx context.Context, evt events.KinesisEvent) 
 }
 </code></pre>
 
-<h2 id="refactor-the-root-domain">Refactor the Root Domain</h2>
+<h4 id="builder">Builder</h4>
 
-<p>Now that the services are updated to subscribe to the channel, we need to provide the channel to the services and start publishing events.</p>
+<p>Process the events in the channel by calling the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Service.Processor">Processor()</a> method on the service builder with a unique processor name and the handler.  Use the returned processor to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Processor.Process">Process()</a> the events on the channel.</p>
 
-<h3 id="use-the-updated-constructor">Use the Updated Constructor</h3>
+<pre><code class="language-go">func (word *Word) Build(service *tld.Service) {
+  // ... Same as before ...
+
+  processor := service.Processor(&quot;requests&quot;, word.processRequests)
+  processor.Process(word.requests, strm.StartingPositionTrimHorizon)
+}
+</code></pre>
+
+<h2 id="root-domain">Root Domain</h2>
+
+<p>Now that the &ldquo;word&rdquo; service is updated to subscribe to the channel, we need to provide the channel to the instances of the &ldquo;word&rdquo; service and start publishing events from the &ldquo;hello-world&rdquo; endpoint.</p>
+
+<h3 id="pass-the-channel">Pass the Channel</h3>
 
 <p>Use the new constructors to pass the channel to the services.</p>
 
@@ -897,11 +877,14 @@ func (word *Word) processRequests(ctx context.Context, evt events.KinesisEvent) 
 
 <h3 id="publish-events">Publish Events</h3>
 
-<p>Finally, publish an event to the channel on every request.  Be sure to always <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher.Flush">Flush()</a> publishers to ensure that any batched messages are sent.</p>
+<p>Create a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher">strm.Publisher</a> to publish messages to the channel.</p>
 
 <pre><code class="language-go">var publisher = strm.NewPublisher(requests)
+</code></pre>
 
-func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+<p>Update the &ldquo;hello-world&rdquo; handler to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher.Publish">Publish()</a> events to the channel.  Be sure to always <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher.Flush">Flush()</a> the publisher to ensure that any batched messages are sent.</p>
+
+<pre><code class="language-go">func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
   defer publisher.Flush(ctx)
   if err := publisher.Publish(ctx, &quot;partition-key&quot;, &amp;Request{At: time.Now()}); err != nil {
     return rest.Respond(http.StatusInternalServerError, err)
@@ -1234,8 +1217,6 @@ git push origin master
 
                     
                     
-                        
-                    
                     
 
                     
@@ -1299,22 +1280,6 @@ git push origin master
                     
                     
 
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
                     
             
         
@@ -1437,20 +1402,20 @@ git push origin master
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541730052"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541730052"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541730052"></script>
-    <script src="/js/jquery.sticky.js?1541730052"></script>
-    <script src="/js/featherlight.min.js?1541730052"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541730052"></script>
-    <script src="/js/highlight.pack.js?1541730052"></script>
+    <script src="/js/clipboard.min.js?1541793514"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541793514"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541793514"></script>
+    <script src="/js/jquery.sticky.js?1541793514"></script>
+    <script src="/js/featherlight.min.js?1541793514"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541793514"></script>
+    <script src="/js/highlight.pack.js?1541793514"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541730052"></script>
-    <script src="/js/learn.js?1541730052"></script>
-    <script src="/js/hugo-learn.js?1541730052"></script>
+    <script src="/js/modernizr.custom.71422.js?1541793514"></script>
+    <script src="/js/learn.js?1541793514"></script>
+    <script src="/js/hugo-learn.js?1541793514"></script>
 
-    <link href="/mermaid/mermaid.css?1541730052" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541730052"></script>
+    <link href="/mermaid/mermaid.css?1541793514" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541793514"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

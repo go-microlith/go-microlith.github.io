@@ -12,19 +12,19 @@
     <title>APIs :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541730052" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541730052" rel="stylesheet">
-    <link href="/css/hybrid.css?1541730052" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541730052" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541730052" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541730052" rel="stylesheet">
-    <link href="/css/theme.css?1541730052" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541730052" rel="stylesheet">
+    <link href="/css/nucleus.css?1541793514" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541793514" rel="stylesheet">
+    <link href="/css/hybrid.css?1541793514" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541793514" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541793514" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541793514" rel="stylesheet">
+    <link href="/css/theme.css?1541793514" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541793514" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541730052" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541793514" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541730052"></script>
+    <script src="/js/jquery-2.x.min.js?1541793514"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541730052"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541730052"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541793514"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541793514"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541730052"></script>
+<script type="text/javascript" src="/js/search.js?1541793514"></script>
 
     
   </div>
@@ -452,8 +452,6 @@
         <ul>
           
           
-            
-          
           
           
         
@@ -522,47 +520,13 @@
  
   
     
-    <li data-nav-id="/resources/rest/" title="APIs" class="dd-item 
-        parent
-        active
-        
-        ">
-      <a href="/resources/rest/">
-          APIs
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-          
-        
-          
-            
-            
-
-
- 
-  
-    
-      <li data-nav-id="/resources/rest/call/" title="Call an API" class="dd-item ">
-        <a href="/resources/rest/call/">
-        Call
+      <li data-nav-id="/resources/rest/" title="APIs" class="dd-item active">
+        <a href="/resources/rest/">
+        APIs
         
         </a>
     </li>
      
-  
- 
-
-            
-          
-        
-        </ul>
-              
-    </li>
   
  
 
@@ -780,9 +744,17 @@
 <ul>
 <li>
 <ul>
+<li><a href="#apis">APIs</a>
+<ul>
 <li><a href="#scopes">Scopes</a></li>
-<li><a href="#endpoints">Endpoints</a></li>
-<li><a href="#shared-endpoint-properties">Shared Endpoint Properties</a></li>
+<li><a href="#endpoints">Endpoints</a>
+<ul>
+<li><a href="#handlers">Handlers</a></li>
+<li><a href="#definition">Definition</a></li>
+</ul></li>
+<li><a href="#inheritance">Inheritance</a></li>
+</ul></li>
+<li><a href="#clients">Clients</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -805,57 +777,32 @@
 
 
 
-<p>APIs follow the AWS API Gateway design, based on Swagger.  Define your API by
-calling the Scope() method on a service or domain builder.  Within your scope,
-use the builder DSL to define your API.</p>
+<p>APIs follow the AWS API Gateway design, based on Swagger.</p>
 
-<h2 id="scopes">Scopes</h2>
+<h2 id="apis">APIs</h2>
 
-<p>Scope names are paths, such as &ldquo;/foo&rdquo; or &ldquo;/foo/bar&rdquo;.  Scopes can contain
-path parameters enclosed in curly braces, such as &ldquo;/{foo-id}&rdquo;.  Scopes can
-define nested scopes which are prefixed by their parent scope.</p>
+<p>Define paths in your API using the <code>Scope()</code> method.  This method is available on <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Service.Scope">service builders</a> to define service APIs, on <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Domain.Scope">domain builders</a> to define domain origins, and via <a href="https://godoc.org/gopkg.in/microlith.v0#Scope">microlith.Scope()</a> to define the root domain&rsquo;s origin API.  Within your scopes, use methods named after HTTP methods to add endpoints.</p>
 
-<pre><code class="language-go">// Define a scope
-service.Scope(&quot;/foo&quot;, func(scope *Scope) {
-  // Define a nested scope with a path parameter
+<h3 id="scopes">Scopes</h3>
+
+<p>Scopes are paths, such as &ldquo;/foo&rdquo; or &ldquo;/bar&rdquo;.  Paths can be multiple segments, such as &ldquo;/foo/bar&rdquo; and can contain variables, such as &ldquo;/foo/{foo-id}&rdquo;.  Create nested scopes by passing a builder function and calling the <code>Scope()</code> method on passed builder.</p>
+
+<p>It is safe to call <code>Scope()</code> methods multiple times with the same or overlapping paths.</p>
+
+<pre><code class="language-go">service.Scope(&quot;/foo&quot;, func(scope *Scope) {
   scope.Scope(&quot;/{foo-id}&quot;, func(scope *Scope) {
     // ...
   })
 })
 </code></pre>
 
-<h2 id="endpoints">Endpoints</h2>
+<h3 id="endpoints">Endpoints</h3>
 
-<p>Endpoints are Lambda functions that handle HTTP requests.  They are created with
-methods named after HTTP methods.</p>
+<p>Endpoints are <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_ApiGatewayEvent.md">API Gateway</a> Lambda functions that handle HTTP requests.  They are created with methods named after HTTP methods.</p>
 
-<pre><code class="language-go">var echoEndpoint *Endpoint
+<h4 id="handlers">Handlers</h4>
 
-service.Scope(&quot;/&quot;, func(scope *Scope) {
-  echoEndpoint = scope.Get(&quot;echo&quot;, echoHandler)
-})
-</code></pre>
-
-<p>All of the endpoint creation methods take an optional request builder to define
-query parameters and headers as well as responses.</p>
-
-<pre><code class="language-go">service.Scope(&quot;/&quot;, func(scope *Scope) {
-  scope.Get(&quot;echo&quot;, echoHandler, func(endpoint *Endpoint) {
-    endpoint.QueryParameter(&quot;a-query-param&quot;, false)
-    endpoint.Header(&quot;x-request-header&quot;, false)
-
-    endpoint.Response(http.StatusOK, func(response *Response) {
-      response.Header(&quot;x-response-header&quot;, false)
-    })
-
-    echoEndpoint = endpoint
-  })
-})
-</code></pre>
-
-<p>Within the handler functions, use the RequestBody() and Respond() helpers to
-parse a JSON request body and respond using JSON.  If Respond() is passed an
-error value, the error message is placed in the &lsquo;X-Microlith-Error&rsquo; header.</p>
+<p>Within the handler functions, use <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#RequestBody">RequestBody()</a> to parse a JSON request body and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Respond">Respond()</a> to respond using JSON.  The path and query parameters and the request headers are available on the request object.</p>
 
 <pre><code class="language-go">// Handler function
 func echoHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -868,12 +815,37 @@ func echoHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events
 }
 </code></pre>
 
-<h2 id="shared-endpoint-properties">Shared Endpoint Properties</h2>
+<h4 id="definition">Definition</h4>
 
-<p>To define request parameters and responses that are shared, define them on the
-scope.  Endpoints in the scope and all nested scopes will automatically inherit
-them.  Inherited request parameters and responses can be overridden in nested
-scopes or in individual endpoints.</p>
+<p>Use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Scope.Head">Head()</a>, <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Scope.Get">Get()</a>, <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Scope.Post">Post()</a>, <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Scope.Put">Put()</a>, and
+<a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Scope.Delete">Delete()</a> methods on a scope builder to define the endpoints.  Each endpoint must have a unique name and a unique combination of path and HTTP method, such as <code>GET /</code>.  The value returned from the method is used to make HTTP calls on the endpoint.</p>
+
+<pre><code class="language-go">var echo *rest.Endpoint
+
+service.Scope(&quot;/&quot;, func(scope *Scope) {
+  echo = scope.Get(&quot;echo&quot;, echoHandler)
+})
+</code></pre>
+
+<p>All of the methods take an optional builder to define the endpoint.  Use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Endpoint.QueryParameter">QueryParameter()</a> and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Endpoint.Header">Header()</a> methods to define the parameters for the endpoint.  Use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Endpoint.Response">Response()</a> and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Response.Header">Header()</a> methods to define the HTTP responses.  The builder object passed is the same value that is returned and can be captured via the builder function.</p>
+
+<pre><code class="language-go">service.Scope(&quot;/&quot;, func(scope *Scope) {
+  scope.Get(&quot;echo&quot;, echoHandler, func(endpoint *Endpoint) {
+    endpoint.QueryParameter(&quot;a-query-param&quot;, false)
+    endpoint.Header(&quot;x-request-header&quot;, false)
+
+    endpoint.Response(http.StatusOK, func(response *Response) {
+      response.Header(&quot;x-response-header&quot;, false)
+    })
+
+    echo = endpoint
+  })
+})
+</code></pre>
+
+<h3 id="inheritance">Inheritance</h3>
+
+<p>Request parameters and responses can be defined on scopes.  These parameters and responses are inherited by all endpoints in the scope and all nested scopes.  Inherited values can be overridden within individual endpoints or nested scopes.</p>
 
 <pre><code class="language-go">microlith.Scope(&quot;/foo&quot;, func(scope *Scope) {
   scope.Header(&quot;x-header&quot;, true)
@@ -895,10 +867,42 @@ scopes or in individual endpoints.</p>
 })
 </code></pre>
 
+<h2 id="clients">Clients</h2>
+
+<p>Create a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Client">rest.Client</a> to call an API.  To call a service, pass a service builder to the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#ServiceClient">tld.ServiceClient()</a> function.  To call the origin of a subdomain, pass a domain builder to the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#DomainClient">tld.DomainClient()</a> function.</p>
+
+<pre><code class="language-go">client := tld.ServiceClient(service)
+</code></pre>
+
+<p>Use the client to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Client.Call">Call()</a> endpoints on the service.  The method takes the endpoint to call, an optional request body, and an optional builder to set path and query parameters and request headers.</p>
+
+<pre><code class="language-go">resp, err := client.Call(echoEndpoint, requestBody, func(request *Request) {
+  request.QueryParameter(&quot;foo&quot;, &quot;bar&quot;)
+  request.Header(&quot;x-foo&quot;, &quot;bar&quot;)
+})
+if err != nil {
+  log.Panic(err)
+}
+</code></pre>
+
+<p>The values returned are the same values returned by <a href="https://godoc.org/net/http#Client.Do">net/http</a>.  Use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ResponseBody">ResponseBody()</a> and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ErrorResponse">ErrorResponse()</a> helpers to deserialize the response body.</p>
+
+<pre><code class="language-go">switch resp.StatusCode {
+  case http.StatusOK:
+    if err := ResponseBody(resp, &amp;responseBody); err != nil {
+      log.Panic(err)
+    }
+  default:
+    err := ErrorResponse(resp, nil)
+    log.Panic(err)
+}
+</code></pre>
+
 
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -1196,8 +1200,6 @@ scopes or in individual endpoints.</p>
 
                     
                     
-                        
-                    
                     
 
                     
@@ -1266,25 +1268,6 @@ scopes or in individual endpoints.</p>
                     
 
                     
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
             
         
                     
@@ -1292,6 +1275,9 @@ scopes or in individual endpoints.</p>
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1397,7 +1383,7 @@ scopes or in individual endpoints.</p>
             <a class="nav nav-prev" href="/resources/stor/" title="Tables"> <i class="fas fa-chevron-left"></i></a>
         
         
-            <a class="nav nav-next" href="/resources/rest/call/" title="Call an API" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+            <a class="nav nav-next" href="/resources/cron/" title="Schedued Jobs" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -1406,20 +1392,20 @@ scopes or in individual endpoints.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541730052"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541730052"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541730052"></script>
-    <script src="/js/jquery.sticky.js?1541730052"></script>
-    <script src="/js/featherlight.min.js?1541730052"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541730052"></script>
-    <script src="/js/highlight.pack.js?1541730052"></script>
+    <script src="/js/clipboard.min.js?1541793514"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541793514"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541793514"></script>
+    <script src="/js/jquery.sticky.js?1541793514"></script>
+    <script src="/js/featherlight.min.js?1541793514"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541793514"></script>
+    <script src="/js/highlight.pack.js?1541793514"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541730052"></script>
-    <script src="/js/learn.js?1541730052"></script>
-    <script src="/js/hugo-learn.js?1541730052"></script>
+    <script src="/js/modernizr.custom.71422.js?1541793514"></script>
+    <script src="/js/learn.js?1541793514"></script>
+    <script src="/js/hugo-learn.js?1541793514"></script>
 
-    <link href="/mermaid/mermaid.css?1541730052" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541730052"></script>
+    <link href="/mermaid/mermaid.css?1541793514" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541793514"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
@@ -1427,3 +1413,4 @@ scopes or in individual endpoints.</p>
 
   </body>
 </html>
+
