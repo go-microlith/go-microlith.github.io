@@ -17,8 +17,8 @@
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/root/</guid>
-      <description>We will start by adding a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application and redeploying. We will add the endpoint to the origin of the root domain. The root domain has a specialized API exposed via the top-level &amp;ldquo;microlith&amp;rdquo; package.
-The Handler First, we will create a handler function. The handler function must match the signature of a API Gateway Lambda. The body of the handler uses the Respond() helper to return a 200 response code and the string &amp;ldquo;Hello, world!</description>
+      <description>We will be creating a Hello World application. Our application needs to respond to GET / with a 200 and the string &amp;ldquo;Hello, world!&amp;rdquo;. As we refactor the application throughout the tutorial, it should still return the same response.
+To start, we will add a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application and redeploy. We will add the endpoint to the origin of the root domain. The root domain has a specialized API exposed via the top-level microlith package.</description>
     </item>
     
     <item>
@@ -27,10 +27,9 @@ The Handler First, we will create a handler function. The handler function must 
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/services/</guid>
-      <description>Services implement the business logic of your Microlith application.
-Let&amp;rsquo;s refactor our domain into a pair of services: a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service. Then we&amp;rsquo;ll refactor our origin endpoint to call those services to build a response.
-Create a Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word. At the code level, a service is an object which implements the tld.ServiceBuilder interface.
-// Word is a service that returns a fixed word type Word struct { word string client *rest.</description>
+      <description>The origin API implements its business logic by making calls on services in the domain. It uses the results of those calls to create a response for the user.
+Let&amp;rsquo;s refactor our domain into a pair of services, a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service, which perform the work of creating words. Then we&amp;rsquo;ll refactor our origin endpoint to use those services to build our &amp;ldquo;Hello, world!&amp;rdquo; response.
+The &amp;ldquo;word&amp;rdquo; Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word.</description>
     </item>
     
     <item>

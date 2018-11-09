@@ -12,14 +12,49 @@
     
     
     <item>
+      <title>Buckets</title>
+      <link>http://microlith-framework.com/resources/blob/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/blob/</guid>
+      <description>Create a bucket by calling Bucket() on a service builder with a unique bucket name.
+images := service.Bucket(&amp;quot;images&amp;quot;)  The returned object is used to create clients and to attach observers.
+Manipulators To Get(), Put(), or Delete() an object from a bucket, use a Manipulator.
+mnip := blob.NewManipulator(images) contents, err := mnip.Get(ctx, &amp;quot;/microlith/logo.png&amp;quot;) if err != nil { log.Panic(err) } defer contents.Close() os.Copy(os.Stdout, contents)  Observers Observers cannot access buckets using Manipulators.</description>
+    </item>
+    
+    <item>
+      <title>Streams</title>
+      <link>http://microlith-framework.com/resources/strm/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/strm/</guid>
+      <description>Create a stream by calling Stream() on a service builder with a unique stream name:
+userSignups := service.Stream(&amp;quot;user-signups&amp;quot;)  The returned object is used to create clients and to attach processors.
+Publishers To Publish() messages to a stream, use a Publisher.
+publisher := strm.NewPublisher(userSignups) defer publisher.Flush(ctx) signup := &amp;amp;UserSignup{ Email: &amp;quot;john@doe.com&amp;quot;, At: time.Now(), } if err := publisher.Publish(ctx, &amp;quot;partition-key&amp;quot;, signup); err != nil { log.Panic(err) }  Processors Process events published to the stream by calling the Processor() method on a service builder with a unique processor name and a Kinesis Lambda function.</description>
+    </item>
+    
+    <item>
+      <title>Tables</title>
+      <link>http://microlith-framework.com/resources/stor/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/stor/</guid>
+      <description>Create a table by calling Table() method on a service builders.
+Tables are created with a hash (&amp;ldquo;partition&amp;rdquo;) key and an optional range (&amp;ldquo;sort&amp;rdquo;) key given as Attributes. Attributes can be created with the StringAttribute(), NumberAttribute(), and BinaryAttribute() functions.
+The streaming configuration must also be provided when the table is declared by passing a ChangeType value.
+var artistKey = stor.StringAttribute(&amp;quot;Artist&amp;quot;) var nameKey = stor.StringAttribute(&amp;quot;Name&amp;quot;) var albums = service.Table(&amp;quot;albums&amp;quot;, artistKey, nameKey, stor.</description>
+    </item>
+    
+    <item>
       <title>Schedued Jobs</title>
       <link>http://microlith-framework.com/resources/cron/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/cron/</guid>
-      <description>Jobs are Lambda functions that are invoked on a schedule. The schedule can be a simple time interval or a complex calendar, both expressed using CloudWatch Schedule Expressions.
-Schedule a Job To schedule a job, use the Job() method on a service builder, providing a unique job name, a schedule, and a Lambda function.
-service.Job(&amp;quot;purge-cache&amp;quot;, &amp;quot;rate(15 minutes)&amp;quot;, func(ctx context.Context, evt events.CloudWatchEvent) error { return json.NewEncoder(os.Stdout).Encode(evt.Details) })  Cron syntax for the schedule is also supported.</description>
+      <description>Schedule a job to run in the background by calling Job() on a service builder, providing a unique job name, a schedule, and a CloudWatch Event Lambda function. The schedule can be a simple time interval or a complex calendar, both expressed using CloudWatch Schedule Expressions.
+service.Job(&amp;quot;purge-cache&amp;quot;, &amp;quot;rate(15 minutes)&amp;quot;, func(ctx context.Context, evt events.CloudWatchEvent) error { return json.NewEncoder(os.Stdout).Encode(evt.Details) })  </description>
     </item>
     
     <item>
@@ -28,8 +63,7 @@ service.Job(&amp;quot;purge-cache&amp;quot;, &amp;quot;rate(15 minutes)&amp;quot
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/inst/</guid>
-      <description>All output from Lambdas is captured as CloudWatch Logs. Readers are Lambda functions that process the resulting log stream.
-Create a Reader To create a log reader, call the Reader() method on a service builder, providing a unique reader name and a Lambda function to process the log messages.
+      <description>All console output (standard out and standard error) from Lambdas is captured as CloudWatch Logs. Read Lambdas&amp;rsquo; logs by calling the Reader() method on a service builder, passing a unique reader name and a CloudWatch Logs Lambda function. Use the returned reader to filter and Read() a Lambda&amp;rsquo;s logs.
 onErrors := service.Reader(&amp;quot;on-errors&amp;quot;, func(ctx context.Context, evt events.CloudwatchLogsEvent) error { data, err := evt.AWSLogs.Parse() if err != nil { return err } for _, logEvent := range data.</description>
     </item>
     

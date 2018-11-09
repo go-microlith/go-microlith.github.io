@@ -35,13 +35,15 @@ A service&amp;rsquo;s external interface is a REST API. Endpoints on the API imp
     </item>
     
     <item>
-      <title>CRUD Operations</title>
-      <link>http://microlith-framework.com/resources/stor/mutator/crud/</link>
+      <title>Buckets</title>
+      <link>http://microlith-framework.com/resources/blob/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://microlith-framework.com/resources/stor/mutator/crud/</guid>
-      <description>Mutators support CRUD operations on individual items. Every operation takes a key to identify the object to operate on and/or a value. These keys and values can be either non-nil map[string]interface{} values or structs. If a value is used as a key, it must include the key fields specified when the table is created.
-Put The Put() inserts or overwrites a value in the table. The item passed must include the key fields.</description>
+      <guid>http://microlith-framework.com/resources/blob/</guid>
+      <description>Create a bucket by calling Bucket() on a service builder with a unique bucket name.
+images := service.Bucket(&amp;quot;images&amp;quot;)  The returned object is used to create clients and to attach observers.
+Manipulators To Get(), Put(), or Delete() an object from a bucket, use a Manipulator.
+mnip := blob.NewManipulator(images) contents, err := mnip.Get(ctx, &amp;quot;/microlith/logo.png&amp;quot;) if err != nil { log.Panic(err) } defer contents.Close() os.Copy(os.Stdout, contents)  Observers Observers cannot access buckets using Manipulators.</description>
     </item>
     
     <item>
@@ -60,8 +62,8 @@ go get gopkg.in/microlith.v0  </description>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/root/</guid>
-      <description>We will start by adding a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application and redeploying. We will add the endpoint to the origin of the root domain. The root domain has a specialized API exposed via the top-level &amp;ldquo;microlith&amp;rdquo; package.
-The Handler First, we will create a handler function. The handler function must match the signature of a API Gateway Lambda. The body of the handler uses the Respond() helper to return a 200 response code and the string &amp;ldquo;Hello, world!</description>
+      <description>We will be creating a Hello World application. Our application needs to respond to GET / with a 200 and the string &amp;ldquo;Hello, world!&amp;rdquo;. As we refactor the application throughout the tutorial, it should still return the same response.
+To start, we will add a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application and redeploy. We will add the endpoint to the origin of the root domain. The root domain has a specialized API exposed via the top-level microlith package.</description>
     </item>
     
     <item>
@@ -98,46 +100,26 @@ requestBody := map[string]interface{}{&amp;quot;Foo&amp;quot;: &amp;quot;bar&amp
     </item>
     
     <item>
-      <title>Publishing to Streams</title>
-      <link>http://microlith-framework.com/resources/strm/publisher/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/resources/strm/publisher/</guid>
-      <description>To publish to a stream, create a Publisher object and Publish() messages. The publisher automatically encodes the messages to JSON and batches messages before sending. Be sure to Flush() your publisher to ensure the final batch is sent.
-// Create a publisher var publisher = NewPublisher(userSignups) func someHandler(ctx context.Context) error { // Be sure to Flush() the publisher defer publisher.Flush(ctx) // Write messages to the stream if err := publisher.Publish(ctx, &amp;quot;partition-one&amp;quot;, &amp;quot;value-one&amp;quot;); err !</description>
-    </item>
-    
-    <item>
-      <title>Query Operations</title>
-      <link>http://microlith-framework.com/resources/stor/mutator/query/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/resources/stor/mutator/query/</guid>
-      <description>The Query and Scan operations operate a page of results at a time. They return a Result object to process the items in the results.
-// Query the first page of results from the table result, err := mutator.Query(ctx, func(query *Query) { query.KeyCondition( expression.Name(&amp;quot;Foo&amp;quot;).Equal(expression.Value(&amp;quot;bar&amp;quot;)), ) }) if err != nil { log.Panic(err) }  To fetch and process all of the pages, the Result object contains the last evaluated key</description>
-    </item>
-    
-    <item>
       <title>Services</title>
       <link>http://microlith-framework.com/tutorial/services/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/services/</guid>
-      <description>Services implement the business logic of your Microlith application.
-Let&amp;rsquo;s refactor our domain into a pair of services: a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service. Then we&amp;rsquo;ll refactor our origin endpoint to call those services to build a response.
-Create a Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word. At the code level, a service is an object which implements the tld.ServiceBuilder interface.
-// Word is a service that returns a fixed word type Word struct { word string client *rest.</description>
+      <description>The origin API implements its business logic by making calls on services in the domain. It uses the results of those calls to create a response for the user.
+Let&amp;rsquo;s refactor our domain into a pair of services, a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service, which perform the work of creating words. Then we&amp;rsquo;ll refactor our origin endpoint to use those services to build our &amp;ldquo;Hello, world!&amp;rdquo; response.
+The &amp;ldquo;word&amp;rdquo; Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word.</description>
     </item>
     
     <item>
-      <title>Working with Buckets</title>
-      <link>http://microlith-framework.com/resources/blob/manipulator/</link>
+      <title>Streams</title>
+      <link>http://microlith-framework.com/resources/strm/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://microlith-framework.com/resources/blob/manipulator/</guid>
-      <description>Objects are added, updated, and removed from a bucket using a Manipulator.
-Create a manipulator by passing a reference to a bucket:
-mnip := blob.NewManipulator(images)  Get contents, err := mnip.Get(ctx, &amp;quot;/the/key&amp;quot;) if err != nil { log.Panic(err) } defer contents.Close()  io.Copy(os.Stdout, contents)  Put body, err := NewBufferString(&amp;quot;the-body&amp;quot;) if err != nil { log.Panic(err) } defer body.Close()  if err := mnip.Put(ctx, &amp;quot;/the/key&amp;quot;, body); err != nil { log.</description>
+      <guid>http://microlith-framework.com/resources/strm/</guid>
+      <description>Create a stream by calling Stream() on a service builder with a unique stream name:
+userSignups := service.Stream(&amp;quot;user-signups&amp;quot;)  The returned object is used to create clients and to attach processors.
+Publishers To Publish() messages to a stream, use a Publisher.
+publisher := strm.NewPublisher(userSignups) defer publisher.Flush(ctx) signup := &amp;amp;UserSignup{ Email: &amp;quot;john@doe.com&amp;quot;, At: time.Now(), } if err := publisher.Publish(ctx, &amp;quot;partition-key&amp;quot;, signup); err != nil { log.Panic(err) }  Processors Process events published to the stream by calling the Processor() method on a service builder with a unique processor name and a Kinesis Lambda function.</description>
     </item>
     
     <item>
@@ -152,18 +134,6 @@ package main import ( microlith &amp;quot;gopkg.in/microlith.v0&amp;quot; ) func
     </item>
     
     <item>
-      <title>Batch Operations</title>
-      <link>http://microlith-framework.com/resources/stor/mutator/batch/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/resources/stor/mutator/batch/</guid>
-      <description>Batch operations on tables are supported via top-level functions.
-Get The operation retrieves multiple items from multiple tables at once.
-Create Call the GetBatch() function and pass it a builder. Use the builder to Get() items from tables via their Keys(). You can use Consistent() reads and Project() only select attributes into the result.
-You can perform up to 100 operations in a batch on one or more tables in a batch.</description>
-    </item>
-    
-    <item>
       <title>Channels</title>
       <link>http://microlith-framework.com/tutorial/channels/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
@@ -171,29 +141,6 @@ You can perform up to 100 operations in a batch on one or more tables in a batch
       <guid>http://microlith-framework.com/tutorial/channels/</guid>
       <description>Channels are created by calling either the microlith.Channel() function to create a channel in the root domain, or by calling the microlith.Channel() method on a domain builder to create a channel in a subdomain. The returned reference can then be passed to a service so the service can interact with the channel.
 Let&amp;rsquo;s create a channel that logs an event when a request is made against the &amp;ldquo;hello-world&amp;rdquo; endpoint in the Origin.</description>
-    </item>
-    
-    <item>
-      <title>Observing Changes</title>
-      <link>http://microlith-framework.com/resources/blob/observer/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/resources/blob/observer/</guid>
-      <description>Observers are Lambda functions that observe buckets and are invoked when the buckets&amp;rsquo; contents change.
-Observers cannot access buckets. This is due to a circular dependency in CloudFormation. If an observer needs to access buckets, a work around is to publish all events to a Stream and create a processor to perform the action.
- Create an Observer Create an observer by calling the Observer() function on a service builder, giving it a unique observer name and an S3 Lambda function.</description>
-    </item>
-    
-    <item>
-      <title>Process Messages from Streams</title>
-      <link>http://microlith-framework.com/resources/strm/processor/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/resources/strm/processor/</guid>
-      <description>Processors are Lambda functions that processes messages published to a stream. Each processor may subscribe to multiple streams and is called when messages are published to any of the streams.
-Messages are given to processors in batches. To simplify this, create a Scanner to loop through the batch and process individual messages.
-To create a process, call the Processor() method on a service builder.
-// Create a processor processor := service.</description>
     </item>
     
     <item>
@@ -209,14 +156,15 @@ You will need the Domain Name and the Hosted Zone ID to bootstrap your applicati
     </item>
     
     <item>
-      <title>Watching for Changes</title>
-      <link>http://microlith-framework.com/resources/stor/watcher/</link>
+      <title>Tables</title>
+      <link>http://microlith-framework.com/resources/stor/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://microlith-framework.com/resources/stor/watcher/</guid>
-      <description>If change streaming is enabled on a table, changes to the table can be processed using a Watcher Lambda function. Only tables can be watched, not secondary indexes.
-To create a watcher, call the Watcher() method on a service builder.
-// Create a watcher watcher := service.Watcher(&amp;quot;process-changes&amp;quot;, func(ctx context.Context, evt events.DynamoDBEvent) error { // ... }) // Watch for changes on the table watcher.Watch(table, strm.StartingPositionTrimHorizon)  </description>
+      <guid>http://microlith-framework.com/resources/stor/</guid>
+      <description>Create a table by calling Table() method on a service builders.
+Tables are created with a hash (&amp;ldquo;partition&amp;rdquo;) key and an optional range (&amp;ldquo;sort&amp;rdquo;) key given as Attributes. Attributes can be created with the StringAttribute(), NumberAttribute(), and BinaryAttribute() functions.
+The streaming configuration must also be provided when the table is declared by passing a ChangeType value.
+var artistKey = stor.StringAttribute(&amp;quot;Artist&amp;quot;) var nameKey = stor.StringAttribute(&amp;quot;Name&amp;quot;) var albums = service.Table(&amp;quot;albums&amp;quot;, artistKey, nameKey, stor.</description>
     </item>
     
     <item>
@@ -257,9 +205,8 @@ git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  I
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/cron/</guid>
-      <description>Jobs are Lambda functions that are invoked on a schedule. The schedule can be a simple time interval or a complex calendar, both expressed using CloudWatch Schedule Expressions.
-Schedule a Job To schedule a job, use the Job() method on a service builder, providing a unique job name, a schedule, and a Lambda function.
-service.Job(&amp;quot;purge-cache&amp;quot;, &amp;quot;rate(15 minutes)&amp;quot;, func(ctx context.Context, evt events.CloudWatchEvent) error { return json.NewEncoder(os.Stdout).Encode(evt.Details) })  Cron syntax for the schedule is also supported.</description>
+      <description>Schedule a job to run in the background by calling Job() on a service builder, providing a unique job name, a schedule, and a CloudWatch Event Lambda function. The schedule can be a simple time interval or a complex calendar, both expressed using CloudWatch Schedule Expressions.
+service.Job(&amp;quot;purge-cache&amp;quot;, &amp;quot;rate(15 minutes)&amp;quot;, func(ctx context.Context, evt events.CloudWatchEvent) error { return json.NewEncoder(os.Stdout).Encode(evt.Details) })  </description>
     </item>
     
     <item>
@@ -278,8 +225,7 @@ Let&amp;rsquo;s create a subdomain named &amp;ldquo;sub.domain&amp;rdquo; that r
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/inst/</guid>
-      <description>All output from Lambdas is captured as CloudWatch Logs. Readers are Lambda functions that process the resulting log stream.
-Create a Reader To create a log reader, call the Reader() method on a service builder, providing a unique reader name and a Lambda function to process the log messages.
+      <description>All console output (standard out and standard error) from Lambdas is captured as CloudWatch Logs. Read Lambdas&amp;rsquo; logs by calling the Reader() method on a service builder, passing a unique reader name and a CloudWatch Logs Lambda function. Use the returned reader to filter and Read() a Lambda&amp;rsquo;s logs.
 onErrors := service.Reader(&amp;quot;on-errors&amp;quot;, func(ctx context.Context, evt events.CloudwatchLogsEvent) error { data, err := evt.AWSLogs.Parse() if err != nil { return err } for _, logEvent := range data.</description>
     </item>
     
