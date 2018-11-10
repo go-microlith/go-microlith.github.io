@@ -12,19 +12,19 @@
     <title>Streams :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541793514" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541793514" rel="stylesheet">
-    <link href="/css/hybrid.css?1541793514" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541793514" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541793514" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541793514" rel="stylesheet">
-    <link href="/css/theme.css?1541793514" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541793514" rel="stylesheet">
+    <link href="/css/nucleus.css?1541839318" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541839318" rel="stylesheet">
+    <link href="/css/hybrid.css?1541839318" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541839318" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541839318" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541839318" rel="stylesheet">
+    <link href="/css/theme.css?1541839318" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541839318" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541793514" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541839318" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541793514"></script>
+    <script src="/js/jquery-2.x.min.js?1541839318"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541793514"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541793514"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541839318"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541839318"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541793514"></script>
+<script type="text/javascript" src="/js/search.js?1541839318"></script>
 
     
   </div>
@@ -778,7 +778,7 @@
 
 <h2 id="publishers">Publishers</h2>
 
-<p>To <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher.Publish">Publish()</a> messages to a stream, use a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher">Publisher</a>.</p>
+<p>To <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher.Publish">Publish()</a> messages to a stream, use a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher">Publisher</a>.  Publishers automatically batch messages.  To ensure that any pending messages are published, defer a call to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher.Flush">Flush()</a>.</p>
 
 <pre><code class="language-go">publisher := strm.NewPublisher(userSignups)
 defer publisher.Flush(ctx)
@@ -795,7 +795,7 @@ if err := publisher.Publish(ctx, &quot;partition-key&quot;, signup); err != nil 
 
 <h2 id="processors">Processors</h2>
 
-<p>Process events published to the stream by calling the <a href="https://gopkg.in/microlith.v0/sam/tld#Service.Processor">Processor()</a> method on a service builder with a unique processor name and a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_Kinesis.md">Kinesis</a> Lambda function.  Use the returned processor to <a href="https://gopkg.in/microlith.v0/sam/tld/strm#Processor.Process">Process()</a> events published to a stream.</p>
+<p>Process events from streams by calling the <a href="https://gopkg.in/microlith.v0/sam/tld#Service.Processor">Processor()</a> method on a service builder with a unique processor name and a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_Kinesis.md">Kinesis</a> Lambda function.  Use the returned processor to <a href="https://gopkg.in/microlith.v0/sam/tld/strm#Processor.Process">Process()</a> a stream.</p>
 
 <p>Messages are given to processors in batches.  To iterate over the batch, create a <a href="https://gopkg.in/microlith.v0/sam/tld/strm#Scanner">Scanner</a>.</p>
 
@@ -1327,20 +1327,20 @@ client.PutRecords(&amp;kinesis.PutRecordsInput{
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541793514"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541793514"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541793514"></script>
-    <script src="/js/jquery.sticky.js?1541793514"></script>
-    <script src="/js/featherlight.min.js?1541793514"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541793514"></script>
-    <script src="/js/highlight.pack.js?1541793514"></script>
+    <script src="/js/clipboard.min.js?1541839318"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541839318"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541839318"></script>
+    <script src="/js/jquery.sticky.js?1541839318"></script>
+    <script src="/js/featherlight.min.js?1541839318"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541839318"></script>
+    <script src="/js/highlight.pack.js?1541839318"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541793514"></script>
-    <script src="/js/learn.js?1541793514"></script>
-    <script src="/js/hugo-learn.js?1541793514"></script>
+    <script src="/js/modernizr.custom.71422.js?1541839318"></script>
+    <script src="/js/learn.js?1541839318"></script>
+    <script src="/js/hugo-learn.js?1541839318"></script>
 
-    <link href="/mermaid/mermaid.css?1541793514" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541793514"></script>
+    <link href="/mermaid/mermaid.css?1541839318" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541839318"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

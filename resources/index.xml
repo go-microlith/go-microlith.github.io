@@ -20,7 +20,7 @@
       <description>Create a bucket by calling Bucket() on a service builder with a unique bucket name.
 images := service.Bucket(&amp;quot;images&amp;quot;)  The returned object is used to create clients and to attach observers.
 Manipulators To Get(), Put(), or Delete() an object from a bucket, use a Manipulator.
-mnip := blob.NewManipulator(images) contents, err := mnip.Get(ctx, &amp;quot;/microlith/logo.png&amp;quot;) if err != nil { log.Panic(err) } defer contents.Close() os.Copy(os.Stdout, contents)  Observers Observers cannot access buckets using Manipulators.</description>
+mnip := blob.NewManipulator(images) contents, err := mnip.Get(ctx, &amp;quot;/microlith/logo.png&amp;quot;) if err != nil { log.Panic(err) } defer contents.Close() os.Copy(os.Stdout, contents)  Observers Observe objects added, updated, or deleted from buckets by calling the Observer() function on a service builder, giving it a unique observer name and an S3 Lambda function.</description>
     </item>
     
     <item>
@@ -31,8 +31,8 @@ mnip := blob.NewManipulator(images) contents, err := mnip.Get(ctx, &amp;quot;/mi
       <guid>http://microlith-framework.com/resources/strm/</guid>
       <description>Create a stream by calling Stream() on a service builder with a unique stream name:
 userSignups := service.Stream(&amp;quot;user-signups&amp;quot;)  The returned object is used to create clients and to attach processors.
-Publishers To Publish() messages to a stream, use a Publisher.
-publisher := strm.NewPublisher(userSignups) defer publisher.Flush(ctx) signup := &amp;amp;UserSignup{ Email: &amp;quot;john@doe.com&amp;quot;, At: time.Now(), } if err := publisher.Publish(ctx, &amp;quot;partition-key&amp;quot;, signup); err != nil { log.Panic(err) }  Processors Process events published to the stream by calling the Processor() method on a service builder with a unique processor name and a Kinesis Lambda function.</description>
+Publishers To Publish() messages to a stream, use a Publisher. Publishers automatically batch messages. To ensure that any pending messages are published, defer a call to Flush().
+publisher := strm.NewPublisher(userSignups) defer publisher.Flush(ctx) signup := &amp;amp;UserSignup{ Email: &amp;quot;john@doe.com&amp;quot;, At: time.</description>
     </item>
     
     <item>
@@ -41,7 +41,7 @@ publisher := strm.NewPublisher(userSignups) defer publisher.Flush(ctx) signup :=
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/stor/</guid>
-      <description>Create a table by calling Table() method on a service builders.
+      <description>Create a table by calling the Table() method on a service builder.
 Tables are created with a hash (&amp;ldquo;partition&amp;rdquo;) key and an optional range (&amp;ldquo;sort&amp;rdquo;) key given as Attributes. Attributes can be created with the StringAttribute(), NumberAttribute(), and BinaryAttribute() functions.
 The streaming configuration must also be provided when the table is declared by passing a ChangeType value.
 var artistKey = stor.StringAttribute(&amp;quot;Artist&amp;quot;) var nameKey = stor.StringAttribute(&amp;quot;Name&amp;quot;) var albums = service.Table(&amp;quot;albums&amp;quot;, artistKey, nameKey, stor.</description>

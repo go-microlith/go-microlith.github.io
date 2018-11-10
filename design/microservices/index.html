@@ -12,19 +12,19 @@
     <title>Microservices :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541793514" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541793514" rel="stylesheet">
-    <link href="/css/hybrid.css?1541793514" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541793514" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541793514" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541793514" rel="stylesheet">
-    <link href="/css/theme.css?1541793514" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541793514" rel="stylesheet">
+    <link href="/css/nucleus.css?1541839318" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541839318" rel="stylesheet">
+    <link href="/css/hybrid.css?1541839318" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541839318" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541839318" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541839318" rel="stylesheet">
+    <link href="/css/theme.css?1541839318" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541839318" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541793514" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541839318" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541793514"></script>
+    <script src="/js/jquery-2.x.min.js?1541839318"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541793514"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541793514"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541839318"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541839318"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541793514"></script>
+<script type="text/javascript" src="/js/search.js?1541839318"></script>
 
     
   </div>
@@ -777,9 +777,9 @@
 
 <p>Services are implemented as AWS::Serverless services, containing resources such as <a href="/resources/blob">Buckets</a>, <a href="/resources/stor">Tables</a>, and <a href="/resources/strm">Streams</a> to store and communicate state.</p>
 
-<p>A service&rsquo;s external interface is a REST API.  Endpoints on the API implement business logic by <a href="/resources/blob/manipulator">manipulating</a> buckets, <a href="/resources/stor/mutator">mutating</a> tables, and <a href="/resources/strm/publish">publishing</a> to streams.</p>
+<p>A service&rsquo;s external interface is a REST API.  Endpoints on the API implement business logic by <a href="/resources/blob/#manipulators">manipulating</a> buckets, <a href="/resources/stor/#mutator">mutating</a> tables, and <a href="/resources/strm/#publishers">publishing</a> to streams.</p>
 
-<p>Asynchronous business logic such as <a href="/resources/blob/observer">observing</a> objects in a bucket, <a href="/resources/stor/watcher">watching</a> changes to tables, and <a href="/resources/strm/processor">processing</a> events published to a stream is implemented by attaching Lambdas to resources.  Services additionally support non-resource actions, such as scheduling <a href="/resources/cron">cron jobs</a> and <a href="/resources/inst">reading</a> Lambdas&rsquo; logs.</p>
+<p>Asynchronous business logic such as <a href="/resources/blob/#observers">observing</a> objects in a bucket, <a href="/resources/stor/#watchers">watching</a> changes to tables, and <a href="/resources/strm/#processors">processing</a> events published to a stream is implemented by attaching Lambdas to resources.  Services additionally support non-resource actions, such as scheduling <a href="/resources/cron">cron jobs</a> and <a href="/resources/inst">reading</a> Lambdas&rsquo; logs.</p>
 
 <p>Unlike a standard AWS::Serverless service, the API is not publicly routable.  Microlith services must live in a container that makes calls on them, such as a Domain or Application.</p>
 
@@ -787,7 +787,7 @@
 
 <p>Domains are containers for services.  They compose the business logic of the services to build larger, richer, and more complex units of business logic.</p>
 
-<p>A domain&rsquo;s external interface is a REST API mounted under a publicly routable DNS name.  Endpoints on this API, named the Origin, implement business logic by making calls on the services in the domain.</p>
+<p>A domain&rsquo;s external interface is a REST API.  Endpoints on this API, named the Origin, implement business logic by making calls on the services in the domain.</p>
 
 <p>Services themselves cannot make calls on their peers in the domain.  To coordinate between them, domains provide broadcast Channels.  Channels are streams that are shared between all of the services in a domain.  Any service can publish events to a channel and/or process events published to a channel.</p>
 
@@ -795,9 +795,9 @@
 
 <p>Applications are containers for domains.  They route traffic to domains and share state between domains.  Each Microlith application is a single Application container.</p>
 
-<p>Applications route traffic using DNS.  Every application contains at least one domain, called the Root domain.  This domain is mounted under a base DNS name, such as &ldquo;example.com&rdquo;.  Applications can contain named subdomains which are mounted relative to the DNS name of root domain, such as &ldquo;foo.example.com&rdquo;, &ldquo;bar.example.com&rdquo;, and &ldquo;foo.bar.example.com&rdquo;.</p>
+<p>Applications route traffic using DNS.  The origin of every domain is mounted under a unique public DNS name.  An application contains at least one domain, called the Root domain.  The root domain is mounted under a base DNS name, such as &ldquo;example.com&rdquo;.  Applications can contain named subdomains which are mounted relative to the DNS name of root domain, such as &ldquo;foo.example.com&rdquo;, &ldquo;bar.example.com&rdquo;, and &ldquo;foo.bar.example.com&rdquo;.</p>
 
-<p>To coordinate between domains, applications provide Globals.  The globals are a set of services and channels that make a &ldquo;pseudo-domain&rdquo; that is shared between all domains.  Origins can call global services just like their internal services, and services can use global channels just like normal channels.  Unlike peer services in a domain, Global services can be called directly by services in a domain.</p>
+<p>To coordinate between domains, applications provide Globals.  The globals are a set of services and channels that make a &ldquo;pseudo-domain&rdquo; that is shared between all domains.  Origins can call global services just like their internal services, and services can use global channels just like normal channels.  Global services can also be called directly by services in a domain.</p>
 
 
 <footer class=" footline" >
@@ -1290,20 +1290,20 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541793514"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541793514"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541793514"></script>
-    <script src="/js/jquery.sticky.js?1541793514"></script>
-    <script src="/js/featherlight.min.js?1541793514"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541793514"></script>
-    <script src="/js/highlight.pack.js?1541793514"></script>
+    <script src="/js/clipboard.min.js?1541839318"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541839318"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541839318"></script>
+    <script src="/js/jquery.sticky.js?1541839318"></script>
+    <script src="/js/featherlight.min.js?1541839318"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541839318"></script>
+    <script src="/js/highlight.pack.js?1541839318"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541793514"></script>
-    <script src="/js/learn.js?1541793514"></script>
-    <script src="/js/hugo-learn.js?1541793514"></script>
+    <script src="/js/modernizr.custom.71422.js?1541839318"></script>
+    <script src="/js/learn.js?1541839318"></script>
+    <script src="/js/hugo-learn.js?1541839318"></script>
 
-    <link href="/mermaid/mermaid.css?1541793514" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541793514"></script>
+    <link href="/mermaid/mermaid.css?1541839318" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541839318"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

@@ -30,8 +30,8 @@ A service&amp;rsquo;s external interface is a REST API. Endpoints on the API imp
       
       <guid>http://microlith-framework.com/design/monolith/</guid>
       <description>Microlith packages an entire application into a single executable binary. It does this by taking advantage of the init/main phase distinction in Go.
-Init Phase Microlith represents a Domain model application as a tree of Go objects. During the init phase, Microlith provides a builder DSL to construct this tree. Lambda functions are given as Go callback functions. The init phase ends when microlith.Main() is called.
-The init phase must build this tree deterministically.</description>
+Microlith represents a Domain model application as a tree of Go objects. During the init phase, Microlith provides a builder DSL to construct this tree. Lambda functions are given as Go callback functions. The init phase ends when microlith.Main() is called.
+The main phase handles converting the tree of objects into CloudFormation templates, deploying it to AWS in a Serverless pattern, and executing Lambda functions.</description>
     </item>
     
   </channel>

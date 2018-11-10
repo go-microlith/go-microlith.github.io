@@ -12,19 +12,19 @@
     <title>APIs :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541793514" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541793514" rel="stylesheet">
-    <link href="/css/hybrid.css?1541793514" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541793514" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541793514" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541793514" rel="stylesheet">
-    <link href="/css/theme.css?1541793514" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541793514" rel="stylesheet">
+    <link href="/css/nucleus.css?1541839318" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541839318" rel="stylesheet">
+    <link href="/css/hybrid.css?1541839318" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541839318" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541839318" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541839318" rel="stylesheet">
+    <link href="/css/theme.css?1541839318" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541839318" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541793514" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541839318" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541793514"></script>
+    <script src="/js/jquery-2.x.min.js?1541839318"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541793514"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541793514"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541839318"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541839318"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541793514"></script>
+<script type="text/javascript" src="/js/search.js?1541839318"></script>
 
     
   </div>
@@ -787,14 +787,14 @@
 
 <p>Scopes are paths, such as &ldquo;/foo&rdquo; or &ldquo;/bar&rdquo;.  Paths can be multiple segments, such as &ldquo;/foo/bar&rdquo; and can contain variables, such as &ldquo;/foo/{foo-id}&rdquo;.  Create nested scopes by passing a builder function and calling the <code>Scope()</code> method on passed builder.</p>
 
-<p>It is safe to call <code>Scope()</code> methods multiple times with the same or overlapping paths.</p>
-
-<pre><code class="language-go">service.Scope(&quot;/foo&quot;, func(scope *Scope) {
-  scope.Scope(&quot;/{foo-id}&quot;, func(scope *Scope) {
+<pre><code class="language-go">service.Scope(&quot;/foo&quot;, func(scope *rest.Scope) {
+  scope.Scope(&quot;/{foo-id}&quot;, func(scope *rest.Scope) {
     // ...
   })
 })
 </code></pre>
+
+<p>It is safe to call <code>Scope()</code> methods multiple times with the same or overlapping paths.</p>
 
 <h3 id="endpoints">Endpoints</h3>
 
@@ -807,11 +807,11 @@
 <pre><code class="language-go">// Handler function
 func echoHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
   var body map[string]interface{}
-  if err := RequestBody(&amp;body); err != nil {
-    return Respond(http.StatusBadRequest, err)
+  if err := rest.RequestBody(&amp;body); err != nil {
+    return rest.Respond(http.StatusBadRequest, err)
   }
 
-  return Respond(http.StatusOK, body)
+  return rest.Respond(http.StatusOK, body)
 }
 </code></pre>
 
@@ -822,19 +822,19 @@ func echoHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events
 
 <pre><code class="language-go">var echo *rest.Endpoint
 
-service.Scope(&quot;/&quot;, func(scope *Scope) {
+service.Scope(&quot;/&quot;, func(scope *rest.Scope) {
   echo = scope.Get(&quot;echo&quot;, echoHandler)
 })
 </code></pre>
 
 <p>All of the methods take an optional builder to define the endpoint.  Use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Endpoint.QueryParameter">QueryParameter()</a> and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Endpoint.Header">Header()</a> methods to define the parameters for the endpoint.  Use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Endpoint.Response">Response()</a> and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Response.Header">Header()</a> methods to define the HTTP responses.  The builder object passed is the same value that is returned and can be captured via the builder function.</p>
 
-<pre><code class="language-go">service.Scope(&quot;/&quot;, func(scope *Scope) {
-  scope.Get(&quot;echo&quot;, echoHandler, func(endpoint *Endpoint) {
+<pre><code class="language-go">service.Scope(&quot;/&quot;, func(scope *rest.Scope) {
+  scope.Get(&quot;echo&quot;, echoHandler, func(endpoint *rest.Endpoint) {
     endpoint.QueryParameter(&quot;a-query-param&quot;, false)
     endpoint.Header(&quot;x-request-header&quot;, false)
 
-    endpoint.Response(http.StatusOK, func(response *Response) {
+    endpoint.Response(http.StatusOK, func(response *rest.Response) {
       response.Header(&quot;x-response-header&quot;, false)
     })
 
@@ -847,19 +847,19 @@ service.Scope(&quot;/&quot;, func(scope *Scope) {
 
 <p>Request parameters and responses can be defined on scopes.  These parameters and responses are inherited by all endpoints in the scope and all nested scopes.  Inherited values can be overridden within individual endpoints or nested scopes.</p>
 
-<pre><code class="language-go">microlith.Scope(&quot;/foo&quot;, func(scope *Scope) {
+<pre><code class="language-go">microlith.Scope(&quot;/foo&quot;, func(scope *rest.Scope) {
   scope.Header(&quot;x-header&quot;, true)
 
   scope.Get(&quot;requires-header&quot;, handler)
-  scope.Put(&quot;does-not-require-header&quot;, handler, func(endpoint *Endpoint) {
+  scope.Put(&quot;does-not-require-header&quot;, handler, func(endpoint *rest.Endpoint) {
     endpoint.Header(&quot;x-header&quot;, false)
   })
 
-  scope.Scope(&quot;/bar&quot;, func(scope *Scope) {
+  scope.Scope(&quot;/bar&quot;, func(scope *rest.Scope) {
     scope.Get(&quot;requires-header&quot;, handler)
   })
 
-  scope.Scope(&quot;/baz&quot;, func(scope *Scope) {
+  scope.Scope(&quot;/baz&quot;, func(scope *rest.Scope) {
     scope.Header(&quot;x-header&quot;, false)
 
     scope.Get(&quot;does-not-require-header&quot;, handler)
@@ -874,7 +874,7 @@ service.Scope(&quot;/&quot;, func(scope *Scope) {
 <pre><code class="language-go">client := tld.ServiceClient(service)
 </code></pre>
 
-<p>Use the client to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Client.Call">Call()</a> endpoints on the service.  The method takes the endpoint to call, an optional request body, and an optional builder to set path and query parameters and request headers.</p>
+<p>Use the client to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Client.Call">Call()</a> endpoints on the service.  The method takes the endpoint to call, an optional request body, and an optional builder to set <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Request.PathParameter">PathParameter()</a>, <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Request.QueryParameter">QueryParameter()</a>, and request <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Request.Header">Header()</a> values.</p>
 
 <pre><code class="language-go">resp, err := client.Call(echoEndpoint, requestBody, func(request *Request) {
   request.QueryParameter(&quot;foo&quot;, &quot;bar&quot;)
@@ -885,15 +885,15 @@ if err != nil {
 }
 </code></pre>
 
-<p>The values returned are the same values returned by <a href="https://godoc.org/net/http#Client.Do">net/http</a>.  Use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ResponseBody">ResponseBody()</a> and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ErrorResponse">ErrorResponse()</a> helpers to deserialize the response body.</p>
+<p>The values returned are the same values returned by <a href="https://godoc.org/net/http#Client.Do">http.Client</a>.  Use the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ResponseBody">ResponseBody()</a> and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ErrorResponse">ErrorResponse()</a> helpers to deserialize the response body.</p>
 
 <pre><code class="language-go">switch resp.StatusCode {
   case http.StatusOK:
-    if err := ResponseBody(resp, &amp;responseBody); err != nil {
+    if err := rest.ResponseBody(resp, &amp;responseBody); err != nil {
       log.Panic(err)
     }
   default:
-    err := ErrorResponse(resp, nil)
+    err := rest.ErrorResponse(resp, nil)
     log.Panic(err)
 }
 </code></pre>
@@ -1392,20 +1392,20 @@ if err != nil {
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541793514"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541793514"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541793514"></script>
-    <script src="/js/jquery.sticky.js?1541793514"></script>
-    <script src="/js/featherlight.min.js?1541793514"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541793514"></script>
-    <script src="/js/highlight.pack.js?1541793514"></script>
+    <script src="/js/clipboard.min.js?1541839318"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541839318"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541839318"></script>
+    <script src="/js/jquery.sticky.js?1541839318"></script>
+    <script src="/js/featherlight.min.js?1541839318"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541839318"></script>
+    <script src="/js/highlight.pack.js?1541839318"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541793514"></script>
-    <script src="/js/learn.js?1541793514"></script>
-    <script src="/js/hugo-learn.js?1541793514"></script>
+    <script src="/js/modernizr.custom.71422.js?1541839318"></script>
+    <script src="/js/learn.js?1541839318"></script>
+    <script src="/js/hugo-learn.js?1541839318"></script>
 
-    <link href="/mermaid/mermaid.css?1541793514" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541793514"></script>
+    <link href="/mermaid/mermaid.css?1541839318" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541839318"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

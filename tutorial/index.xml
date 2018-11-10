@@ -28,7 +28,7 @@ To start, we will add a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to o
       
       <guid>http://microlith-framework.com/tutorial/services/</guid>
       <description>The origin API implements its business logic by making calls on services in the domain. It uses the results of those calls to create a response for the user.
-Let&amp;rsquo;s refactor our domain into a pair of services, a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service, which perform the work of creating words. Then we&amp;rsquo;ll refactor our origin endpoint to use those services to build our &amp;ldquo;Hello, world!&amp;rdquo; response.
+Let&amp;rsquo;s refactor our domain into services which perform the work of creating words. Then we&amp;rsquo;ll refactor our origin endpoint to use those services to build our &amp;ldquo;Hello, world!&amp;rdquo; response.
 The &amp;ldquo;word&amp;rdquo; Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word.</description>
     </item>
     

@@ -12,19 +12,19 @@
     <title>Services :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541793514" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541793514" rel="stylesheet">
-    <link href="/css/hybrid.css?1541793514" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541793514" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541793514" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541793514" rel="stylesheet">
-    <link href="/css/theme.css?1541793514" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541793514" rel="stylesheet">
+    <link href="/css/nucleus.css?1541839318" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541839318" rel="stylesheet">
+    <link href="/css/hybrid.css?1541839318" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541839318" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541839318" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541839318" rel="stylesheet">
+    <link href="/css/theme.css?1541839318" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541839318" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541793514" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541839318" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541793514"></script>
+    <script src="/js/jquery-2.x.min.js?1541839318"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541793514"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541793514"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541839318"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541839318"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541793514"></script>
+<script type="text/javascript" src="/js/search.js?1541839318"></script>
 
     
   </div>
@@ -787,13 +787,13 @@
 
 <p>The origin API implements its business logic by making calls on services in the domain.  It uses the results of those calls to create a response for the user.</p>
 
-<p>Let&rsquo;s refactor our domain into a pair of services, a &ldquo;hello&rdquo; and a &ldquo;world&rdquo; service, which perform the work of creating words.  Then we&rsquo;ll refactor our origin endpoint to use those services to build our &ldquo;Hello, world!&rdquo; response.</p>
+<p>Let&rsquo;s refactor our domain into services which perform the work of creating words.  Then we&rsquo;ll refactor our origin endpoint to use those services to build our &ldquo;Hello, world!&rdquo; response.</p>
 
 <h2 id="the-word-service">The &ldquo;word&rdquo; Service</h2>
 
-<p>We will create a &ldquo;word&rdquo; service that returns a fixed word.  It will have one endpoint which returns the word as a string.</p>
+<p>We will create a &ldquo;word&rdquo; service that returns a fixed word.  It will have one endpoint which returns the word as a string and a public method that calls the endpoint.</p>
 
-<p>At the code level, a service is an object which implements the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#ServiceBuilder">tld.ServiceBuilder</a> interface.  This method is called when the service is registered and passes a builder to define the service.</p>
+<p>At the code level, a service is an object which implements the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#ServiceBuilder">tld.ServiceBuilder</a> interface.  The <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#ServiceBuilder.Build">Build()</a> method is called when the service is registered with a domain.  It is passed a builder to define the service.</p>
 
 <pre><code class="language-go">type Word struct {
   word     string
@@ -814,7 +814,7 @@ func (word *Word) Build(service *tld.Service) {
 
 <h3 id="add-an-endpoint">Add An Endpoint</h3>
 
-<p>We will add an endpoint to the service that returns the word.  This largely mirrors adding an endpoint to the origin.</p>
+<p>We will add an endpoint to the service that returns the word.  This largely mirrors adding an endpoint to the origin: we will create a handler and then wire the endpoint using the builder.</p>
 
 <h4 id="handler">Handler</h4>
 
@@ -840,7 +840,7 @@ func (word *Word) Build(service *tld.Service) {
 
 <h3 id="client-method">Client Method</h3>
 
-<p>The client method makes calls on the endpoint.  We will implement a public instance method to call the &ldquo;word&rdquo; endpoint and return the response body.</p>
+<p>We will implement a public instance method that call the &ldquo;word&rdquo; endpoint and return the response body.  To make calls on the service, we need to create a REST client using the builder.</p>
 
 <h4 id="builder-1">Builder</h4>
 
@@ -1436,20 +1436,20 @@ git push origin master
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541793514"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541793514"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541793514"></script>
-    <script src="/js/jquery.sticky.js?1541793514"></script>
-    <script src="/js/featherlight.min.js?1541793514"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541793514"></script>
-    <script src="/js/highlight.pack.js?1541793514"></script>
+    <script src="/js/clipboard.min.js?1541839318"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541839318"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541839318"></script>
+    <script src="/js/jquery.sticky.js?1541839318"></script>
+    <script src="/js/featherlight.min.js?1541839318"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541839318"></script>
+    <script src="/js/highlight.pack.js?1541839318"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541793514"></script>
-    <script src="/js/learn.js?1541793514"></script>
-    <script src="/js/hugo-learn.js?1541793514"></script>
+    <script src="/js/modernizr.custom.71422.js?1541839318"></script>
+    <script src="/js/learn.js?1541839318"></script>
+    <script src="/js/hugo-learn.js?1541839318"></script>
 
-    <link href="/mermaid/mermaid.css?1541793514" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541793514"></script>
+    <link href="/mermaid/mermaid.css?1541839318" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541839318"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

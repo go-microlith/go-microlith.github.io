@@ -50,7 +50,7 @@ You will need the Domain Name and the Hosted Zone ID to bootstrap your applicati
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/bootstrap/bootstrap/</guid>
-      <description>Your application has a built-in command to deploy itself into a self-hosted AWS environment. This environments includes a Git repository for your source code and a continuous deployment pipeline for your application with test and production environments. The bootstrap process will then initialize a git repository in your local source tree, create an initial commit, push, and wait for a full build and deploy to go green. Finally, it will healthcheck your deployed application.</description>
+      <description>Your application has a built-in command to deploy itself into a self-hosted AWS environment. This environment includes a Git repository for your source code and a continuous deployment pipeline for your application with test and production environments. The bootstrap process will then initialize a git repository in your local source tree, create an initial commit, push, and wait for a full build and deploy to go green. Finally, it will healthcheck your deployed application.</description>
     </item>
     
     <item>

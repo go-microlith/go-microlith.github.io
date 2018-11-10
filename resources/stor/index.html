@@ -12,19 +12,19 @@
     <title>Tables :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541793514" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541793514" rel="stylesheet">
-    <link href="/css/hybrid.css?1541793514" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541793514" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541793514" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541793514" rel="stylesheet">
-    <link href="/css/theme.css?1541793514" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541793514" rel="stylesheet">
+    <link href="/css/nucleus.css?1541839318" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541839318" rel="stylesheet">
+    <link href="/css/hybrid.css?1541839318" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541839318" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541839318" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541839318" rel="stylesheet">
+    <link href="/css/theme.css?1541839318" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541839318" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541793514" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541839318" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541793514"></script>
+    <script src="/js/jquery-2.x.min.js?1541839318"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541793514"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541793514"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541839318"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541839318"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541793514"></script>
+<script type="text/javascript" src="/js/search.js?1541839318"></script>
 
     
   </div>
@@ -769,7 +769,7 @@
 
 
 
-<p>Create a table by calling <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Service.Table">Table()</a> method on a service builders.</p>
+<p>Create a table by calling the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Service.Table">Table()</a> method on a service builder.</p>
 
 <p>Tables are created with a hash (&ldquo;partition&rdquo;) key and an optional range (&ldquo;sort&rdquo;) key given as <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#Attribute">Attributes</a>.  Attributes can be created with the <a href="https://godoc.org/microlith.v0/sam/tld/stor#StringAttribute">StringAttribute()</a>, <a href="https://godoc.org/microlith.v0/sam/tld/stor#NumberAttribute">NumberAttribute()</a>,
 and <a href="https://godoc.org/microlith.v0/sam/tld/stor#BinaryAttribute">BinaryAttribute()</a> functions.</p>
@@ -785,9 +785,8 @@ var albums    = service.Table(&quot;albums&quot;, artistKey, nameKey, stor.Chang
 
 <p>Indexes project fields from the base table into the index.  The projection must be provided at index creation.  The constructors for indexes take a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#ProjectionType">ProjectionType</a> as their final argument.  For the &ldquo;Include&rdquo; projection type, the names of the attributes to project are taken as varargs.</p>
 
-<pre><code class="language-go">var albumsByYear = albums.GlobalIndex(&quot;albums-by-year&quot;, yearKey, nameKey, stor.ProjectionTypeInclude, &quot;Artist&quot;)
-
-var yearKey      = stor.NumberAttribute(&quot;Year&quot;)
+<pre><code class="language-go">var yearKey      = stor.NumberAttribute(&quot;Year&quot;)
+var albumsByYear = albums.GlobalIndex(&quot;albums-by-year&quot;, yearKey, nameKey, stor.ProjectionTypeInclude, &quot;Artist&quot;)
 var releaseOrder = albums.LocalIndex(&quot;release-order&quot;, yearKey, stor.ProjectionTypeInclude, &quot;Name&quot;)
 </code></pre>
 
@@ -820,7 +819,7 @@ releaseOrderQuerier := stor.NewQuerier(releaseOrder)
 
 <h2 id="watchers">Watchers</h2>
 
-<p>If change streaming is enabled on a table (i.e., not <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#ChangeType">ChangeTypeNone</a>), watch changes to the table by calling <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Service.Watcher">Watcher()</a> on a service builder with a unique watcher name and a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_DynamoDB.md">DynamoDB</a> Lambda function.  Use the returned processor to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#Watcher.Watch">Watch()</a> changes on a table.</p>
+<p>Watch changes to tables by calling <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Service.Watcher">Watcher()</a> on a service builder with a unique watcher name and a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_DynamoDB.md">DynamoDB</a> Lambda function.  Use the returned watcher to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#Watcher.Watch">Watch()</a> a table.  Change streaming must be enabled (i.e., not <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#ChangeType">ChangeTypeNone</a>) on watched tables.</p>
 
 <p>Only tables support watchers.  Watching changes on a secondary index is not supported.</p>
 
@@ -837,7 +836,7 @@ albumAdded.Watch(albums, strm.StartingPositionTrimHorizon)
 
 <h2 id="name">Name</h2>
 
-<p>Tables are created with an AWS-assigned stream name.  This name is available at
+<p>Tables are created with an AWS-assigned table name.  This name is available at
 runtime via the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/stor#TableName">TableName()</a> function.</p>
 
 <pre><code class="language-go">client := dynamodb.New(session.New())
@@ -1343,20 +1342,20 @@ client.GetItem(&amp;dynamodb.GetItemInput{
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541793514"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541793514"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541793514"></script>
-    <script src="/js/jquery.sticky.js?1541793514"></script>
-    <script src="/js/featherlight.min.js?1541793514"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541793514"></script>
-    <script src="/js/highlight.pack.js?1541793514"></script>
+    <script src="/js/clipboard.min.js?1541839318"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541839318"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541839318"></script>
+    <script src="/js/jquery.sticky.js?1541839318"></script>
+    <script src="/js/featherlight.min.js?1541839318"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541839318"></script>
+    <script src="/js/highlight.pack.js?1541839318"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541793514"></script>
-    <script src="/js/learn.js?1541793514"></script>
-    <script src="/js/hugo-learn.js?1541793514"></script>
+    <script src="/js/modernizr.custom.71422.js?1541839318"></script>
+    <script src="/js/learn.js?1541839318"></script>
+    <script src="/js/hugo-learn.js?1541839318"></script>
 
-    <link href="/mermaid/mermaid.css?1541793514" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541793514"></script>
+    <link href="/mermaid/mermaid.css?1541839318" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541839318"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
