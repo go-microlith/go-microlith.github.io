@@ -12,19 +12,19 @@
     <title>Globals :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541839318" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541839318" rel="stylesheet">
-    <link href="/css/hybrid.css?1541839318" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541839318" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541839318" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541839318" rel="stylesheet">
-    <link href="/css/theme.css?1541839318" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541839318" rel="stylesheet">
+    <link href="/css/nucleus.css?1541891455" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541891455" rel="stylesheet">
+    <link href="/css/hybrid.css?1541891455" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541891455" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541891455" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541891455" rel="stylesheet">
+    <link href="/css/theme.css?1541891455" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541891455" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541839318" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541891455" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541839318"></script>
+    <script src="/js/jquery-2.x.min.js?1541891455"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541839318"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541839318"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541891455"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541891455"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541839318"></script>
+<script type="text/javascript" src="/js/search.js?1541891455"></script>
 
     
   </div>
@@ -393,9 +393,9 @@
  
   
     
-      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item active">
-        <a href="/tutorial/globals/">
-        Globals
+      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item ">
+        <a href="/tutorial/subdomains/">
+        Subdomains
         
         </a>
     </li>
@@ -412,9 +412,9 @@
  
   
     
-      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item ">
-        <a href="/tutorial/subdomains/">
-        Subdomains
+      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item active">
+        <a href="/tutorial/globals/">
+        Globals
         
         </a>
     </li>
@@ -744,8 +744,17 @@
 <ul>
 <li>
 <ul>
-<li><a href="#promote-the-world-service">Promote the World Service</a></li>
-<li><a href="#promote-the-requests-channel">Promote the Requests Channel</a></li>
+<li><a href="#promote">Promote</a>
+<ul>
+<li><a href="#service">Service</a></li>
+<li><a href="#channel">Channel</a></li>
+</ul></li>
+<li><a href="#subdomain">Subdomain</a>
+<ul>
+<li><a href="#constructor">Constructor</a></li>
+<li><a href="#builder">Builder</a></li>
+</ul></li>
+<li><a href="#instance">Instance</a></li>
 <li><a href="#ship-it">Ship It</a></li>
 </ul></li>
 </ul>
@@ -769,15 +778,17 @@
 
 
 
-<p>Global services are addressable by all services and origins in any domain.  The built service can be passed directly to subdomains and services.</p>
+<p>An application provides global services to share business logic between domains.  It also provides global channels to communicate between different domains.</p>
 
-<p>Global channels are addressable by any service or origin in any domain and any global service.  The returned reference can be passed to domains and services.</p>
+<p>Let&rsquo;s factor some shared logic out of our application by promoting the &ldquo;world&rdquo; service to a global service.  Since the service relies on the requests channel, it will need to be promoted to a global channel.  When we are done, both the root domain and the subdomain will each have their own &ldquo;hello&rdquo; service and will use the global &ldquo;world&rdquo; service and &ldquo;requests&rdquo; channel.  Since the channel has become shared, all services will process request events from both the root and the subdomain origins.</p>
 
-<p>Let&rsquo;s promote the &ldquo;world&rdquo; service to a global service and the &ldquo;requests&rdquo; channel to a global channel.</p>
+<h2 id="promote">Promote</h2>
 
-<h2 id="promote-the-world-service">Promote the World Service</h2>
+<p>First, we need to promote the &ldquo;world&rdquo; service to a global service and the &ldquo;requests&rdquo; channel to a global channel.</p>
 
-<p>To promote the &ldquo;world&rdquo; service, we need to use the <a href="https://godoc.org/gopkg.in/microlith.v0#GlobalService">microlith.GlobalService()</a> function.</p>
+<h3 id="service">Service</h3>
+
+<p>To promote the &ldquo;world&rdquo; service to a global service, change the initializer to register the service using the <a href="https://godoc.org/gopkg.in/microlith.v0#GlobalService">microlith.GlobalService()</a> function.</p>
 
 <pre><code class="language-go">func init() {
   // ... Same as before ...
@@ -786,11 +797,46 @@
 }
 </code></pre>
 
-<h2 id="promote-the-requests-channel">Promote the Requests Channel</h2>
+<h3 id="channel">Channel</h3>
 
-<p>To promote the &ldquo;requests&rdquo; channel, we need to use the <a href="https://godoc.org/gopkg.in/microlith.v0#GlobalChannel">microlith.GlobalChannel()</a> function.</p>
+<p>To promote the &ldquo;requests&rdquo; channel, change the requests variable to create the channel with the <a href="https://godoc.org/gopkg.in/microlith.v0#GlobalChannel">microlith.GlobalChannel()</a> function.</p>
 
 <pre><code class="language-go">var requests = microlith.GlobalChannel(&quot;requests&quot;)
+</code></pre>
+
+<h2 id="subdomain">Subdomain</h2>
+
+<p>The subdomain needs to get a reference to the global &ldquo;words&rdquo; service so it can make calls it and a reference to the global &ldquo;requests&rdquo; channel so that it can construct the &ldquo;hello&rdquo; service and publish request events.</p>
+
+<h3 id="constructor">Constructor</h3>
+
+<p>The subdomain constructor needs to take the &ldquo;words&rdquo; service and the &ldquo;request&rdquo; channel as arguments.  They are stored in instance variables since they will be needed in Lambdas.  The constructor also creates an instance of the &ldquo;hello&rdquo; service since it has all of the parameters available.</p>
+
+<pre><code class="language-go">func NewSub(world *Word, requests *strm.Stream) *Sub {
+  return &amp;Sub{
+    helloSvc: NewWord(&quot;hello&quot;, requests),
+    worldSvc: world,
+    requests: requests,
+  }
+}
+</code></pre>
+
+<h3 id="builder">Builder</h3>
+
+<p>The services and the channel no longer need to be instantiated in the builder.  They are either passed into or instantiated in the constructor.  The builder also no longer needs to register the &ldquo;world&rdquo; service, since it is global.  The builder only needs to register the &ldquo;hello&rdquo; service created in the constructor.</p>
+
+<pre><code class="language-go">func (sub *Sub) Build(domain *tld.Domain) {
+  domain.Service(&quot;hello&quot;, sub.helloSvc)
+
+  // ... Same as before ...
+}
+</code></pre>
+
+<h2 id="instance">Instance</h2>
+
+<p>Finally, the instance of the subdomain needs to be passed the &ldquo;world&rdquo; service and &ldquo;requests&rdquo; channel when it is constructed.</p>
+
+<pre><code class="language-go">var subDomain = NewSub(worldSvc, requests)
 </code></pre>
 
 <h2 id="ship-it">Ship It</h2>
@@ -804,7 +850,14 @@ git push origin master
 
 <p>Finally, call your endpoints to verify that your application functions as expected.</p>
 
-<pre><code class="language-bash">curl https://prod.my-domain.com/
+<pre><code class="language-bash"># hello-world
+curl https://prod.my-domain.com/
+
+# hello-subdomain-world
+curl https://sub.domain.prod.my-domain.com/
+
+# proxy-to-subdomain
+curl https://prod.my-domain.com/proxy/to/subdomain
 </code></pre>
 
 
@@ -1072,7 +1125,6 @@ git push origin master
             
                 
                     
-                    
                 
                 
 
@@ -1089,8 +1141,6 @@ git push origin master
             
                 
                     
-                        
-                        
                     
                 
                 
@@ -1111,18 +1161,8 @@ git push origin master
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
                         
-            
-            
-                
+                        
                     
                 
                 
@@ -1131,9 +1171,6 @@ git push origin master
                     
                     
 
-                    
-            
-        
                     
                         
             
@@ -1215,38 +1252,6 @@ git push origin master
             
         
                     
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
             
             
@@ -1279,6 +1284,54 @@ git push origin master
                     
 
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
             
         
                     
@@ -1289,10 +1342,10 @@ git push origin master
 
 
         
-            <a class="nav nav-prev" href="/tutorial/channels/" title="Channels"> <i class="fas fa-chevron-left"></i></a>
+            <a class="nav nav-prev" href="/tutorial/subdomains/" title="Subdomains"> <i class="fas fa-chevron-left"></i></a>
         
         
-            <a class="nav nav-next" href="/tutorial/subdomains/" title="Subdomains" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+            <a class="nav nav-next" href="/resources/" title="Resources" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -1301,20 +1354,20 @@ git push origin master
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541839318"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541839318"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541839318"></script>
-    <script src="/js/jquery.sticky.js?1541839318"></script>
-    <script src="/js/featherlight.min.js?1541839318"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541839318"></script>
-    <script src="/js/highlight.pack.js?1541839318"></script>
+    <script src="/js/clipboard.min.js?1541891455"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541891455"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541891455"></script>
+    <script src="/js/jquery.sticky.js?1541891455"></script>
+    <script src="/js/featherlight.min.js?1541891455"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541891455"></script>
+    <script src="/js/highlight.pack.js?1541891455"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541839318"></script>
-    <script src="/js/learn.js?1541839318"></script>
-    <script src="/js/hugo-learn.js?1541839318"></script>
+    <script src="/js/modernizr.custom.71422.js?1541891455"></script>
+    <script src="/js/learn.js?1541891455"></script>
+    <script src="/js/hugo-learn.js?1541891455"></script>
 
-    <link href="/mermaid/mermaid.css?1541839318" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541839318"></script>
+    <link href="/mermaid/mermaid.css?1541891455" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541891455"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

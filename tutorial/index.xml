@@ -43,25 +43,23 @@ Let&amp;rsquo;s create a channel for request events. The &amp;ldquo;hello-world&
     </item>
     
     <item>
-      <title>Globals</title>
-      <link>http://microlith-framework.com/tutorial/globals/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/tutorial/globals/</guid>
-      <description>Global services are addressable by all services and origins in any domain. The built service can be passed directly to subdomains and services.
-Global channels are addressable by any service or origin in any domain and any global service. The returned reference can be passed to domains and services.
-Let&amp;rsquo;s promote the &amp;ldquo;world&amp;rdquo; service to a global service and the &amp;ldquo;requests&amp;rdquo; channel to a global channel.
-Promote the World Service To promote the &amp;ldquo;world&amp;rdquo; service, we need to use the microlith.</description>
-    </item>
-    
-    <item>
       <title>Subdomains</title>
       <link>http://microlith-framework.com/tutorial/subdomains/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/subdomains/</guid>
-      <description>Creating a subdomain is similar to creating a service. At the code level, a subdomain is an object that implements the tld.DomainBuilder interface and is registered under the root domain.
-Let&amp;rsquo;s create a subdomain named &amp;ldquo;sub.domain&amp;rdquo; that returns &amp;ldquo;Hello, subdomain world!&amp;rdquo;. It will have a &amp;ldquo;hello&amp;rdquo; service and use the global &amp;ldquo;world&amp;rdquo; service and &amp;ldquo;requests&amp;rdquo; channel. The subdomain&amp;rsquo;s origin will have an endpoint that calls these services and constructs the response.</description>
+      <description>An application contains a root domain and a set of named subdomains.
+Let&amp;rsquo;s create a subdomain named &amp;ldquo;sub.domain&amp;rdquo; that mirrors the root domain. It will have one endpoint that returns &amp;ldquo;Hello, subdomain world!&amp;rdquo;. Like the root domain, it will factor the work out into a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service and have a channel for request events. It will also have a public client method to call the endpoint on the origin.</description>
+    </item>
+    
+    <item>
+      <title>Globals</title>
+      <link>http://microlith-framework.com/tutorial/globals/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/tutorial/globals/</guid>
+      <description>An application provides global services to share business logic between domains. It also provides global channels to communicate between different domains.
+Let&amp;rsquo;s factor some shared logic out of our application by promoting the &amp;ldquo;world&amp;rdquo; service to a global service. Since the service relies on the requests channel, it will need to be promoted to a global channel. When we are done, both the root domain and the subdomain will each have their own &amp;ldquo;hello&amp;rdquo; service and will use the global &amp;ldquo;world&amp;rdquo; service and &amp;ldquo;requests&amp;rdquo; channel.</description>
     </item>
     
   </channel>

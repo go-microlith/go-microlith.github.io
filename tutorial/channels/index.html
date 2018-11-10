@@ -12,19 +12,19 @@
     <title>Channels :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541839318" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541839318" rel="stylesheet">
-    <link href="/css/hybrid.css?1541839318" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541839318" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541839318" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541839318" rel="stylesheet">
-    <link href="/css/theme.css?1541839318" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541839318" rel="stylesheet">
+    <link href="/css/nucleus.css?1541891455" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541891455" rel="stylesheet">
+    <link href="/css/hybrid.css?1541891455" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541891455" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541891455" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541891455" rel="stylesheet">
+    <link href="/css/theme.css?1541891455" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541891455" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541839318" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541891455" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541839318"></script>
+    <script src="/js/jquery-2.x.min.js?1541891455"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541839318"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541839318"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541891455"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541891455"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541839318"></script>
+<script type="text/javascript" src="/js/search.js?1541891455"></script>
 
     
   </div>
@@ -393,9 +393,9 @@
  
   
     
-      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item ">
-        <a href="/tutorial/globals/">
-        Globals
+      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item ">
+        <a href="/tutorial/subdomains/">
+        Subdomains
         
         </a>
     </li>
@@ -412,9 +412,9 @@
  
   
     
-      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item ">
-        <a href="/tutorial/subdomains/">
-        Subdomains
+      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item ">
+        <a href="/tutorial/globals/">
+        Globals
         
         </a>
     </li>
@@ -750,7 +750,7 @@
 <li><a href="#constructor">Constructor</a></li>
 <li><a href="#processor">Processor</a>
 <ul>
-<li><a href="#handler">Handler</a></li>
+<li><a href="#lambda">Lambda</a></li>
 <li><a href="#builder">Builder</a></li>
 </ul></li>
 </ul></li>
@@ -826,9 +826,9 @@ func NewWord(word string, requests *strm.Stream) *Word {
 
 <p>Now that the service has a reference to the channel, it can add a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Processor">strm.Processor</a> to write the events to the log.</p>
 
-<h4 id="handler">Handler</h4>
+<h4 id="lambda">Lambda</h4>
 
-<p>Create a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_Kinesis.md">Kinesis</a> Lambda to write requests to the logs.  Like the handler for the endpoint, this will be a private instance method on our service.</p>
+<p>Create a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_Kinesis.md">Kinesis</a> Lambda to write requests to the logs.  Like the handler Lambda for the endpoint, this will be a private instance method on our service.</p>
 
 <p>Events are passed as batches.  Create a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Scanner">Scanner</a> to iterate over the batch.</p>
 
@@ -882,7 +882,7 @@ func NewWord(word string, requests *strm.Stream) *Word {
 <pre><code class="language-go">var publisher = strm.NewPublisher(requests)
 </code></pre>
 
-<p>Update the &ldquo;hello-world&rdquo; handler to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher.Publish">Publish()</a> events to the channel.  Defer a call to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher.Flush">Flush()</a> to ensure that any batched messages are sent.</p>
+<p>Update the &ldquo;hello-world&rdquo; handler Lambda to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher.Publish">Publish()</a> events to the channel.  Defer a call to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/strm#Publisher.Flush">Flush()</a> to ensure that any batched messages are sent.</p>
 
 <pre><code class="language-go">func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
   defer publisher.Flush(ctx)
@@ -1393,7 +1393,7 @@ git push origin master
             <a class="nav nav-prev" href="/tutorial/services/" title="Services"> <i class="fas fa-chevron-left"></i></a>
         
         
-            <a class="nav nav-next" href="/tutorial/globals/" title="Globals" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+            <a class="nav nav-next" href="/tutorial/subdomains/" title="Subdomains" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -1402,20 +1402,20 @@ git push origin master
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541839318"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541839318"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541839318"></script>
-    <script src="/js/jquery.sticky.js?1541839318"></script>
-    <script src="/js/featherlight.min.js?1541839318"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541839318"></script>
-    <script src="/js/highlight.pack.js?1541839318"></script>
+    <script src="/js/clipboard.min.js?1541891455"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541891455"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541891455"></script>
+    <script src="/js/jquery.sticky.js?1541891455"></script>
+    <script src="/js/featherlight.min.js?1541891455"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541891455"></script>
+    <script src="/js/highlight.pack.js?1541891455"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541839318"></script>
-    <script src="/js/learn.js?1541839318"></script>
-    <script src="/js/hugo-learn.js?1541839318"></script>
+    <script src="/js/modernizr.custom.71422.js?1541891455"></script>
+    <script src="/js/learn.js?1541891455"></script>
+    <script src="/js/hugo-learn.js?1541891455"></script>
 
-    <link href="/mermaid/mermaid.css?1541839318" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541839318"></script>
+    <link href="/mermaid/mermaid.css?1541891455" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541891455"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

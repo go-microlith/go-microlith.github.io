@@ -98,12 +98,17 @@
   </url>
   
   <url>
-    <loc>http://microlith-framework.com/tutorial/globals/</loc>
+    <loc>http://microlith-framework.com/tutorial/subdomains/</loc>
     <lastmod>2018-10-25T18:10:01-06:00</lastmod>
   </url>
   
   <url>
     <loc>http://microlith-framework.com/bootstrap/done/</loc>
+    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://microlith-framework.com/tutorial/globals/</loc>
     <lastmod>2018-10-25T18:10:01-06:00</lastmod>
   </url>
   
@@ -114,11 +119,6 @@
   
   <url>
     <loc>http://microlith-framework.com/resources/cron/</loc>
-    <lastmod>2018-10-25T18:10:01-06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://microlith-framework.com/tutorial/subdomains/</loc>
     <lastmod>2018-10-25T18:10:01-06:00</lastmod>
   </url>
   

@@ -12,19 +12,19 @@
     <title>Hello, world! :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541839318" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541839318" rel="stylesheet">
-    <link href="/css/hybrid.css?1541839318" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541839318" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541839318" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541839318" rel="stylesheet">
-    <link href="/css/theme.css?1541839318" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541839318" rel="stylesheet">
+    <link href="/css/nucleus.css?1541891455" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541891455" rel="stylesheet">
+    <link href="/css/hybrid.css?1541891455" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541891455" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541891455" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541891455" rel="stylesheet">
+    <link href="/css/theme.css?1541891455" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541891455" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541839318" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541891455" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541839318"></script>
+    <script src="/js/jquery-2.x.min.js?1541891455"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541839318"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541839318"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541891455"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541891455"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541839318"></script>
+<script type="text/javascript" src="/js/search.js?1541891455"></script>
 
     
   </div>
@@ -393,9 +393,9 @@
  
   
     
-      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item ">
-        <a href="/tutorial/globals/">
-        Globals
+      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item ">
+        <a href="/tutorial/subdomains/">
+        Subdomains
         
         </a>
     </li>
@@ -412,9 +412,9 @@
  
   
     
-      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item ">
-        <a href="/tutorial/subdomains/">
-        Subdomains
+      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item ">
+        <a href="/tutorial/globals/">
+        Globals
         
         </a>
     </li>
@@ -744,8 +744,8 @@
 <ul>
 <li>
 <ul>
-<li><a href="#the-handler">The Handler</a></li>
-<li><a href="#the-endpoint">The Endpoint</a></li>
+<li><a href="#lambda">Lambda</a></li>
+<li><a href="#builder">Builder</a></li>
 <li><a href="#ship-it">Ship It</a></li>
 </ul></li>
 </ul>
@@ -773,20 +773,20 @@
 
 <p>To start, we will add a single &ldquo;Hello, world!&rdquo; endpoint to our application and redeploy.  We will add the endpoint to the origin of the root domain.  The root domain has a specialized API exposed via the top-level <a href="https://godoc.org/gopkg.in/microlith.v0">microlith</a> package.</p>
 
-<h2 id="the-handler">The Handler</h2>
+<h2 id="lambda">Lambda</h2>
 
-<p>First, we will create a handler function.  The handler function must match the signature of a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_ApiGatewayEvent.md">API Gateway</a> Lambda.  The body of the handler uses the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Respond">Respond()</a> helper to return a 200 response code and the string &ldquo;Hello, world!&rdquo;  This helper automatically encodes the response body as JSON.</p>
+<p>First, we will create a handler Lambda function.  The Lambda must be a <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_ApiGatewayEvent.md">API Gateway</a> Lambda.  The body of the Lambda uses the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Respond">Respond()</a> helper to return a 200 response code and the string &ldquo;Hello, world!&rdquo;  This helper automatically encodes the response body as JSON.</p>
 
 <pre><code class="language-go">func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
   return rest.Respond(http.StatusOK, &quot;Hello, world!&quot;)
 }
 </code></pre>
 
-<h2 id="the-endpoint">The Endpoint</h2>
+<h2 id="builder">Builder</h2>
 
-<p>Next, we will add a single endpoint at &ldquo;GET /&rdquo; named &ldquo;hello-world&rdquo; and pass the handler function.</p>
+<p>Next, we will add a single endpoint at &ldquo;GET /&rdquo; named &ldquo;hello-world&rdquo; and pass the Lambda function.</p>
 
-<p>To define endpoints on the origin, use the <a href="https://godoc.org/gopkg.in/microlith.v0/#Scope">microlith.Scope()</a> function.  This function takes a path and a builder that provides a Swagger-based DSL for defining a REST API.  Endpoints are defined using methods named after HTTP verbs (such as <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Scope.Get">Get()</a>, <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Scope.Put">Put()</a>, etc.)  For each endpoint defined, you must pass a unique endpoint name and a handler function.</p>
+<p>To define endpoints on the origin, use the <a href="https://godoc.org/gopkg.in/microlith.v0/#Scope">microlith.Scope()</a> function.  This function takes a path and a builder that provides a Swagger-based DSL for defining a REST API.  Endpoints are defined using methods named after HTTP verbs (such as <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Scope.Get">Get()</a>, <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Scope.Put">Put()</a>, etc.)  For each endpoint defined, you must pass a unique endpoint name and a Lambda function.</p>
 
 <pre><code class="language-go">func init() {
   microlith.Scope(&quot;/&quot;, func(scope *rest.Scope) {
@@ -1306,20 +1306,20 @@ git push origin master
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541839318"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541839318"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541839318"></script>
-    <script src="/js/jquery.sticky.js?1541839318"></script>
-    <script src="/js/featherlight.min.js?1541839318"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541839318"></script>
-    <script src="/js/highlight.pack.js?1541839318"></script>
+    <script src="/js/clipboard.min.js?1541891455"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541891455"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541891455"></script>
+    <script src="/js/jquery.sticky.js?1541891455"></script>
+    <script src="/js/featherlight.min.js?1541891455"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541891455"></script>
+    <script src="/js/highlight.pack.js?1541891455"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541839318"></script>
-    <script src="/js/learn.js?1541839318"></script>
-    <script src="/js/hugo-learn.js?1541839318"></script>
+    <script src="/js/modernizr.custom.71422.js?1541891455"></script>
+    <script src="/js/learn.js?1541891455"></script>
+    <script src="/js/hugo-learn.js?1541891455"></script>
 
-    <link href="/mermaid/mermaid.css?1541839318" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541839318"></script>
+    <link href="/mermaid/mermaid.css?1541891455" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541891455"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

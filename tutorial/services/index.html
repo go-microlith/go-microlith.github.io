@@ -12,19 +12,19 @@
     <title>Services :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541839318" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541839318" rel="stylesheet">
-    <link href="/css/hybrid.css?1541839318" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541839318" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541839318" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541839318" rel="stylesheet">
-    <link href="/css/theme.css?1541839318" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541839318" rel="stylesheet">
+    <link href="/css/nucleus.css?1541891455" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541891455" rel="stylesheet">
+    <link href="/css/hybrid.css?1541891455" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541891455" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541891455" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541891455" rel="stylesheet">
+    <link href="/css/theme.css?1541891455" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541891455" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541839318" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541891455" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541839318"></script>
+    <script src="/js/jquery-2.x.min.js?1541891455"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541839318"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541839318"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541891455"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541891455"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541839318"></script>
+<script type="text/javascript" src="/js/search.js?1541891455"></script>
 
     
   </div>
@@ -393,9 +393,9 @@
  
   
     
-      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item ">
-        <a href="/tutorial/globals/">
-        Globals
+      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item ">
+        <a href="/tutorial/subdomains/">
+        Subdomains
         
         </a>
     </li>
@@ -412,9 +412,9 @@
  
   
     
-      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item ">
-        <a href="/tutorial/subdomains/">
-        Subdomains
+      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item ">
+        <a href="/tutorial/globals/">
+        Globals
         
         </a>
     </li>
@@ -746,21 +746,22 @@
 <ul>
 <li><a href="#the-word-service">The &ldquo;word&rdquo; Service</a>
 <ul>
-<li><a href="#add-an-endpoint">Add An Endpoint</a>
+<li><a href="#endpoint">Endpoint</a>
 <ul>
-<li><a href="#handler">Handler</a></li>
+<li><a href="#lambda">Lambda</a></li>
 <li><a href="#builder">Builder</a></li>
 </ul></li>
-<li><a href="#client-method">Client Method</a>
+<li><a href="#client">Client</a>
 <ul>
 <li><a href="#builder-1">Builder</a></li>
-<li><a href="#client">Client</a></li>
+<li><a href="#client-1">Client</a></li>
 </ul></li>
+<li><a href="#done">Done</a></li>
 </ul></li>
 <li><a href="#origin">Origin</a>
 <ul>
 <li><a href="#services">Services</a></li>
-<li><a href="#handler-1">Handler</a></li>
+<li><a href="#lambda-1">Lambda</a></li>
 </ul></li>
 <li><a href="#ship-it">Ship It</a></li>
 </ul></li>
@@ -812,13 +813,13 @@ func (word *Word) Build(service *tld.Service) {
 }
 </code></pre>
 
-<h3 id="add-an-endpoint">Add An Endpoint</h3>
+<h3 id="endpoint">Endpoint</h3>
 
-<p>We will add an endpoint to the service that returns the word.  This largely mirrors adding an endpoint to the origin: we will create a handler and then wire the endpoint using the builder.</p>
+<p>We will add an endpoint to the service that returns the word.  This largely mirrors adding an endpoint to the origin: we will create a Lambda handler and then wire the endpoint using the builder.</p>
 
-<h4 id="handler">Handler</h4>
+<h4 id="lambda">Lambda</h4>
 
-<p>The handler function for the endpoint will be a private instance method on the service object.  It will simply return a 200 OK with the word as JSON.</p>
+<p>The handler Lambda function for the endpoint will be a private instance method on the service object.  It will simply return a 200 OK with the word as JSON.</p>
 
 <pre><code class="language-go">func (word *Word) handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
   return rest.Respond(http.StatusOK, word.word)
@@ -838,7 +839,7 @@ func (word *Word) Build(service *tld.Service) {
 }
 </code></pre>
 
-<h3 id="client-method">Client Method</h3>
+<h3 id="client">Client</h3>
 
 <p>We will implement a public instance method that call the &ldquo;word&rdquo; endpoint and return the response body.  To make calls on the service, we need to create a REST client using the builder.</p>
 
@@ -857,7 +858,7 @@ func (word *Word) Build(service *tld.Service) {
 }
 </code></pre>
 
-<h4 id="client">Client</h4>
+<h4 id="client-1">Client</h4>
 
 <p>Use the client created in the builder to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Client.Call">Call()</a> endpoints.  The returned value is a standard <a href="https://godoc.org/net/http#Response">http.Response</a>.  Microlith provides the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ResponseBody">ResponseBody()</a> and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ErrorResponse">ErrorResponse()</a> helpers to deserialize the contents of the response body either as an object or an error, respectively.</p>
 
@@ -881,9 +882,13 @@ func (word *Word) Build(service *tld.Service) {
 }
 </code></pre>
 
+<h3 id="done">Done</h3>
+
+<p>We can have a &ldquo;word&rdquo; service we can use in our root domain to factor out the creation of our words.</p>
+
 <h2 id="origin">Origin</h2>
 
-<p>We can now use the &ldquo;word&rdquo; service in our root domain to factor out the creation of our words.</p>
+<p>We need to update the origin to create and use the &ldquo;word&rdquo; service to factor into services.</p>
 
 <p>We will create two instances of the service, one returning &ldquo;hello&rdquo; and the other &ldquo;world&rdquo;.  Then, we will call those from our origin handler to construct the &ldquo;Hello, world!&rdquo; response for the user.</p>
 
@@ -904,9 +909,9 @@ func init() {
 }
 </code></pre>
 
-<h3 id="handler-1">Handler</h3>
+<h3 id="lambda-1">Lambda</h3>
 
-<p>In the &ldquo;hello-world&rdquo; handler, use the client methods on your service objects to call the services.  Use the words returned from the service calls to construct the response to the user.</p>
+<p>In the &ldquo;hello-world&rdquo; handler Lambda, use the client methods on your service objects to call the services.  Use the words returned from the service calls to construct the response to the user.</p>
 
 <pre><code class="language-go">func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
   hello, err := helloSvc.Word(ctx)
@@ -1436,20 +1441,20 @@ git push origin master
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541839318"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541839318"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541839318"></script>
-    <script src="/js/jquery.sticky.js?1541839318"></script>
-    <script src="/js/featherlight.min.js?1541839318"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541839318"></script>
-    <script src="/js/highlight.pack.js?1541839318"></script>
+    <script src="/js/clipboard.min.js?1541891455"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541891455"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541891455"></script>
+    <script src="/js/jquery.sticky.js?1541891455"></script>
+    <script src="/js/featherlight.min.js?1541891455"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541891455"></script>
+    <script src="/js/highlight.pack.js?1541891455"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541839318"></script>
-    <script src="/js/learn.js?1541839318"></script>
-    <script src="/js/hugo-learn.js?1541839318"></script>
+    <script src="/js/modernizr.custom.71422.js?1541891455"></script>
+    <script src="/js/learn.js?1541891455"></script>
+    <script src="/js/hugo-learn.js?1541891455"></script>
 
-    <link href="/mermaid/mermaid.css?1541839318" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541839318"></script>
+    <link href="/mermaid/mermaid.css?1541891455" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541891455"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

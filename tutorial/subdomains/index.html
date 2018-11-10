@@ -12,19 +12,19 @@
     <title>Subdomains :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541839318" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541839318" rel="stylesheet">
-    <link href="/css/hybrid.css?1541839318" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541839318" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541839318" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541839318" rel="stylesheet">
-    <link href="/css/theme.css?1541839318" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541839318" rel="stylesheet">
+    <link href="/css/nucleus.css?1541891455" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541891455" rel="stylesheet">
+    <link href="/css/hybrid.css?1541891455" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541891455" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541891455" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541891455" rel="stylesheet">
+    <link href="/css/theme.css?1541891455" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541891455" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541839318" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541891455" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541839318"></script>
+    <script src="/js/jquery-2.x.min.js?1541891455"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541839318"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541839318"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541891455"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541891455"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541839318"></script>
+<script type="text/javascript" src="/js/search.js?1541891455"></script>
 
     
   </div>
@@ -393,9 +393,9 @@
  
   
     
-      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item ">
-        <a href="/tutorial/globals/">
-        Globals
+      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item active">
+        <a href="/tutorial/subdomains/">
+        Subdomains
         
         </a>
     </li>
@@ -412,9 +412,9 @@
  
   
     
-      <li data-nav-id="/tutorial/subdomains/" title="Subdomains" class="dd-item active">
-        <a href="/tutorial/subdomains/">
-        Subdomains
+      <li data-nav-id="/tutorial/globals/" title="Globals" class="dd-item ">
+        <a href="/tutorial/globals/">
+        Globals
         
         </a>
     </li>
@@ -746,12 +746,29 @@
 <ul>
 <li><a href="#create-the-subdomain">Create the Subdomain</a>
 <ul>
-<li><a href="#add-an-endpoint">Add an Endpoint</a></li>
-<li><a href="#implement-a-client">Implement a Client</a></li>
+<li><a href="#channel">Channel</a></li>
+<li><a href="#services">Services</a></li>
+<li><a href="#endpoint">Endpoint</a>
+<ul>
+<li><a href="#lambda">Lambda</a></li>
+<li><a href="#builder">Builder</a></li>
+</ul></li>
+<li><a href="#client">Client</a>
+<ul>
+<li><a href="#builder-1">Builder</a></li>
+<li><a href="#client-1">Client</a></li>
+</ul></li>
+<li><a href="#done">Done</a></li>
 </ul></li>
 <li><a href="#use-the-subdomain">Use the Subdomain</a>
 <ul>
-<li><a href="#call-the-subdomain">Call the Subdomain</a></li>
+<li><a href="#create">Create</a></li>
+<li><a href="#call">Call</a>
+<ul>
+<li><a href="#lambda-1">Lambda</a></li>
+<li><a href="#builder-2">Builder</a></li>
+</ul></li>
+<li><a href="#done-1">Done</a></li>
 </ul></li>
 <li><a href="#ship-it">Ship It</a></li>
 </ul></li>
@@ -776,16 +793,17 @@
 
 
 
-<p>Creating a subdomain is similar to creating a service.  At the code level, a subdomain is an object that implements the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#DomainBuilder">tld.DomainBuilder</a> interface and is registered under the root domain.</p>
+<p>An application contains a root domain and a set of named subdomains.</p>
 
-<p>Let&rsquo;s create a subdomain named &ldquo;sub.domain&rdquo; that returns &ldquo;Hello, subdomain world!&rdquo;.  It will have a &ldquo;hello&rdquo; service and use the global &ldquo;world&rdquo; service and &ldquo;requests&rdquo; channel.  The subdomain&rsquo;s origin will have an endpoint that calls these services and constructs the response.</p>
+<p>Let&rsquo;s create a subdomain named &ldquo;sub.domain&rdquo; that mirrors the root domain.  It will have one endpoint that returns &ldquo;Hello, subdomain world!&rdquo;.  Like the root domain, it will factor the work out into a &ldquo;hello&rdquo; and a &ldquo;world&rdquo; service and have a channel for request events.  It will also have a public client method to call the endpoint on the origin.</p>
 
 <h2 id="create-the-subdomain">Create the Subdomain</h2>
 
-<p>First, create a subdomain object.  The constructor will take references to the global &ldquo;world&rdquo; service and the &ldquo;requests&rdquo; channel, and will construct a new instance of the &ldquo;hello&rdquo; service.  In the builder, we need to register the instance of the &ldquo;hello&rdquo; service with the domain.</p>
+<p>Creating a subdomain is similar to creating a service.  At the code level, a subdomain is an object that implements the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#DomainBuilder">tld.DomainBuilder</a> interface and is registered under the root domain.  The object passed to the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#DomainBuilder.Build">Build()</a> method provides an API similar to the API exposed in the top-level <a href="https://godoc.org/gopkg.in/microlith.v0">microlith</a> package.</p>
 
-<pre><code class="language-go">// A Sub is a subdomain
-type Sub struct {
+<p>First, create a object to represent the subdomain.  It will hold all of the domain state in instance variables.</p>
+
+<pre><code class="language-go">type Sub struct {
   helloSvc *Word
   worldSvc *Word
   requests *strm.Stream
@@ -793,35 +811,59 @@ type Sub struct {
   client   *rest.Client
 }
 
-// NewSub constructs a new subdomain referencing the &quot;world&quot; global service and
-// the &quot;requests&quot; global channel.
-func NewSub(world *Word, requests *strm.Stream) *Sub {
-  return &amp;Sub{
-    helloSvc: NewWord(&quot;hello&quot;, requests),
-    worldSvc: world,
-    requests: requests,
-  }
+func NewSub() *Sub {
+  return new(Sub)
 }
 
-// Build implements the tld.DomainBuilder interface.
 func (sub *Sub) Build(domain *tld.Domain) {
-  domain.Service(&quot;hello&quot;, sub.helloSvc)
+  // TODO
 }
 </code></pre>
 
-<h3 id="add-an-endpoint">Add an Endpoint</h3>
+<h3 id="channel">Channel</h3>
 
-<p>Next, we need to add an endpoint on the subdomain&rsquo;s origin.  The handler for the endpoint will call the &ldquo;hello&rdquo; and &ldquo;world&rdquo; services and construct a response to return to the user.</p>
+<p>Create a channel in the subdomain by calling the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Domain.Channel">Channel()</a> method on the domain builder.  Place the returned channel in an instance variable so that we can publish request events to it in the origin.</p>
+
+<pre><code class="language-go">func (sub *Sub) Build(domain *tld.Domain) {
+  sub.channel = domain.Channel(&quot;requests&quot;)
+}
+</code></pre>
+
+<h3 id="services">Services</h3>
+
+<p>We will reuse the existing &ldquo;word&rdquo; service in our subdomain.  Like in the root domain, we will create two instances of the service, one returning &ldquo;hello&rdquo; and one returning &ldquo;world&rdquo;, and we will register the instances with our domain using the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Domain.Service">Service()</a> method on the domain builder.</p>
+
+<p>We will put the service instances into instance variables so that we can call them from the endpoint on the origin.</p>
 
 <pre><code class="language-go">func (sub *Sub) Build(domain *tld.Domain) {
   // ... Same as before ...
 
-  domain.Scope(&quot;/&quot;, func(scope *rest.Scope) {
-    sub.endpoint = scope.Get(&quot;hello-subdomain-world&quot;, sub.handler)
-  })
-}
+  sub.helloSvc = NewWord(&quot;hello&quot;, sub.requests)
+  sub.worldSvc = NewWord(&quot;world&quot;, sub.requests)
 
-func (sub *Sub) handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+  domain.Service(&quot;hello&quot;, sub.helloSvc)
+  domain.Service(&quot;world&quot;, sub.worldSvc)
+}
+</code></pre>
+
+<h3 id="endpoint">Endpoint</h3>
+
+<p>Next, we need to add a &ldquo;hello-subdomain-world&rdquo; endpoint on the subdomain&rsquo;s origin.  The handler will use the &ldquo;hello&rdquo; and &ldquo;world&rdquo; services to construct the response to return to the user.  It will also publish a request event to the channel.</p>
+
+<h4 id="lambda">Lambda</h4>
+
+<p>The handler Lambda looks very similar to the handler in the root origin.  It will publish the request event, call the &ldquo;hello&rdquo; and &ldquo;world&rdquo; services, then use their responses to construct the &ldquo;Hello, subdomain world!&rdquo; response to the user.</p>
+
+<p>The primary difference is that the subdomain handler Lambda is implemented as a private instance method and uses the services stored in instance variables.</p>
+
+<pre><code class="language-go">func (sub *Sub) handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+  publisher := strm.NewPublisher(sub.channel)
+  defer publisher.Flush(ctx)
+
+  if err := publisher.Publish(ctx, &quot;partition-key&quot;, &amp;Request{At: time.Now()}); err != nil {
+    return rest.Respond(http.StatusInternalServerError, err)
+  }
+
   hello, err := sub.helloSvc.Word(ctx)
   if err != nil {
     return rest.Respond(http.StatusInternalServerError, err)
@@ -837,9 +879,26 @@ func (sub *Sub) handler(ctx context.Context, req events.APIGatewayProxyRequest) 
 }
 </code></pre>
 
-<h3 id="implement-a-client">Implement a Client</h3>
+<h4 id="builder">Builder</h4>
 
-<p>Finally, let&rsquo;s add a public client method to the subdomain so we can call it from the root domain.  We&rsquo;ll need to create a REST client in the builder using the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#DomainClient">tld.DomainClient</a> function.</p>
+<p>Like in our service builder, endpoints are created by calling the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#Domain.Scope">Scope()</a> method on a domain builder.  We will capture the returned endpoint so that we can call it from our client method.</p>
+
+<pre><code class="language-go">func (sub *Sub) Build(domain *tld.Domain) {
+  // ... Same as before ...
+
+  domain.Scope(&quot;/&quot;, func(scope *rest.Scope) {
+    sub.endpoint = scope.Get(&quot;hello-subdomain-world&quot;, sub.handler)
+  })
+}
+</code></pre>
+
+<h3 id="client">Client</h3>
+
+<p>Finally, let&rsquo;s add a public client method to the subdomain so we can call the &ldquo;hello-subdomain-world&rdquo; endpoint from the root domain.</p>
+
+<h4 id="builder-1">Builder</h4>
+
+<p>Similar to calling endpoints on a service, we&rsquo;ll need to create a REST client in the builder using the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#DomainClient">tld.DomainClient</a> function to call endpoints on the subdomain&rsquo;s origin.</p>
 
 <pre><code class="language-go">func (sub *Sub) Build(domain *tld.Domain) {
   // ... Same as before ...
@@ -850,11 +909,13 @@ func (sub *Sub) handler(ctx context.Context, req events.APIGatewayProxyRequest) 
     log.Panic(err)
   }
 }
+</code></pre>
 
-// HelloSubdomainWorld calls the &quot;hello-subdomain-world&quot; endpoint on the
-// service.  On success, it returns the string &quot;Hello, subdomain world!&quot;.
-// Otherwise, it returns an error.
-func (sub *Sub) HelloSubdomainWorld(ctx context.Context) (string, error) {
+<h4 id="client-1">Client</h4>
+
+<p>The client method uses the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Client">rest.Client</a> to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Client.Call">Call()</a> the &ldquo;hello-subdomain-world&rdquo; endpoint on the origin.  The <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ResponseBody">ResponseBody()</a> and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ErrorResponse">ErrorResponse()</a> helpers are used to parse the response.</p>
+
+<pre><code class="language-go">func (sub *Sub) HelloSubdomainWorld(ctx context.Context) (string, error) {
   resp, err := sub.client.Call(ctx, sub.endpoint, nil)
   if err != nil {
     return &quot;&quot;, err
@@ -874,34 +935,41 @@ func (sub *Sub) HelloSubdomainWorld(ctx context.Context) (string, error) {
 }
 </code></pre>
 
+<h3 id="done">Done</h3>
+
+<p>We now have a subdomain with one endpoint returning &ldquo;Hello, subdomain world!&rdquo; that we can use in our root domain.</p>
+
 <h2 id="use-the-subdomain">Use the Subdomain</h2>
 
-<p>Mount an instance of this subdomain in the root domain of your application using the <a href="https://godoc.org/gopkg.in/microlith.v0#Subdomain">microlith.Subdomain()</a> function.</p>
+<p>To use the subdomain, we need to create an instance of the subdomain, register it with the application, and then make calls on its endpoint.</p>
 
-<pre><code class="language-go">var subDomain = NewSub(worldSvc, requests)
+<h3 id="create">Create</h3>
 
-func init() {
+<p>First, create an instance of the subdomain.</p>
+
+<pre><code class="language-go">var subDomain = NewSub()
+</code></pre>
+
+<p>Next, register the instance of the subdomain with your application by calling the <a href="https://godoc.org/gopkg.in/microlith.v0#Subdomain">microlith.Subdomain()</a> function with a unique subdomain name and the instance of the subdomain.</p>
+
+<pre><code class="language-go">func init() {
   // ... Same as before ...
 
   microlith.Subdomain(&quot;sub.domain&quot;, subDomain)
 }
 </code></pre>
 
-<h3 id="call-the-subdomain">Call the Subdomain</h3>
+<h3 id="call">Call</h3>
 
-<p>The subdomain can be called from the root domain origin, from services in the root domain, or directly via its domain name.  Let&rsquo;s add an endpoint to the root domain&rsquo;s origin that calls the subdomain.</p>
+<p>Because it was registered with the application, the subdomain can be called directly at &ldquo;sub.domain.prod.my-domain.com&rdquo; once the application is deployed.</p>
 
-<pre><code class="language-go">func init() {
-  microlith.Scope(&quot;/&quot;, func(scope *rest.Scope) {
-    // ... Same as before ...
+<p>The subdomain can also be called from the root domain origin or from services in the root domain.  Let&rsquo;s add an endpoint to the root domain&rsquo;s origin that proxies a call the subdomain.</p>
 
-    scope.Scope(&quot;/proxy/to/subdomain&quot;, func(scope *rest.Scope) {
-      scope.Get(&quot;subdomain&quot;, subHandler)
-    })
-  })
-}
+<h4 id="lambda-1">Lambda</h4>
 
-func subHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+<p>The handler Lambda function for the endpoint uses the subdomain&rsquo;s client method to call the subdomain and returns the response.</p>
+
+<pre><code class="language-go">func subHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
   msg, err := subDomain.HelloSubdomainWorld(ctx)
   if err != nil {
     return rest.Respond(http.StatusInternalServerError, err)
@@ -910,6 +978,25 @@ func subHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events.
   return rest.Respond(http.StatusOK, msg)
 }
 </code></pre>
+
+<h4 id="builder-2">Builder</h4>
+
+<p>We will add an endpoint to the root domain&rsquo;s origin that calls the subdomain handler Lambda.  Calling the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Scope.Scope">Scope()</a> method on a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Scope">Scope</a> object creates a nested scope relative to the scope the method was called on.</p>
+
+<pre><code class="language-go">func init() {
+  microlith.Scope(&quot;/&quot;, func(scope *rest.Scope) {
+    // ... Same as before ...
+
+    scope.Scope(&quot;/proxy/to/subdomain&quot;, func(scope *rest.Scope) {
+      scope.Get(&quot;proxy-to-subdomain&quot;, subHandler)
+    })
+  })
+}
+</code></pre>
+
+<h3 id="done-1">Done</h3>
+
+<p>Now our application has a subdomain that mirrors the root domain and a specialized endpoint to call the subdomain.</p>
 
 <h2 id="ship-it">Ship It</h2>
 
@@ -1198,22 +1285,6 @@ curl https://prod.my-domain.com/proxy/to/subdomain
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
                     
                 
                 
@@ -1226,9 +1297,6 @@ curl https://prod.my-domain.com/proxy/to/subdomain
             
         
                     
-            
-        
-                    
                         
             
             
@@ -1236,19 +1304,6 @@ curl https://prod.my-domain.com/proxy/to/subdomain
                     
                         
                         
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -1260,6 +1315,22 @@ curl https://prod.my-domain.com/proxy/to/subdomain
                     
             
         
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
                     
                         
             
@@ -1341,38 +1412,6 @@ curl https://prod.my-domain.com/proxy/to/subdomain
             
         
                     
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
             
             
@@ -1405,6 +1444,54 @@ curl https://prod.my-domain.com/proxy/to/subdomain
                     
 
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
             
         
                     
@@ -1415,10 +1502,10 @@ curl https://prod.my-domain.com/proxy/to/subdomain
 
 
         
-            <a class="nav nav-prev" href="/tutorial/globals/" title="Globals"> <i class="fas fa-chevron-left"></i></a>
+            <a class="nav nav-prev" href="/tutorial/channels/" title="Channels"> <i class="fas fa-chevron-left"></i></a>
         
         
-            <a class="nav nav-next" href="/resources/" title="Resources" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+            <a class="nav nav-next" href="/tutorial/globals/" title="Globals" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 
@@ -1427,20 +1514,20 @@ curl https://prod.my-domain.com/proxy/to/subdomain
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541839318"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541839318"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541839318"></script>
-    <script src="/js/jquery.sticky.js?1541839318"></script>
-    <script src="/js/featherlight.min.js?1541839318"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541839318"></script>
-    <script src="/js/highlight.pack.js?1541839318"></script>
+    <script src="/js/clipboard.min.js?1541891455"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541891455"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541891455"></script>
+    <script src="/js/jquery.sticky.js?1541891455"></script>
+    <script src="/js/featherlight.min.js?1541891455"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541891455"></script>
+    <script src="/js/highlight.pack.js?1541891455"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541839318"></script>
-    <script src="/js/learn.js?1541839318"></script>
-    <script src="/js/hugo-learn.js?1541839318"></script>
+    <script src="/js/modernizr.custom.71422.js?1541891455"></script>
+    <script src="/js/learn.js?1541891455"></script>
+    <script src="/js/hugo-learn.js?1541891455"></script>
 
-    <link href="/mermaid/mermaid.css?1541839318" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541839318"></script>
+    <link href="/mermaid/mermaid.css?1541891455" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541891455"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
