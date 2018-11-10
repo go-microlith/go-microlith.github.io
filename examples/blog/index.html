@@ -12,19 +12,19 @@
     <title>Blog :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541892239" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541892239" rel="stylesheet">
-    <link href="/css/hybrid.css?1541892239" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541892239" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541892239" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541892239" rel="stylesheet">
-    <link href="/css/theme.css?1541892239" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541892239" rel="stylesheet">
+    <link href="/css/nucleus.css?1541893484" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541893484" rel="stylesheet">
+    <link href="/css/hybrid.css?1541893484" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541893484" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541893484" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541893484" rel="stylesheet">
+    <link href="/css/theme.css?1541893484" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541893484" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541892239" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541893484" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541892239"></script>
+    <script src="/js/jquery-2.x.min.js?1541893484"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541892239"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541892239"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541893484"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541893484"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541892239"></script>
+<script type="text/javascript" src="/js/search.js?1541893484"></script>
 
     
   </div>
@@ -750,7 +750,12 @@
 <ul>
 <li><a href="#root-domain">Root Domain</a></li>
 </ul></li>
-<li><a href="#implementation">Implementation</a></li>
+<li><a href="#implementation">Implementation</a>
+<ul>
+<li><a href="#services">Services</a></li>
+<li><a href="#deletes">Deletes</a></li>
+<li><a href="#origin">Origin</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -793,6 +798,8 @@ go install blog.com
 </code></pre>
 
 <h2 id="bootstrap">Bootstrap</h2>
+
+<p>Assuming you own the domain name <code>my-domain.com</code> hosted in zone <code>Z1234567890</code>, use:</p>
 
 <pre><code class="language-bash">blog.com bootstrap \
   --test-validation-domain my-domain.com \
@@ -954,15 +961,23 @@ go install blog.com
 
 <p>This application is implemented with a single service in the root domain, two global services, and a global channel.</p>
 
-<p>The <code>posts</code> service in the root domain provides CRUD operations on blog posts.  It is backed by a single DynamoDB table to store the posts.</p>
+<h3 id="services">Services</h3>
 
-<p>The <code>comments</code> global service provides the ability to comment on an object and to fetch all of the comments on an object.  It is backed by a single DynamoDB table to store the comments.  The table has a global secondary index to fetch time-ordered comments on a single object.</p>
+<p>The &ldquo;posts&rdquo; service in the root domain provides CRUD operations on blog posts.  It is backed by a single DynamoDB table to store the posts.</p>
 
-<p>The <code>reactions</code> global service provides the ability to react to an object and to fetch a summary of the reactions to an object.  It is backed by a single DynamoDB table to store the reactions.  It lives in the <code>blog.com/reactions</code> package.</p>
+<p>The &ldquo;comments&rdquo; global service provides the ability to comment on an object and to fetch all of the comments on an object.  It is backed by a single DynamoDB table to store the comments.  The table has a global secondary index to fetch time-ordered comments on a single object.</p>
 
-<p>The <code>object-deleted</code> global channel contains events with the IDs of objects that were deleted.  The <code>posts</code> service watches its DynamoDB table for deletes and emits an event on the channel when one is detected.  The <code>comments</code> and <code>reactions</code> service processes the channel and purges any comments on and reactions to the deleted objects.  The <code>comments</code> service also watches its DynamoDB table for deletes and emits events on the channel so that reactions to comments are also deleted.</p>
+<p>The &ldquo;reactions&rdquo; global service provides the ability to react to an object and to fetch a summary of the reactions to an object.  It is backed by a single DynamoDB table to store the reactions.</p>
 
-<p>The origin provides a complete API for the user.  The <code>list-posts</code> endpoint fetches the posts along with their comments and reactions to return them to the user.  The rest of the endpoints are proxies to service endpoints to interact with the returned posts.</p>
+<h3 id="deletes">Deletes</h3>
+
+<p>The &ldquo;object-deleted&rdquo; global channel contains events with the IDs of objects that have been deleted.  It is used to purge deleted data from all of the services in an eventually consistent way.</p>
+
+<p>The &ldquo;posts&rdquo; and &ldquo;comments&rdquo; services watch their DynamoDB tables for deletes and emit events on the channel.  The &ldquo;comments&rdquo; and &ldquo;reactions&rdquo; service processes the channel and purge comments on and reactions to the deleted objects.</p>
+
+<h3 id="origin">Origin</h3>
+
+<p>The origin provides a complete API for the user.  The &ldquo;list-posts&rdquo; endpoint fetches the posts along with their comments and reactions to return them to the user.  The rest of the endpoints are proxies to service endpoints to interact with the returned posts.</p>
 
 
 <footer class=" footline" >
@@ -1458,20 +1473,20 @@ go install blog.com
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541892239"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541892239"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541892239"></script>
-    <script src="/js/jquery.sticky.js?1541892239"></script>
-    <script src="/js/featherlight.min.js?1541892239"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541892239"></script>
-    <script src="/js/highlight.pack.js?1541892239"></script>
+    <script src="/js/clipboard.min.js?1541893484"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541893484"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541893484"></script>
+    <script src="/js/jquery.sticky.js?1541893484"></script>
+    <script src="/js/featherlight.min.js?1541893484"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541893484"></script>
+    <script src="/js/highlight.pack.js?1541893484"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541892239"></script>
-    <script src="/js/learn.js?1541892239"></script>
-    <script src="/js/hugo-learn.js?1541892239"></script>
+    <script src="/js/modernizr.custom.71422.js?1541893484"></script>
+    <script src="/js/learn.js?1541893484"></script>
+    <script src="/js/hugo-learn.js?1541893484"></script>
 
-    <link href="/mermaid/mermaid.css?1541892239" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541892239"></script>
+    <link href="/mermaid/mermaid.css?1541893484" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541893484"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

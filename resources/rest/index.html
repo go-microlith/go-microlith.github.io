@@ -12,19 +12,19 @@
     <title>APIs :: Microlith</title>
 
     
-    <link href="/css/nucleus.css?1541892239" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1541892239" rel="stylesheet">
-    <link href="/css/hybrid.css?1541892239" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1541892239" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1541892239" rel="stylesheet">
-    <link href="/css/auto-complete.css?1541892239" rel="stylesheet">
-    <link href="/css/theme.css?1541892239" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1541892239" rel="stylesheet">
+    <link href="/css/nucleus.css?1541893484" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1541893484" rel="stylesheet">
+    <link href="/css/hybrid.css?1541893484" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1541893484" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1541893484" rel="stylesheet">
+    <link href="/css/auto-complete.css?1541893484" rel="stylesheet">
+    <link href="/css/theme.css?1541893484" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1541893484" rel="stylesheet">
     
-      <link href="/css/theme-blue.css?1541892239" rel="stylesheet">
+      <link href="/css/theme-blue.css?1541893484" rel="stylesheet">
     
 
-    <script src="/js/jquery-2.x.min.js?1541892239"></script>
+    <script src="/js/jquery-2.x.min.js?1541893484"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -69,14 +69,14 @@
     <span data-search-clear=""><i class="fas fa-close"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1541892239"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1541892239"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1541893484"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1541893484"></script>
 <script type="text/javascript">
     
         var baseurl = "http:\/\/microlith-framework.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1541892239"></script>
+<script type="text/javascript" src="/js/search.js?1541893484"></script>
 
     
   </div>
@@ -749,7 +749,7 @@
 <li><a href="#scopes">Scopes</a></li>
 <li><a href="#endpoints">Endpoints</a>
 <ul>
-<li><a href="#handlers">Handlers</a></li>
+<li><a href="#lambdas">Lambdas</a></li>
 <li><a href="#definition">Definition</a></li>
 </ul></li>
 <li><a href="#inheritance">Inheritance</a></li>
@@ -800,9 +800,9 @@
 
 <p>Endpoints are <a href="https://github.com/aws/aws-lambda-go/blob/master/events/README_ApiGatewayEvent.md">API Gateway</a> Lambda functions that handle HTTP requests.  They are created with methods named after HTTP methods.</p>
 
-<h4 id="handlers">Handlers</h4>
+<h4 id="lambdas">Lambdas</h4>
 
-<p>Within the handler functions, use <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#RequestBody">RequestBody()</a> to parse a JSON request body and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Respond">Respond()</a> to respond using JSON.  The path and query parameters and the request headers are available on the request object.</p>
+<p>Within the handler Lambda functions, use <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#RequestBody">RequestBody()</a> to parse a JSON request body and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Respond">Respond()</a> to respond using JSON.  The path and query parameters and the request headers are available on the request object.</p>
 
 <pre><code class="language-go">// Handler function
 func echoHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -876,7 +876,7 @@ service.Scope(&quot;/&quot;, func(scope *rest.Scope) {
 
 <p>Use the client to <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Client.Call">Call()</a> endpoints on the service.  The method takes the endpoint to call, an optional request body, and an optional builder to set <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Request.PathParameter">PathParameter()</a>, <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Request.QueryParameter">QueryParameter()</a>, and request <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Request.Header">Header()</a> values.</p>
 
-<pre><code class="language-go">resp, err := client.Call(echoEndpoint, requestBody, func(request *Request) {
+<pre><code class="language-go">resp, err := client.Call(echoEndpoint, requestBody, func(request *rest.Request) {
   request.QueryParameter(&quot;foo&quot;, &quot;bar&quot;)
   request.Header(&quot;x-foo&quot;, &quot;bar&quot;)
 })
@@ -1392,20 +1392,20 @@ if err != nil {
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1541892239"></script>
-    <script src="/js/perfect-scrollbar.min.js?1541892239"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1541892239"></script>
-    <script src="/js/jquery.sticky.js?1541892239"></script>
-    <script src="/js/featherlight.min.js?1541892239"></script>
-    <script src="/js/html5shiv-printshiv.min.js?1541892239"></script>
-    <script src="/js/highlight.pack.js?1541892239"></script>
+    <script src="/js/clipboard.min.js?1541893484"></script>
+    <script src="/js/perfect-scrollbar.min.js?1541893484"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1541893484"></script>
+    <script src="/js/jquery.sticky.js?1541893484"></script>
+    <script src="/js/featherlight.min.js?1541893484"></script>
+    <script src="/js/html5shiv-printshiv.min.js?1541893484"></script>
+    <script src="/js/highlight.pack.js?1541893484"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom.71422.js?1541892239"></script>
-    <script src="/js/learn.js?1541892239"></script>
-    <script src="/js/hugo-learn.js?1541892239"></script>
+    <script src="/js/modernizr.custom.71422.js?1541893484"></script>
+    <script src="/js/learn.js?1541893484"></script>
+    <script src="/js/hugo-learn.js?1541893484"></script>
 
-    <link href="/mermaid/mermaid.css?1541892239" type="text/css" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1541892239"></script>
+    <link href="/mermaid/mermaid.css?1541893484" type="text/css" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1541893484"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
