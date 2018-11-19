@@ -1,15 +1,89 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Introduction on Microlith</title>
+    <title>Ship on Microlith</title>
     <link>http://microlith-framework.com/intro/</link>
-    <description>Recent content in Introduction on Microlith</description>
+    <description>Recent content in Ship on Microlith</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Oct 2018 18:05:05 -0600</lastBuildDate>
     
 	<atom:link href="http://microlith-framework.com/intro/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Services</title>
+      <link>http://microlith-framework.com/intro/services/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/intro/services/</guid>
+      <description>The leaves of your tree are Sinatra-weight Serverless services. A service is an atomic unit of business logic. It is a REST API, a set of resources, and a set of asynchronous actions.
+You define services using a builder DSL. Microlith uses a simple, pervasive language to make the API easy to learn and use. You define your API. You add buckets, tables, and streams. You observe objects in buckets, watch changes to tables, and process events from streams.</description>
+    </item>
+    
+    <item>
+      <title>Lambdas</title>
+      <link>http://microlith-framework.com/intro/lambdas/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/intro/lambdas/</guid>
+      <description>Your business logic is implemented with Lambda functions. Microlith Lambda functions are Go objects that implement a Lambda interface. Each type of Lambda is a specialized single-method interface.
+In your Lambda functions, you can work with objects in buckets, query and update tables and indexes, publish events to streams, and call endpoints on services. APIs are simple nouns and verbs. They follow the principles of least surprise and of &amp;ldquo;Tell, don&amp;rsquo;t Ask&amp;rdquo;.</description>
+    </item>
+    
+    <item>
+      <title>Domains</title>
+      <link>http://microlith-framework.com/intro/domain/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/intro/domain/</guid>
+      <description>The branches of your tree are domains. A domain is a container for services. It is an origin API, a set of services, and a set of shared broadcast channels. The origin takes traffic and calls on services to implement business logic. Services use the channels to communicate asynchronously.
+You define domains with a builder DSL. You define your origin API, create channels, and add services. You implement endpoints with Lambdas, just like in services.</description>
+    </item>
+    
+    <item>
+      <title>Application</title>
+      <link>http://microlith-framework.com/intro/application/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/intro/application/</guid>
+      <description>The root of your tree is the application. An application is a container for domains. It has a root domain and a set of subdomains, and it routes traffic to them using DNS. It also has a global &amp;ldquo;pseudo-domain&amp;rdquo; with services and channels that are shared between all domains.
+The application is defined using the DSL in the top-level microlith package. You define your root domain using the domain DSL, plus you add global services, create global channels and register subdomains.</description>
+    </item>
+    
+    <item>
+      <title>Package</title>
+      <link>http://microlith-framework.com/intro/package/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/intro/package/</guid>
+      <description>With your tree built, there&amp;rsquo;s one last API to learn. And it&amp;rsquo;s the easiest of them all.
+func main() { microlith.Main() }  That&amp;rsquo;s it. Build your app like any other Go executable.
+go install github.com/go-microlith/introduction.com  </description>
+    </item>
+    
+    <item>
+      <title>Ship</title>
+      <link>http://microlith-framework.com/intro/ship/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/intro/ship/</guid>
+      <description>Deployment is simple. Your app provisions its own miniature Heroku in AWS with a single command.
+introduction.com instance bootstrap --import-path github.com/go-microlith/introduction.com  You just push. Microlith takes care of the rest.
+git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  </description>
+    </item>
+    
+    <item>
+      <title>Fin.</title>
+      <link>http://microlith-framework.com/intro/fin/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/intro/fin/</guid>
+      <description>That&amp;rsquo;s it. That&amp;rsquo;s all there is to Microlith.
+Now let&amp;rsquo;s build something. Set up your prerequisites and try the tutorial.
+You can jump ahead and read about the resources Microlith supports. Or you can check out the example applications or the GoDocs.
+Have questions? Encounter problems? Want to keep up to date? Join the mailing list: go-serverless@microlith-framework.com</description>
+    </item>
     
   </channel>
 </rss>

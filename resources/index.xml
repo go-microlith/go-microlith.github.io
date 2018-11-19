@@ -18,21 +18,8 @@
       
       <guid>http://microlith-framework.com/resources/blob/</guid>
       <description>Create a bucket by calling Bucket() on a service builder with a unique bucket name.
-images := service.Bucket(&amp;quot;images&amp;quot;)  The returned object is used to create clients and to attach observers.
-Manipulators To Get(), Put(), or Delete() an object from a bucket, use a Manipulator.
-mnip := blob.NewManipulator(images) contents, err := mnip.Get(ctx, &amp;quot;/microlith/logo.png&amp;quot;) if err != nil { log.Panic(err) } defer contents.Close() os.Copy(os.Stdout, contents)  Observers Observe objects added, updated, or deleted from buckets by calling the Observer() function on a service builder, giving it a unique observer name and an S3 Lambda function.</description>
-    </item>
-    
-    <item>
-      <title>Streams</title>
-      <link>http://microlith-framework.com/resources/strm/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/resources/strm/</guid>
-      <description>Create a stream by calling Stream() on a service builder with a unique stream name:
-userSignups := service.Stream(&amp;quot;user-signups&amp;quot;)  The returned object is used to create clients and to attach processors.
-Publishers To Publish() messages to a stream, use a Publisher. Publishers automatically batch messages. To ensure that any pending messages are published, defer a call to Flush().
-publisher := strm.NewPublisher(userSignups) defer publisher.Flush(ctx) signup := &amp;amp;UserSignup{ Email: &amp;quot;john@doe.com&amp;quot;, At: time.</description>
+images := service.Bucket(&amp;quot;images&amp;quot;)  In Lambda functions, you can Get(), Put(), or Delete() objects in the bucket.
+contents, err := images.Get(ctx, &amp;quot;/microlith/logo.png&amp;quot;) if err != nil { // ... } defer contents.Close() os.Copy(os.Stdout, contents)  Observers Observers are Lambda functions triggered when objects are added, updated, or deleted from buckets. Create an Observer Lambda by implementing the Observer interface.</description>
     </item>
     
     <item>
@@ -41,21 +28,32 @@ publisher := strm.NewPublisher(userSignups) defer publisher.Flush(ctx) signup :=
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/stor/</guid>
-      <description>Create a table by calling the Table() method on a service builder.
-Tables are created with a hash (&amp;ldquo;partition&amp;rdquo;) key and an optional range (&amp;ldquo;sort&amp;rdquo;) key given as Attributes. Attributes can be created with the StringAttribute(), NumberAttribute(), and BinaryAttribute() functions.
+      <description>Create a table by calling the Table() method on a service builder with a unique table name.
+Tables are created with a hash (&amp;ldquo;partition&amp;rdquo;) key and an optional range (&amp;ldquo;sort&amp;rdquo;) key given as Attributes. Attributes can be created with the String(), Number(), and Binary() functions.
 The streaming configuration must also be provided when the table is declared by passing a ChangeType value.
-var artistKey = stor.StringAttribute(&amp;quot;Artist&amp;quot;) var nameKey = stor.StringAttribute(&amp;quot;Name&amp;quot;) var albums = service.Table(&amp;quot;albums&amp;quot;, artistKey, nameKey, stor.</description>
+var artistKey = stor.String(&amp;quot;Artist&amp;quot;) var nameKey = stor.</description>
     </item>
     
     <item>
-      <title>APIs</title>
+      <title>Streams</title>
+      <link>http://microlith-framework.com/resources/strm/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/strm/</guid>
+      <description>Create a stream by calling Stream() on a service builder with a unique stream name
+userSignups := service.Stream(&amp;quot;user-signups&amp;quot;)  In Lambda functions, you can Publish() messages to a stream. Streams automatically batch messages. To ensure that any pending messages are published, defer a call to Flush().
+signup := &amp;amp;UserSignup{ Email: &amp;quot;john@doe.com&amp;quot;, At: time.Now(), } defer userSignups.Flush(ctx) if err := userSignups.Publish(ctx, &amp;quot;partition-key&amp;quot;, signup); err != nil { // ... }  Processors Processors are Lambda functions that are triggered when messages are published to streams.</description>
+    </item>
+    
+    <item>
+      <title>Endpoints</title>
       <link>http://microlith-framework.com/resources/rest/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/rest/</guid>
-      <description>APIs follow the AWS API Gateway design, based on Swagger.
-APIs Define paths in your API using the Scope() method. This method is available on service builders to define service APIs, on domain builders to define domain origins, and via microlith.Scope() to define the root domain&amp;rsquo;s origin API. Within your scopes, use methods named after HTTP methods to add endpoints.
-Scopes Scopes are paths, such as &amp;ldquo;/foo&amp;rdquo; or &amp;ldquo;/bar&amp;rdquo;. Paths can be multiple segments, such as &amp;ldquo;/foo/bar&amp;rdquo; and can contain variables, such as &amp;ldquo;/foo/{foo-id}&amp;rdquo;.</description>
+      <description>Endpoints are Lambda functions triggered on HTTP requests. Create an Endpoint Lambda by implementing the Handler interface.
+Within the handler Lambda functions, you can parse a RequestBody() as JSON and Respond() with JSON or an error. The path and query parameters and the request headers are available on the request object.
+type echo struct {} func (*echo) ServeREST(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) { var body map[string]interface{} if err := rest.</description>
     </item>
     
     <item>
@@ -64,8 +62,8 @@ Scopes Scopes are paths, such as &amp;ldquo;/foo&amp;rdquo; or &amp;ldquo;/bar&a
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/cron/</guid>
-      <description>Schedule a job to run in the background by calling Job() on a service builder, providing a unique job name, a schedule, and a CloudWatch Event Lambda function. The schedule can be a simple time interval or a complex calendar, both expressed using CloudWatch Schedule Expressions.
-service.Job(&amp;quot;purge-cache&amp;quot;, &amp;quot;rate(15 minutes)&amp;quot;, func(ctx context.Context, evt events.CloudWatchEvent) error { return json.NewEncoder(os.Stdout).Encode(evt.Details) })  </description>
+      <description>Jobs are Lambda functions that are triggered on a schedule. Create a Job Lambda by implementing the Job interface.
+type purgeCache struct {} func (*purgeCache) Run(ctx context.Context, evt events.CloudWatchEvent) error { // ... }  Register the job by calling the Job() method on a service builder, giving it a unique job name, a schedule, and a Job Lambda. The schedule can be a simple time interval or a complex calendar, both expressed using CloudWatch Schedule Expressions.</description>
     </item>
     
     <item>
@@ -74,8 +72,8 @@ service.Job(&amp;quot;purge-cache&amp;quot;, &amp;quot;rate(15 minutes)&amp;quot
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/inst/</guid>
-      <description>All console output (standard out and standard error) from Lambdas is captured as CloudWatch Logs. Read Lambdas&amp;rsquo; logs by calling the Reader() method on a service builder, passing a unique reader name and a CloudWatch Logs Lambda function. Use the returned reader to filter and Read() a Lambda&amp;rsquo;s logs.
-onErrors := service.Reader(&amp;quot;on-errors&amp;quot;, func(ctx context.Context, evt events.CloudwatchLogsEvent) error { data, err := evt.AWSLogs.Parse() if err != nil { return err } for _, logEvent := range data.</description>
+      <description>Readers are Lambda functions that read the logs of other Lambda functions. All console output from Lambdas is captured as CloudWatch Logs. Readers are triggered on log messages. Create a Reader Lambda by implementing the Reader interface.
+type onError struct {} func (*onError) Read(ctx context.Context, evt events.CloudwatchLogsEvent) error { data, err := evt.AWSLogs.Parse() if err != nil { return err } for _, logEvent := range data.LogEvents { fmt.Printf(&amp;quot;Error found in log group %q: %s&amp;quot;, evt.</description>
     </item>
     
   </channel>

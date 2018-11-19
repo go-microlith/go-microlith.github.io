@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Endpoints :: Microlith</title>
+    <title>Getting Started :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1542658311" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/resources/rest/">
+  <body class="" data-url="/tutorial/bootstrap/">
     <nav id="sidebar" class="">
 
 
@@ -328,7 +328,7 @@
   
     
     <li data-nav-id="/tutorial/" title="Tutorial" class="dd-item 
-        
+        parent
         
         
         ">
@@ -352,7 +352,7 @@
  
   
     
-      <li data-nav-id="/tutorial/bootstrap/" title="Getting Started" class="dd-item ">
+      <li data-nav-id="/tutorial/bootstrap/" title="Getting Started" class="dd-item active">
         <a href="/tutorial/bootstrap/">
         Getting Started
         
@@ -474,7 +474,7 @@
   
     
     <li data-nav-id="/resources/" title="Resources" class="dd-item 
-        parent
+        
         
         
         ">
@@ -555,7 +555,7 @@
  
   
     
-      <li data-nav-id="/resources/rest/" title="Endpoints" class="dd-item active">
+      <li data-nav-id="/resources/rest/" title="Endpoints" class="dd-item ">
         <a href="/resources/rest/">
         Endpoints
         
@@ -763,7 +763,7 @@
             
           
           
-            <a href='/'>Microlith</a> > <a href='/resources/'>Resources</a> > Endpoints
+            <a href='/'>Microlith</a> > <a href='/tutorial/'>Tutorial</a> > Getting Started
           
          
           
@@ -779,8 +779,14 @@
 <ul>
 <li>
 <ul>
-<li><a href="#apis">APIs</a></li>
-<li><a href="#scopes">Scopes</a></li>
+<li><a href="#create-the-application">Create the Application</a></li>
+<li><a href="#bootstrap">Bootstrap</a>
+<ul>
+<li><a href="#dns">DNS</a></li>
+<li><a href="#import-path">Import Path</a></li>
+<li><a href="#bootstrap-command">Bootstrap Command</a></li>
+<li><a href="#re-bootstrap-and-teardown">Re-Bootstrap and Teardown</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -795,7 +801,7 @@
         
         <div id="body-inner">
           
-            <h1>Endpoints</h1>
+            <h1>Getting Started</h1>
           
 
         
@@ -803,135 +809,99 @@
 
 
 
-<p>Endpoints are Lambda functions triggered on HTTP requests.  Create an Endpoint Lambda by implementing the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Handler">Handler</a> interface.</p>
+<p>The tutorial will introduce you to Microlith by building a simple &ldquo;Hello, world!&rdquo; app.  It&rsquo;s not fancy: &ldquo;GET /&rdquo; returns &ldquo;Hello, world!&rdquo;.  We&rsquo;ll slowly refactor the application to show how to build a Microlith app.  For a complete, non-trivial app, see the <a href="/examples/blog">blog</a> example.</p>
 
-<p>Within the handler Lambda functions, you can parse a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#RequestBody">RequestBody()</a> as JSON and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Respond">Respond()</a> with JSON or an error.  The path and query parameters and the request headers are available on the request object.</p>
+<p>The first step is to create an empty app and bootstrap it.</p>
 
-<pre><code class="language-go">type echo struct {}
+<h2 id="create-the-application">Create the Application</h2>
 
-func (*echo) ServeREST(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-  var body map[string]interface{}
-  if err := rest.RequestBody(&amp;body); err != nil {
-    return rest.Respond(http.StatusBadRequest, err)
-  }
+<p>A Microlith application is just an executable that calls <a href="https://godoc.org/gopkg.in/microlith.v0#Main">microlith.Main()</a>.  Applications are named after domain names, such as &ldquo;tutorial.com&rdquo;.</p>
 
-  return rest.Respond(http.StatusOK, body)
+<pre><code class="language-go">package main
+
+import (
+  microlith &quot;gopkg.in/microlith.v0&quot;
+)
+
+func main() {
+  microlith.Main()
 }
 </code></pre>
 
-<h2 id="apis">APIs</h2>
+<p>Build the application with:</p>
 
-<p>Define APIs on services by calling the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#ServiceBuilder.API">API()</a> method on a service builder.  Define the origin API on a domain by calling the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#DomainBuilder.Origin">Origin()</a> method on a domain builder.  In the root domain, use the <a href="https://godoc.org/gopkg.in/microlith.v0#Origin">microlith.Origin()</a> function.</p>
-
-<p>In the builder, you can add <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Head">Head()</a>, <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Get">Get()</a>, <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Post">Post()</a>,
-<a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Put">Put()</a>,
-and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Delete">Delete()</a> endpoints and define <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Scope">Scope()</a>s.  The HTTP methods take a unique endpoint name, an Endpoint Lambda, and an optional output <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Endpoint">Endpoint</a> argument.</p>
-
-<pre><code class="language-go">var echoEndpoint *rest.Endpoint
-
-service.API(func(api *rest.APIBuilder) {
-  api.Post(&quot;echo&quot;, new(echo), &amp;echoEndpoint)
-})
+<pre><code class="language-bash">go install github.com/go-microlith/tutorial.com
 </code></pre>
 
-<p>The HTTP methods take an optional builder to define the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#EndpointBuilder.Query">Query()</a> parameters and request <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#EndpointBuilder.Header">Header()</a>s, as well as the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#EndpointBuilder.Response">Response()</a>s and response <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ResponseBuilder.Header">Header()</a>s.</p>
+<p>Don&rsquo;t worry if you don&rsquo;t own the domain name &ldquo;tutorial.com&rdquo;.  The application name is a logical name.  At runtime, you can serve your app from any DNS name.</p>
 
-<pre><code class="language-go">var listOrdersEndpoint *rest.Endpoint
+<h2 id="bootstrap">Bootstrap</h2>
 
-service.API(func(api *rest.APIBuilder) {
-  api.Get(&quot;list-orders&quot;, new(listOrders), &amp;listOrdersEndpoint, func(endpoint *rest.EndpointBuilder) {
-    endpoint.Query(&quot;page&quot;, false)
-    endpoint.Query(&quot;limit&quot;, false)
+<p>Microlith applications come with a built-in command to setup continuous deployment to AWS.  This command supports several options.  At a minimum, you must to pass your DNS information and your import path.</p>
 
-    endpoint.Header(&quot;Authorization&quot;, true)
+<p>To see all options, use the &ldquo;&ndash;help&rdquo; flag.</p>
 
-    endpoint.Response(http.StatusOK, func(response *rest.ResponseBuilder) {
-      response.Header(&quot;X-Next-Page&quot;, false)
-    })
-  })
-})
+<pre><code class="language-bash">tutorial.com instance bootstrap --help
 </code></pre>
 
-<p>In Lambda functions, you can <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Endpoint.Call">Call()</a> the endpoint, passing an optional request body.  The returned values are the same values returned by <a href="https://godoc.org/net/http#Client.Do">http.Client</a>.  You can decode the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ResponseBody">ResponseBody()</a> as JSON, or you can get the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ErrorResponse">ErrorResponse()</a> if an error was passed to Respond().</p>
+<h3 id="dns">DNS</h3>
 
-<pre><code class="language-go">resp, err := echoEndpoint.Call(ctx, map[string]interface{}{&quot;Hello&quot;: &quot;World&quot;})
-if err != nil {
-  // ...
-}
+<p>DNS is the only resource managed by the user instead of by Microlith.  You need to pass a few AWS identifiers so Microlith knows where to deploy.  There are three configuration flags:</p>
 
-switch resp.StatusCode {
-case http.StatusOK:
-  response := make(map[string]interface{})
-  if err := rest.ResponseBody(resp, &amp;response); err != nil {
-    // ...
-  }
-  fmt.Printf(&quot;Response: %#v\n&quot;, response)
-default:
-  err := rest.ErrorResponse(resp, nil)
-  fmt.Printf(&quot;Error: %s\n&quot;, err)
-}
+<ul>
+<li><code>--dns-name</code> is the base DNS name</li>
+<li><code>--hosted-zone-id</code> is the Route53 Hosted Zone for &ldquo;A&rdquo; records</li>
+<li><code>--validation-domain</code> is the Route53 Domain Name for email validation.</li>
+</ul>
+
+<p>Each app is mounted at a base DNS name, such as &ldquo;example.com&rdquo; or &ldquo;app.example.com&rdquo;.  The root domain is mounted at this name and all subdomains are mounted as DNS subdomains.  These names are &ldquo;A&rdquo; records managed by Microlith in a Route53 Hosted Zone managed by the user.  By default, the base DNS name is the executable name.</p>
+
+<p>Each app also has a validation domain name.  This is a Route53 Domain Name set up for email validation and managed by the user.  The contacts of this domain name will be contacted for all ACM Certificates issued.  By default, the validation domain is the same as the DNS name.</p>
+
+<h3 id="import-path">Import Path</h3>
+
+<p>The bootstrap process needs the source code&rsquo;s import path, but can&rsquo;t determine it automatically.  Pass it with the <code>--import-path</code> flag.</p>
+
+<p>By default, Microlith hosts your source in an AWS CodeCommit repository.  If your import path is of the form &ldquo;github.com/&lt;owner&gt;/&lt;repo&gt;&ldquo;, Microlith uses GitHub.  The repository must already exist and you must set up your <a href="/prerequisites/github">GitHub Personal Access Token</a> for Microlith to access it, even for public repositories.</p>
+
+<p>The import path is not persistent across re-bootstraps and must be passed every time.</p>
+
+<h3 id="bootstrap-command">Bootstrap Command</h3>
+
+<div class="notices note" ><p>The bootstrap process will always deploy to the &ldquo;us-east-1&rdquo; region.</p>
+</div>
+
+
+<p>Now you can run the bootstrap command.  For example, to deploy the &ldquo;github.com/go-microlith/tutorial.com&rdquo; application to &ldquo;tutorial.my-domain.com&rdquo;, you would use the following:</p>
+
+<pre><code class="language-bash">tutorial.com instance bootstrap \
+  --import-path       github.com/go-microlith/tutorial.com \
+  --dns-name          tutorial.my-domain.com \
+  --hosted-zone-id    Z1234567890 \
+  --validation-domain my-domain.com
 </code></pre>
 
-<p>You can use an optional builder to set the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#RequesetBuilder.Query">Query()</a> and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#RequesetBuilder.Path">Path()</a> parameters and request <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#RequesetBuilder.Header">Header()</a>s.</p>
+<p>This command will take several minutes to complete.  During the bootstrap process, the contact for the validation domain will receive a confirmation email for an ACM certificate.  The bootstrap process will stall until this email confirmation is completed.</p>
 
-<pre><code class="language-go">resp, err := listOrdersEndpoint.Call(ctx, nil, func(request *rest.RequestBuilder) {
-  request.Query(&quot;page&quot;, &quot;2&quot;)
-  request.Query(&quot;limit&quot;, &quot;10&quot;)
+<p>Once it has completed, you should be able to &ldquo;push to prod&rdquo;:</p>
 
-  request.Header(&quot;Authorization&quot;, &quot;&lt;oauth-token&gt;&quot;)
-})
+<pre><code class="language-bash">git add .
+git commit -m &quot;My changes&quot;
+git push origin master
 </code></pre>
 
-<h2 id="scopes">Scopes</h2>
+<h3 id="re-bootstrap-and-teardown">Re-Bootstrap and Teardown</h3>
 
-<p>Scopes are HTTP paths.  They can be multi-segment and contain path parameters in the form &ldquo;{parameter-name}&rdquo;.  Scopes are created by calling <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Scope">Scope()</a> on an API builder.  Scopes can be nested within other scopes by calling <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ScopeBuilder.Scope">Scope()</a> on a scope builder.</p>
+<p>You can adjust bootstrap parameters at any time by re-running bootstrap command with the &ldquo;&ndash;rebootstrap&rdquo; flag and passing the parameters to update.  All other parameters will retain their previous values.</p>
 
-<pre><code class="language-go">service.API(func(api *rest.APIBuilder) {
-  api.Scope(&quot;/orders&quot;, func(scope *rest.ScopeBuilder) {
-    scope.Get(&quot;list-orders&quot;, new(listOrders), nil)
-    scope.Post(&quot;create-order&quot;, new(createOrder), nil)
+<p>Some parameters will not take effect until the next deploy.</p>
 
-    scope.Scope(&quot;/{order-id}&quot;, func(scope *rest.ScopeBuilder) {
-      scope.Get(&quot;get-order&quot;, new(getOrder), nil)
-      scope.Put(&quot;update-order&quot;, new(updateOrder), nil)
-      scope.Delete(&quot;delete-order&quot;, new(deleteOrder), nil)
-    })
-  })
-})
+<pre><code class="language-bash">tutorial.com instance bootstrap --rebootstrap \
+  --import-path github.com/go-microlith/tutorial.com \
+  --dns-name    example.my-domain.com
 </code></pre>
 
-<p><a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ScopeBuilder.Query">Query()</a> parameters, request <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ScopeBuilder.Header">Header()</a>s, and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ScopeBuilder.Response">Response()</a>s can be defined on a scope and will be inherited by all endpoints in that scope and all nested scopes.  Inherited values can be overridden in individual endpoints or nested scopes.</p>
-
-<pre><code class="language-go">service.API(func(api *rest.APIBuilder) {
-  api.Scope(&quot;/orders&quot;, func(scope *rest.ScopeBuilder) {
-    scope.Header(&quot;Authorization&quot;, true)
-    scope.Response(http.StatusInternalServerError)
-
-    scope.Get(&quot;list-orders&quot;, new(listOrders), nil, func(endpoint *rest.EndpointBuilder) {
-      endpoint.Header(&quot;Authorization&quot;, false)
-
-      endpoint.Response(http.StatusOK, func(response *rest.ResponseBuilder) {
-        response.Header(&quot;X-Next-Page&quot;, false)
-      })
-    })
-
-    scope.Post(&quot;create-order&quot;, new(createOrder), nil, func(endpoint *rest.EndpointBuilder) {
-      endpoint.Response(http.StatusCreated)
-      endpoint.Response(http.StatusBadRequest)
-    })
-
-    scope.Scope(&quot;/{order-id}&quot;, func(scope *rest.ScopeBuilder) {
-      scope.Response(http.StatusOK)
-      scope.Response(http.StatusBadRequest)
-      scope.Response(http.StatusNotFound)
-
-      scope.Get(&quot;get-order&quot;, new(getOrder), nil)
-      scope.Put(&quot;update-order&quot;, new(updateOrder), nil)
-      scope.Delete(&quot;delete-order&quot;, new(deleteOrder), nil)
-    })
-  })
-})
-</code></pre>
+<p>When you are done with your app (or if the bootstrap process fails), see the <a href="/cleanup">teardown instructions</a> to undeploy your application.</p>
 
 
 <footer class=" footline" >
@@ -1149,18 +1119,6 @@ default:
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -1169,92 +1127,6 @@ default:
                     
                     
 
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
                     
                         
             
@@ -1269,6 +1141,9 @@ default:
                     
                     
 
+                    
+            
+        
                     
                         
             
@@ -1325,26 +1200,6 @@ default:
             
             
                 
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
                     
                 
                 
@@ -1421,6 +1276,118 @@ default:
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -1447,10 +1414,10 @@ default:
 
 
         
-            <a class="nav nav-prev" href="/resources/strm/" title="Streams"> <i class="fas fa-chevron-left"></i></a>
+            <a class="nav nav-prev" href="/tutorial/" title="Tutorial"> <i class="fas fa-chevron-left"></i></a>
         
         
-            <a class="nav nav-next" href="/resources/cron/" title="Schedued Jobs" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+            <a class="nav nav-next" href="/tutorial/root/" title="Hello, World!" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 

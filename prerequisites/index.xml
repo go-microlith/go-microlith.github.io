@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Prerequisites on Microlith</title>
+    <link>http://microlith-framework.com/prerequisites/</link>
+    <description>Recent content in Prerequisites on Microlith</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Oct 2018 18:18:21 -0600</lastBuildDate>
+    
+	<atom:link href="http://microlith-framework.com/prerequisites/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Route53 DNS</title>
+      <link>http://microlith-framework.com/prerequisites/route53/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/prerequisites/route53/</guid>
+      <description>Microlith uses Route53 DNS as its global router. You will need a domain name hosted in Route53 set up for AWS Certificate Manager email validation. This requires a one-time, non-automatable setup. Once complete, the configuration can be reused for all of your Microlith applications.
+Domain Name You will need a domain name hosted in Route53. If you have an existing domain, it can be reused.
+Register a Domain in the AWS Console To register or transfer a domain name from the AWS Console:</description>
+    </item>
+    
+    <item>
+      <title>GitHub Access Token</title>
+      <link>http://microlith-framework.com/prerequisites/github/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/prerequisites/github/</guid>
+      <description>Microlith hosts your source code in a git repository. It can either use AWS CodeCommit for this or GitHub.
+To host on GitHub, you need to create a GitHub Personal Access Token with &amp;ldquo;repo&amp;rdquo; scope. A token is needed for both public and private repositories. Place the token in the GITHUB_OAUTH_TOKEN environment variable.
+export GITHUB_OAUTH_TOKEN=&amp;quot;&amp;lt;hex-string&amp;gt;&amp;quot;  </description>
+    </item>
+    
+  </channel>
+</rss>

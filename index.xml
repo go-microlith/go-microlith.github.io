@@ -18,20 +18,8 @@
       
       <guid>http://microlith-framework.com/examples/tutorial/</guid>
       <description>The complete code from the tutorial is available in the  tutorial.com repository.
-Clone The repository should be cloned to the root of your Go workspace&amp;rsquo;s source tree, i.e. ${GOPATH}/src/tutorial.com.
-# Clone the repo to the root of your Go workspace&#39;s source tree mkdir -p &amp;quot;${GOPATH}/src/tutorial.com&amp;quot; git clone https://github.com/go-microlith/tutorial.com &amp;quot;${GOPATH}/src/tutorial.com&amp;quot; # Microlith will recreate this rm -rf &amp;quot;${GOPATH}/src/tutorial.com/.git/&amp;quot; # Build the application go install tutorial.com  Bootstrap Assuming you own the domain name my-domain.</description>
-    </item>
-    
-    <item>
-      <title>Microservices</title>
-      <link>http://microlith-framework.com/design/microservices/</link>
-      <pubDate>Thu, 25 Oct 2018 18:18:21 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/design/microservices/</guid>
-      <description>Microlith uses a microservices-based model called the Domain model. It has three main concepts: Services, Domains, and Applications.
-Services Services are atomic units of business logic and are the base building block of a Microlith application.
-Services are implemented as AWS::Serverless services, containing resources such as Buckets, Tables, and Streams to store and communicate state.
-A service&amp;rsquo;s external interface is a REST API. Endpoints on the API implement business logic by manipulating buckets, mutating tables, and publishing to streams.</description>
+Deploy You can deploy this domain directly from GitHub using the bootstrap process. Be sure your GitHub Personal Access Token is configured.
+# Get the app go get -u github.com/go-microlith/tutorial.com # Build the app go install github.com/go-microlith/tutorial.com # Deploy the app tutorial.com instance bootstrap \ --import-path github.com/go-microlith/tutorial.com \ --dns-name tutorial.my-domain.com \ --hosted-zone-id Z1234567890 \ --validation-domain my-domain.com  API The APIs for each subdomain are documented below.</description>
     </item>
     
     <item>
@@ -41,29 +29,29 @@ A service&amp;rsquo;s external interface is a REST API. Endpoints on the API imp
       
       <guid>http://microlith-framework.com/resources/blob/</guid>
       <description>Create a bucket by calling Bucket() on a service builder with a unique bucket name.
-images := service.Bucket(&amp;quot;images&amp;quot;)  The returned object is used to create clients and to attach observers.
-Manipulators To Get(), Put(), or Delete() an object from a bucket, use a Manipulator.
-mnip := blob.NewManipulator(images) contents, err := mnip.Get(ctx, &amp;quot;/microlith/logo.png&amp;quot;) if err != nil { log.Panic(err) } defer contents.Close() os.Copy(os.Stdout, contents)  Observers Observe objects added, updated, or deleted from buckets by calling the Observer() function on a service builder, giving it a unique observer name and an S3 Lambda function.</description>
+images := service.Bucket(&amp;quot;images&amp;quot;)  In Lambda functions, you can Get(), Put(), or Delete() objects in the bucket.
+contents, err := images.Get(ctx, &amp;quot;/microlith/logo.png&amp;quot;) if err != nil { // ... } defer contents.Close() os.Copy(os.Stdout, contents)  Observers Observers are Lambda functions triggered when objects are added, updated, or deleted from buckets. Create an Observer Lambda by implementing the Observer interface.</description>
     </item>
     
     <item>
-      <title>Get Microlith</title>
-      <link>http://microlith-framework.com/bootstrap/go_get/</link>
+      <title>Route53 DNS</title>
+      <link>http://microlith-framework.com/prerequisites/route53/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://microlith-framework.com/bootstrap/go_get/</guid>
-      <description>Microlith is a standard Go library. Just use &amp;ldquo;go get&amp;rdquo;:
-go get gopkg.in/microlith.v0  </description>
+      <guid>http://microlith-framework.com/prerequisites/route53/</guid>
+      <description>Microlith uses Route53 DNS as its global router. You will need a domain name hosted in Route53 set up for AWS Certificate Manager email validation. This requires a one-time, non-automatable setup. Once complete, the configuration can be reused for all of your Microlith applications.
+Domain Name You will need a domain name hosted in Route53. If you have an existing domain, it can be reused.
+Register a Domain in the AWS Console To register or transfer a domain name from the AWS Console:</description>
     </item>
     
     <item>
-      <title>The Root Domain</title>
-      <link>http://microlith-framework.com/tutorial/root/</link>
+      <title>Services</title>
+      <link>http://microlith-framework.com/intro/services/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://microlith-framework.com/tutorial/root/</guid>
-      <description>We will be creating a Hello World application. Our application needs to respond to GET / with a 200 and the string &amp;ldquo;Hello, world!&amp;rdquo;. As we refactor the application throughout the tutorial, it should still return the same response.
-To start, we will add a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application and redeploy. We will add the endpoint to the origin of the root domain. The root domain has a specialized API exposed via the top-level microlith package.</description>
+      <guid>http://microlith-framework.com/intro/services/</guid>
+      <description>The leaves of your tree are Sinatra-weight Serverless services. A service is an atomic unit of business logic. It is a REST API, a set of resources, and a set of asynchronous actions.
+You define services using a builder DSL. Microlith uses a simple, pervasive language to make the API easy to learn and use. You define your API. You add buckets, tables, and streams. You observe objects in buckets, watch changes to tables, and process events from streams.</description>
     </item>
     
     <item>
@@ -74,75 +62,18 @@ To start, we will add a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to o
       <guid>http://microlith-framework.com/examples/blog/</guid>
       <description>A blogging application with social features is available in the  blog.com repository.
 It provides a basic API for performing CRUD operations on blog posts. It extends this API with comments on blog posts and with Facebook-style reactions (&amp;ldquo;Like&amp;rdquo;, &amp;ldquo;Love&amp;rdquo;, etc.) on both posts and comments.
-Clone The repository should be cloned to the root of your Go workspace&amp;rsquo;s source tree, i.e. ${GOPATH}/src/blog.com:
-# Clone the repo to the root of your Go workspace&#39;s source tree mkdir -p &amp;quot;${GOPATH}/src/blog.</description>
+Deploy You can deploy this domain directly from GitHub using the bootstrap process. Be sure your GitHub Personal Access Token is configured.
+# Get the app go get -u github.</description>
     </item>
     
     <item>
-      <title>Monolith</title>
-      <link>http://microlith-framework.com/design/monolith/</link>
-      <pubDate>Thu, 25 Oct 2018 18:18:21 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/design/monolith/</guid>
-      <description>Microlith packages an entire application into a single executable binary. It does this by taking advantage of the init/main phase distinction in Go.
-Microlith represents a Domain model application as a tree of Go objects. During the init phase, Microlith provides a builder DSL to construct this tree. Lambda functions are given as Go callback functions. The init phase ends when microlith.Main() is called.
-The main phase handles converting the tree of objects into CloudFormation templates, deploying it to AWS in a Serverless pattern, and executing Lambda functions.</description>
-    </item>
-    
-    <item>
-      <title>Services</title>
-      <link>http://microlith-framework.com/tutorial/services/</link>
+      <title>Lambdas</title>
+      <link>http://microlith-framework.com/intro/lambdas/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://microlith-framework.com/tutorial/services/</guid>
-      <description>The origin API implements its business logic by making calls on services in the domain. It uses the results of those calls to create a response for the user.
-Let&amp;rsquo;s refactor our domain into services which perform the work of creating words. Then we&amp;rsquo;ll refactor our origin endpoint to use those services to build our &amp;ldquo;Hello, world!&amp;rdquo; response.
-The &amp;ldquo;word&amp;rdquo; Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word.</description>
-    </item>
-    
-    <item>
-      <title>Streams</title>
-      <link>http://microlith-framework.com/resources/strm/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/resources/strm/</guid>
-      <description>Create a stream by calling Stream() on a service builder with a unique stream name:
-userSignups := service.Stream(&amp;quot;user-signups&amp;quot;)  The returned object is used to create clients and to attach processors.
-Publishers To Publish() messages to a stream, use a Publisher. Publishers automatically batch messages. To ensure that any pending messages are published, defer a call to Flush().
-publisher := strm.NewPublisher(userSignups) defer publisher.Flush(ctx) signup := &amp;amp;UserSignup{ Email: &amp;quot;john@doe.com&amp;quot;, At: time.</description>
-    </item>
-    
-    <item>
-      <title>Your First Application</title>
-      <link>http://microlith-framework.com/bootstrap/create/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/bootstrap/create/</guid>
-      <description>Microlith applications are a single Go executable that serves an entire top-level domain, such as example.com.
-Create an Application To create an application, create an executable in ${GOPATH}/src/example.com/main.go and call microlith.Main():
-package main import ( microlith &amp;quot;gopkg.in/microlith.v0&amp;quot; ) func main() { microlith.Main() }  The name of the executable is significant to Microlith. It must be named after the top-level domain name it logically serves. In this case, &amp;ldquo;example.com&amp;rdquo;.</description>
-    </item>
-    
-    <item>
-      <title>Channels</title>
-      <link>http://microlith-framework.com/tutorial/channels/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/tutorial/channels/</guid>
-      <description>Channels are streams shared between all services in a domain. Services use channels to communicate between each other. Any service can publish events to or process events from a channel. Additionally, the origin can publish events to a channel.
-Let&amp;rsquo;s create a channel for request events. The &amp;ldquo;hello-world&amp;rdquo; endpoint in the origin will publish an event every request. The &amp;ldquo;word&amp;rdquo; service will process the events and write them out to the logs.</description>
-    </item>
-    
-    <item>
-      <title>Route53</title>
-      <link>http://microlith-framework.com/bootstrap/route53/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/bootstrap/route53/</guid>
-      <description>* Almost Zero Configuration
-Microlith uses Route53 DNS as its global router. This requires a one-time, non-automatable setup. Once complete, the configuration can be reused for all of your Microlith applications.
-You will need the Domain Name and the Hosted Zone ID to bootstrap your application. For the remainder of the documentation, we will assume you own my-domain.com in hosted zone Z1234567890.
- Domain Name You will need a domain name hosted in Route53.</description>
+      <guid>http://microlith-framework.com/intro/lambdas/</guid>
+      <description>Your business logic is implemented with Lambda functions. Microlith Lambda functions are Go objects that implement a Lambda interface. Each type of Lambda is a specialized single-method interface.
+In your Lambda functions, you can work with objects in buckets, query and update tables and indexes, publish events to streams, and call endpoints on services. APIs are simple nouns and verbs. They follow the principles of least surprise and of &amp;ldquo;Tell, don&amp;rsquo;t Ask&amp;rdquo;.</description>
     </item>
     
     <item>
@@ -151,61 +82,95 @@ You will need the Domain Name and the Hosted Zone ID to bootstrap your applicati
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/stor/</guid>
-      <description>Create a table by calling the Table() method on a service builder.
-Tables are created with a hash (&amp;ldquo;partition&amp;rdquo;) key and an optional range (&amp;ldquo;sort&amp;rdquo;) key given as Attributes. Attributes can be created with the StringAttribute(), NumberAttribute(), and BinaryAttribute() functions.
+      <description>Create a table by calling the Table() method on a service builder with a unique table name.
+Tables are created with a hash (&amp;ldquo;partition&amp;rdquo;) key and an optional range (&amp;ldquo;sort&amp;rdquo;) key given as Attributes. Attributes can be created with the String(), Number(), and Binary() functions.
 The streaming configuration must also be provided when the table is declared by passing a ChangeType value.
-var artistKey = stor.StringAttribute(&amp;quot;Artist&amp;quot;) var nameKey = stor.StringAttribute(&amp;quot;Name&amp;quot;) var albums = service.Table(&amp;quot;albums&amp;quot;, artistKey, nameKey, stor.</description>
+var artistKey = stor.String(&amp;quot;Artist&amp;quot;) var nameKey = stor.</description>
     </item>
     
     <item>
-      <title>APIs</title>
+      <title>Domains</title>
+      <link>http://microlith-framework.com/intro/domain/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/intro/domain/</guid>
+      <description>The branches of your tree are domains. A domain is a container for services. It is an origin API, a set of services, and a set of shared broadcast channels. The origin takes traffic and calls on services to implement business logic. Services use the channels to communicate asynchronously.
+You define domains with a builder DSL. You define your origin API, create channels, and add services. You implement endpoints with Lambdas, just like in services.</description>
+    </item>
+    
+    <item>
+      <title>Getting Started</title>
+      <link>http://microlith-framework.com/tutorial/bootstrap/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/tutorial/bootstrap/</guid>
+      <description>The tutorial will introduce you to Microlith by building a simple &amp;ldquo;Hello, world!&amp;rdquo; app. It&amp;rsquo;s not fancy: &amp;ldquo;GET /&amp;rdquo; returns &amp;ldquo;Hello, world!&amp;rdquo;. We&amp;rsquo;ll slowly refactor the application to show how to build a Microlith app. For a complete, non-trivial app, see the blog example.
+The first step is to create an empty app and bootstrap it.
+Create the Application A Microlith application is just an executable that calls microlith.Main(). Applications are named after domain names, such as &amp;ldquo;tutorial.</description>
+    </item>
+    
+    <item>
+      <title>GitHub Access Token</title>
+      <link>http://microlith-framework.com/prerequisites/github/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/prerequisites/github/</guid>
+      <description>Microlith hosts your source code in a git repository. It can either use AWS CodeCommit for this or GitHub.
+To host on GitHub, you need to create a GitHub Personal Access Token with &amp;ldquo;repo&amp;rdquo; scope. A token is needed for both public and private repositories. Place the token in the GITHUB_OAUTH_TOKEN environment variable.
+export GITHUB_OAUTH_TOKEN=&amp;quot;&amp;lt;hex-string&amp;gt;&amp;quot;  </description>
+    </item>
+    
+    <item>
+      <title>Streams</title>
+      <link>http://microlith-framework.com/resources/strm/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/resources/strm/</guid>
+      <description>Create a stream by calling Stream() on a service builder with a unique stream name
+userSignups := service.Stream(&amp;quot;user-signups&amp;quot;)  In Lambda functions, you can Publish() messages to a stream. Streams automatically batch messages. To ensure that any pending messages are published, defer a call to Flush().
+signup := &amp;amp;UserSignup{ Email: &amp;quot;john@doe.com&amp;quot;, At: time.Now(), } defer userSignups.Flush(ctx) if err := userSignups.Publish(ctx, &amp;quot;partition-key&amp;quot;, signup); err != nil { // ... }  Processors Processors are Lambda functions that are triggered when messages are published to streams.</description>
+    </item>
+    
+    <item>
+      <title>Application</title>
+      <link>http://microlith-framework.com/intro/application/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/intro/application/</guid>
+      <description>The root of your tree is the application. An application is a container for domains. It has a root domain and a set of subdomains, and it routes traffic to them using DNS. It also has a global &amp;ldquo;pseudo-domain&amp;rdquo; with services and channels that are shared between all domains.
+The application is defined using the DSL in the top-level microlith package. You define your root domain using the domain DSL, plus you add global services, create global channels and register subdomains.</description>
+    </item>
+    
+    <item>
+      <title>Endpoints</title>
       <link>http://microlith-framework.com/resources/rest/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/rest/</guid>
-      <description>APIs follow the AWS API Gateway design, based on Swagger.
-APIs Define paths in your API using the Scope() method. This method is available on service builders to define service APIs, on domain builders to define domain origins, and via microlith.Scope() to define the root domain&amp;rsquo;s origin API. Within your scopes, use methods named after HTTP methods to add endpoints.
-Scopes Scopes are paths, such as &amp;ldquo;/foo&amp;rdquo; or &amp;ldquo;/bar&amp;rdquo;. Paths can be multiple segments, such as &amp;ldquo;/foo/bar&amp;rdquo; and can contain variables, such as &amp;ldquo;/foo/{foo-id}&amp;rdquo;.</description>
+      <description>Endpoints are Lambda functions triggered on HTTP requests. Create an Endpoint Lambda by implementing the Handler interface.
+Within the handler Lambda functions, you can parse a RequestBody() as JSON and Respond() with JSON or an error. The path and query parameters and the request headers are available on the request object.
+type echo struct {} func (*echo) ServeREST(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) { var body map[string]interface{} if err := rest.</description>
     </item>
     
     <item>
-      <title>Bootstrap Your Application</title>
-      <link>http://microlith-framework.com/bootstrap/bootstrap/</link>
+      <title>Hello, World!</title>
+      <link>http://microlith-framework.com/tutorial/root/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://microlith-framework.com/bootstrap/bootstrap/</guid>
-      <description>Your application has a built-in command to deploy itself into a self-hosted AWS environment. This environment includes a Git repository for your source code and a continuous deployment pipeline for your application with test and production environments. The bootstrap process will then initialize a git repository in your local source tree, create an initial commit, push, and wait for a full build and deploy to go green. Finally, it will healthcheck your deployed application.</description>
+      <guid>http://microlith-framework.com/tutorial/root/</guid>
+      <description>To start, we will add a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application and redeploy. We will add the endpoint to the origin of the root domain. The root domain has a specialized API exposed via the top-level microlith package.
+The Endpoint First, we will create an endpoint Lambda function. To create the Lambda, implement the Handler interface. The endpoint uses the Respond() helper to return a 200 response code and the string &amp;ldquo;Hello, world!</description>
     </item>
     
     <item>
-      <title>Subdomains</title>
-      <link>http://microlith-framework.com/tutorial/subdomains/</link>
+      <title>Package</title>
+      <link>http://microlith-framework.com/intro/package/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
-      <guid>http://microlith-framework.com/tutorial/subdomains/</guid>
-      <description>An application contains a root domain and a set of named subdomains.
-Let&amp;rsquo;s create a subdomain named &amp;ldquo;sub.domain&amp;rdquo; that mirrors the root domain. It will have one endpoint that returns &amp;ldquo;Hello, subdomain world!&amp;rdquo;. Like the root domain, it will factor the work out into a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service and have a channel for request events. It will also have a public client method to call the endpoint on the origin.</description>
-    </item>
-    
-    <item>
-      <title>Done</title>
-      <link>http://microlith-framework.com/bootstrap/done/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/bootstrap/done/</guid>
-      <description>Congratulations, your application is now bootstrapped! From now on, git push origin master deploys your application:
-git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  If you receive a &amp;ldquo;403&amp;rdquo; when trying to push on Mac OS X, the credentials stored in the Keychain have expired. You will need to delete them to push again, as documented in Step 3 here.
- </description>
-    </item>
-    
-    <item>
-      <title>Globals</title>
-      <link>http://microlith-framework.com/tutorial/globals/</link>
-      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
-      
-      <guid>http://microlith-framework.com/tutorial/globals/</guid>
-      <description>An application provides global services to share business logic between domains. It also provides global channels to communicate between different domains.
-Let&amp;rsquo;s factor some shared logic out of our application by promoting the &amp;ldquo;world&amp;rdquo; service to a global service. Since the service relies on the requests channel, it will need to be promoted to a global channel. When we are done, both the root domain and the subdomain will each have their own &amp;ldquo;hello&amp;rdquo; service and will use the global &amp;ldquo;world&amp;rdquo; service and &amp;ldquo;requests&amp;rdquo; channel.</description>
+      <guid>http://microlith-framework.com/intro/package/</guid>
+      <description>With your tree built, there&amp;rsquo;s one last API to learn. And it&amp;rsquo;s the easiest of them all.
+func main() { microlith.Main() }  That&amp;rsquo;s it. Build your app like any other Go executable.
+go install github.com/go-microlith/introduction.com  </description>
     </item>
     
     <item>
@@ -214,8 +179,29 @@ Let&amp;rsquo;s factor some shared logic out of our application by promoting the
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/cron/</guid>
-      <description>Schedule a job to run in the background by calling Job() on a service builder, providing a unique job name, a schedule, and a CloudWatch Event Lambda function. The schedule can be a simple time interval or a complex calendar, both expressed using CloudWatch Schedule Expressions.
-service.Job(&amp;quot;purge-cache&amp;quot;, &amp;quot;rate(15 minutes)&amp;quot;, func(ctx context.Context, evt events.CloudWatchEvent) error { return json.NewEncoder(os.Stdout).Encode(evt.Details) })  </description>
+      <description>Jobs are Lambda functions that are triggered on a schedule. Create a Job Lambda by implementing the Job interface.
+type purgeCache struct {} func (*purgeCache) Run(ctx context.Context, evt events.CloudWatchEvent) error { // ... }  Register the job by calling the Job() method on a service builder, giving it a unique job name, a schedule, and a Job Lambda. The schedule can be a simple time interval or a complex calendar, both expressed using CloudWatch Schedule Expressions.</description>
+    </item>
+    
+    <item>
+      <title>Services</title>
+      <link>http://microlith-framework.com/tutorial/services/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/tutorial/services/</guid>
+      <description>Although all external traffic goes through a domain&amp;rsquo;s origin API, the origin does not itself implement business logic. It makes calls on services and creates a response for the user.
+Let&amp;rsquo;s show how this works by refactoring our root domain into services. We&amp;rsquo;ll create a Word service that returns a fixed word. Then we&amp;rsquo;ll create two instances of that service, one returning &amp;ldquo;hello&amp;rdquo; and one returning &amp;ldquo;world&amp;rdquo;, and register them with our domain.</description>
+    </item>
+    
+    <item>
+      <title>Channels</title>
+      <link>http://microlith-framework.com/tutorial/channels/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/tutorial/channels/</guid>
+      <description>The origin calls on services to implement business logic, but services within a domain cannot call each other. Instead, services communicate asynchronously using shared broadcast channels.
+When events occur, such as a user deleting a business object, services publish those events to a channel. Services process events on the channel and update themselves according to their own internal business logic, such as purging their related objects.
+Let&amp;rsquo;s create a channel for request events.</description>
     </item>
     
     <item>
@@ -224,8 +210,51 @@ service.Job(&amp;quot;purge-cache&amp;quot;, &amp;quot;rate(15 minutes)&amp;quot
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/resources/inst/</guid>
-      <description>All console output (standard out and standard error) from Lambdas is captured as CloudWatch Logs. Read Lambdas&amp;rsquo; logs by calling the Reader() method on a service builder, passing a unique reader name and a CloudWatch Logs Lambda function. Use the returned reader to filter and Read() a Lambda&amp;rsquo;s logs.
-onErrors := service.Reader(&amp;quot;on-errors&amp;quot;, func(ctx context.Context, evt events.CloudwatchLogsEvent) error { data, err := evt.AWSLogs.Parse() if err != nil { return err } for _, logEvent := range data.</description>
+      <description>Readers are Lambda functions that read the logs of other Lambda functions. All console output from Lambdas is captured as CloudWatch Logs. Readers are triggered on log messages. Create a Reader Lambda by implementing the Reader interface.
+type onError struct {} func (*onError) Read(ctx context.Context, evt events.CloudwatchLogsEvent) error { data, err := evt.AWSLogs.Parse() if err != nil { return err } for _, logEvent := range data.LogEvents { fmt.Printf(&amp;quot;Error found in log group %q: %s&amp;quot;, evt.</description>
+    </item>
+    
+    <item>
+      <title>Ship</title>
+      <link>http://microlith-framework.com/intro/ship/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/intro/ship/</guid>
+      <description>Deployment is simple. Your app provisions its own miniature Heroku in AWS with a single command.
+introduction.com instance bootstrap --import-path github.com/go-microlith/introduction.com  You just push. Microlith takes care of the rest.
+git add . git commit -m &amp;quot;My changes&amp;quot; git push origin master  </description>
+    </item>
+    
+    <item>
+      <title>Fin.</title>
+      <link>http://microlith-framework.com/intro/fin/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/intro/fin/</guid>
+      <description>That&amp;rsquo;s it. That&amp;rsquo;s all there is to Microlith.
+Now let&amp;rsquo;s build something. Set up your prerequisites and try the tutorial.
+You can jump ahead and read about the resources Microlith supports. Or you can check out the example applications or the GoDocs.
+Have questions? Encounter problems? Want to keep up to date? Join the mailing list: go-serverless@microlith-framework.com</description>
+    </item>
+    
+    <item>
+      <title>Subdomains</title>
+      <link>http://microlith-framework.com/tutorial/subdomains/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/tutorial/subdomains/</guid>
+      <description>The application has a root domain and a set of subdomains, and it routes traffic to them using DNS. Each domain&amp;rsquo;s origin is mounted under a single DNS name. The root domain is mounted at the base DNS name you specified during the bootstrap process. The subdomains are named using subdomain prefixes, and are mounted as subdomains of the base DNS name.
+Let&amp;rsquo;s create a domain named &amp;ldquo;sub&amp;rdquo; that mirrors the root domain.</description>
+    </item>
+    
+    <item>
+      <title>Globals</title>
+      <link>http://microlith-framework.com/tutorial/globals/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/tutorial/globals/</guid>
+      <description>The application has a special &amp;ldquo;pseudo-domain&amp;rdquo; called the globals. The globals are a set of services and channels that are shared between all domains. You can use them in any domain as if they were part of that domain.
+Let&amp;rsquo;s factor some shared logic out of our application by promoting the &amp;ldquo;world&amp;rdquo; service to a global service. Since the service relies on the requests channel, the channel will need to be promoted to a global channel.</description>
     </item>
     
   </channel>

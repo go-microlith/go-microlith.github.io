@@ -18,8 +18,8 @@
       
       <guid>http://microlith-framework.com/examples/tutorial/</guid>
       <description>The complete code from the tutorial is available in the  tutorial.com repository.
-Clone The repository should be cloned to the root of your Go workspace&amp;rsquo;s source tree, i.e. ${GOPATH}/src/tutorial.com.
-# Clone the repo to the root of your Go workspace&#39;s source tree mkdir -p &amp;quot;${GOPATH}/src/tutorial.com&amp;quot; git clone https://github.com/go-microlith/tutorial.com &amp;quot;${GOPATH}/src/tutorial.com&amp;quot; # Microlith will recreate this rm -rf &amp;quot;${GOPATH}/src/tutorial.com/.git/&amp;quot; # Build the application go install tutorial.com  Bootstrap Assuming you own the domain name my-domain.</description>
+Deploy You can deploy this domain directly from GitHub using the bootstrap process. Be sure your GitHub Personal Access Token is configured.
+# Get the app go get -u github.com/go-microlith/tutorial.com # Build the app go install github.com/go-microlith/tutorial.com # Deploy the app tutorial.com instance bootstrap \ --import-path github.com/go-microlith/tutorial.com \ --dns-name tutorial.my-domain.com \ --hosted-zone-id Z1234567890 \ --validation-domain my-domain.com  API The APIs for each subdomain are documented below.</description>
     </item>
     
     <item>
@@ -30,8 +30,8 @@ Clone The repository should be cloned to the root of your Go workspace&amp;rsquo
       <guid>http://microlith-framework.com/examples/blog/</guid>
       <description>A blogging application with social features is available in the  blog.com repository.
 It provides a basic API for performing CRUD operations on blog posts. It extends this API with comments on blog posts and with Facebook-style reactions (&amp;ldquo;Like&amp;rdquo;, &amp;ldquo;Love&amp;rdquo;, etc.) on both posts and comments.
-Clone The repository should be cloned to the root of your Go workspace&amp;rsquo;s source tree, i.e. ${GOPATH}/src/blog.com:
-# Clone the repo to the root of your Go workspace&#39;s source tree mkdir -p &amp;quot;${GOPATH}/src/blog.</description>
+Deploy You can deploy this domain directly from GitHub using the bootstrap process. Be sure your GitHub Personal Access Token is configured.
+# Get the app go get -u github.</description>
     </item>
     
   </channel>

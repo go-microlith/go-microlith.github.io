@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
 <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-    <title>Endpoints :: Microlith</title>
+    <title>Route53 DNS :: Microlith</title>
 
     
     <link href="/css/nucleus.css?1542658311" rel="stylesheet">
@@ -34,7 +34,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/resources/rest/">
+  <body class="" data-url="/prerequisites/route53/">
     <nav id="sidebar" class="">
 
 
@@ -258,7 +258,7 @@
   
     
     <li data-nav-id="/prerequisites/" title="Prerequisites" class="dd-item 
-        
+        parent
         
         
         ">
@@ -282,7 +282,7 @@
  
   
     
-      <li data-nav-id="/prerequisites/route53/" title="Route53 DNS" class="dd-item ">
+      <li data-nav-id="/prerequisites/route53/" title="Route53 DNS" class="dd-item active">
         <a href="/prerequisites/route53/">
         Route53
         
@@ -474,7 +474,7 @@
   
     
     <li data-nav-id="/resources/" title="Resources" class="dd-item 
-        parent
+        
         
         
         ">
@@ -555,7 +555,7 @@
  
   
     
-      <li data-nav-id="/resources/rest/" title="Endpoints" class="dd-item active">
+      <li data-nav-id="/resources/rest/" title="Endpoints" class="dd-item ">
         <a href="/resources/rest/">
         Endpoints
         
@@ -763,7 +763,7 @@
             
           
           
-            <a href='/'>Microlith</a> > <a href='/resources/'>Resources</a> > Endpoints
+            <a href='/'>Microlith</a> > <a href='/prerequisites/'>Prerequisites</a> > Route53 DNS
           
          
           
@@ -779,8 +779,18 @@
 <ul>
 <li>
 <ul>
-<li><a href="#apis">APIs</a></li>
-<li><a href="#scopes">Scopes</a></li>
+<li><a href="#domain-name">Domain Name</a>
+<ul>
+<li><a href="#register-a-domain-in-the-aws-console">Register a Domain in the AWS Console</a></li>
+</ul></li>
+<li><a href="#email-validation">Email Validation</a>
+<ul>
+<li><a href="#alias">Alias</a></li>
+<li><a href="#whois">WHOIS</a>
+<ul>
+<li><a href="#configure-whois-in-the-aws-console">Configure WHOIS in the AWS Console</a></li>
+</ul></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -795,7 +805,7 @@
         
         <div id="body-inner">
           
-            <h1>Endpoints</h1>
+            <h1>Route53 DNS</h1>
           
 
         
@@ -803,135 +813,63 @@
 
 
 
-<p>Endpoints are Lambda functions triggered on HTTP requests.  Create an Endpoint Lambda by implementing the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Handler">Handler</a> interface.</p>
+<p>Microlith uses Route53 DNS as its global router.  You will need a <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar.html">domain name hosted in Route53</a> set up for AWS Certificate Manager <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-email.html">email validation</a>.  This requires a one-time, non-automatable setup.  Once complete, the configuration can be reused for all of your Microlith applications.</p>
 
-<p>Within the handler Lambda functions, you can parse a <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#RequestBody">RequestBody()</a> as JSON and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Respond">Respond()</a> with JSON or an error.  The path and query parameters and the request headers are available on the request object.</p>
+<h2 id="domain-name">Domain Name</h2>
 
-<pre><code class="language-go">type echo struct {}
+<p>You will need a <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar.html">domain name hosted in Route53</a>.  If you have an existing domain, it can be reused.</p>
 
-func (*echo) ServeREST(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-  var body map[string]interface{}
-  if err := rest.RequestBody(&amp;body); err != nil {
-    return rest.Respond(http.StatusBadRequest, err)
-  }
+<h3 id="register-a-domain-in-the-aws-console">Register a Domain in the AWS Console</h3>
 
-  return rest.Respond(http.StatusOK, body)
-}
-</code></pre>
+<p>To register or transfer a domain name from the AWS Console:</p>
 
-<h2 id="apis">APIs</h2>
+<ol>
+<li>Navigate to Route53</li>
+<li>Navigate to &ldquo;Registered Domains&rdquo;</li>
+<li>Click either the &ldquo;Register Domain&rdquo; or &ldquo;Transfer Domain&rdquo; button</li>
+<li>Follow the prompts</li>
+</ol>
 
-<p>Define APIs on services by calling the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#ServiceBuilder.API">API()</a> method on a service builder.  Define the origin API on a domain by calling the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld#DomainBuilder.Origin">Origin()</a> method on a domain builder.  In the root domain, use the <a href="https://godoc.org/gopkg.in/microlith.v0#Origin">microlith.Origin()</a> function.</p>
+<h2 id="email-validation">Email Validation</h2>
 
-<p>In the builder, you can add <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Head">Head()</a>, <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Get">Get()</a>, <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Post">Post()</a>,
-<a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Put">Put()</a>,
-and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Delete">Delete()</a> endpoints and define <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Scope">Scope()</a>s.  The HTTP methods take a unique endpoint name, an Endpoint Lambda, and an optional output <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Endpoint">Endpoint</a> argument.</p>
+<p>Microlith issues signed SSL certificates for your domain.  To validate domain ownership, Microlith uses AWS Certificate Manager&rsquo;s <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-email.html">email validation</a> mechanism.  You must have a valid contact email able to respond to confirmation emails.  There are two options, one if you receive email at the domain and another if you don&rsquo;t.</p>
 
-<pre><code class="language-go">var echoEndpoint *rest.Endpoint
+<h3 id="alias">Alias</h3>
 
-service.API(func(api *rest.APIBuilder) {
-  api.Post(&quot;echo&quot;, new(echo), &amp;echoEndpoint)
-})
-</code></pre>
+<p>If you receive email at &ldquo;my-domain.com&rdquo;, you may receive confirmation emails automatically.  By default, Amazon will send confirmation emails to:</p>
 
-<p>The HTTP methods take an optional builder to define the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#EndpointBuilder.Query">Query()</a> parameters and request <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#EndpointBuilder.Header">Header()</a>s, as well as the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#EndpointBuilder.Response">Response()</a>s and response <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ResponseBuilder.Header">Header()</a>s.</p>
+<ul>
+<li>administrator@my-domain.com</li>
+<li>hostmaster@my-domain.com</li>
+<li>postmaster@my-domain.com</li>
+<li>webmaster@my-domain.com</li>
+<li>admin@my-domain.com</li>
+</ul>
 
-<pre><code class="language-go">var listOrdersEndpoint *rest.Endpoint
+<p>If these email addresses are not valid at your domain name, you can configure an email alias for one or more of them.  Otherwise, you must fall back to the WHOIS mechanism.</p>
 
-service.API(func(api *rest.APIBuilder) {
-  api.Get(&quot;list-orders&quot;, new(listOrders), &amp;listOrdersEndpoint, func(endpoint *rest.EndpointBuilder) {
-    endpoint.Query(&quot;page&quot;, false)
-    endpoint.Query(&quot;limit&quot;, false)
+<h3 id="whois">WHOIS</h3>
 
-    endpoint.Header(&quot;Authorization&quot;, true)
+<p>If you do not receive email at your domain, you must <a href="https://docs.aws.amazon.com/acm/latest/userguide/setup-email.html">configure your WHOIS information</a>.</p>
 
-    endpoint.Response(http.StatusOK, func(response *rest.ResponseBuilder) {
-      response.Header(&quot;X-Next-Page&quot;, false)
-    })
-  })
-})
-</code></pre>
+<p>Your domain name must have a valid Domain, Technical, and/or Administrative contact with an email address.  You must explicitly disable privacy protection on these contacts so the email addresses are visible in the WHOIS database.</p>
 
-<p>In Lambda functions, you can <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#Endpoint.Call">Call()</a> the endpoint, passing an optional request body.  The returned values are the same values returned by <a href="https://godoc.org/net/http#Client.Do">http.Client</a>.  You can decode the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ResponseBody">ResponseBody()</a> as JSON, or you can get the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ErrorResponse">ErrorResponse()</a> if an error was passed to Respond().</p>
+<p>Once complete, you can validate your change with a <a href="https://whois.icann.org/en/lookup">WHOIS Lookup</a> of your domain name.</p>
 
-<pre><code class="language-go">resp, err := echoEndpoint.Call(ctx, map[string]interface{}{&quot;Hello&quot;: &quot;World&quot;})
-if err != nil {
-  // ...
-}
+<h4 id="configure-whois-in-the-aws-console">Configure WHOIS in the AWS Console</h4>
 
-switch resp.StatusCode {
-case http.StatusOK:
-  response := make(map[string]interface{})
-  if err := rest.ResponseBody(resp, &amp;response); err != nil {
-    // ...
-  }
-  fmt.Printf(&quot;Response: %#v\n&quot;, response)
-default:
-  err := rest.ErrorResponse(resp, nil)
-  fmt.Printf(&quot;Error: %s\n&quot;, err)
-}
-</code></pre>
+<ol>
+<li>Navigate to Route53</li>
+<li>Navigate to &ldquo;Registered Domains&rdquo;</li>
+<li>Choose the domain name you plan to use for Microlith</li>
+<li>Click the &ldquo;Edit Contacts&rdquo; button</li>
+<li>Add email addresses to your Domain, Technical, and/or Administrative contacts</li>
+<li>Set &ldquo;Privacy Protection&rdquo; to &ldquo;Disable&rdquo; on the contacts</li>
+<li>Click the &ldquo;Save&rdquo; button</li>
+<li>Wait for the email confirmation that the change has taken effect</li>
+</ol>
 
-<p>You can use an optional builder to set the <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#RequesetBuilder.Query">Query()</a> and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#RequesetBuilder.Path">Path()</a> parameters and request <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#RequesetBuilder.Header">Header()</a>s.</p>
-
-<pre><code class="language-go">resp, err := listOrdersEndpoint.Call(ctx, nil, func(request *rest.RequestBuilder) {
-  request.Query(&quot;page&quot;, &quot;2&quot;)
-  request.Query(&quot;limit&quot;, &quot;10&quot;)
-
-  request.Header(&quot;Authorization&quot;, &quot;&lt;oauth-token&gt;&quot;)
-})
-</code></pre>
-
-<h2 id="scopes">Scopes</h2>
-
-<p>Scopes are HTTP paths.  They can be multi-segment and contain path parameters in the form &ldquo;{parameter-name}&rdquo;.  Scopes are created by calling <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#APIBuilder.Scope">Scope()</a> on an API builder.  Scopes can be nested within other scopes by calling <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ScopeBuilder.Scope">Scope()</a> on a scope builder.</p>
-
-<pre><code class="language-go">service.API(func(api *rest.APIBuilder) {
-  api.Scope(&quot;/orders&quot;, func(scope *rest.ScopeBuilder) {
-    scope.Get(&quot;list-orders&quot;, new(listOrders), nil)
-    scope.Post(&quot;create-order&quot;, new(createOrder), nil)
-
-    scope.Scope(&quot;/{order-id}&quot;, func(scope *rest.ScopeBuilder) {
-      scope.Get(&quot;get-order&quot;, new(getOrder), nil)
-      scope.Put(&quot;update-order&quot;, new(updateOrder), nil)
-      scope.Delete(&quot;delete-order&quot;, new(deleteOrder), nil)
-    })
-  })
-})
-</code></pre>
-
-<p><a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ScopeBuilder.Query">Query()</a> parameters, request <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ScopeBuilder.Header">Header()</a>s, and <a href="https://godoc.org/gopkg.in/microlith.v0/sam/tld/rest#ScopeBuilder.Response">Response()</a>s can be defined on a scope and will be inherited by all endpoints in that scope and all nested scopes.  Inherited values can be overridden in individual endpoints or nested scopes.</p>
-
-<pre><code class="language-go">service.API(func(api *rest.APIBuilder) {
-  api.Scope(&quot;/orders&quot;, func(scope *rest.ScopeBuilder) {
-    scope.Header(&quot;Authorization&quot;, true)
-    scope.Response(http.StatusInternalServerError)
-
-    scope.Get(&quot;list-orders&quot;, new(listOrders), nil, func(endpoint *rest.EndpointBuilder) {
-      endpoint.Header(&quot;Authorization&quot;, false)
-
-      endpoint.Response(http.StatusOK, func(response *rest.ResponseBuilder) {
-        response.Header(&quot;X-Next-Page&quot;, false)
-      })
-    })
-
-    scope.Post(&quot;create-order&quot;, new(createOrder), nil, func(endpoint *rest.EndpointBuilder) {
-      endpoint.Response(http.StatusCreated)
-      endpoint.Response(http.StatusBadRequest)
-    })
-
-    scope.Scope(&quot;/{order-id}&quot;, func(scope *rest.ScopeBuilder) {
-      scope.Response(http.StatusOK)
-      scope.Response(http.StatusBadRequest)
-      scope.Response(http.StatusNotFound)
-
-      scope.Get(&quot;get-order&quot;, new(getOrder), nil)
-      scope.Put(&quot;update-order&quot;, new(updateOrder), nil)
-      scope.Delete(&quot;delete-order&quot;, new(deleteOrder), nil)
-    })
-  })
-})
-</code></pre>
+<p>The email confirmation in the final step will go to the email address associated with the AWS user/account that made the change, not to the email address set in your WHOIS information.</p>
 
 
 <footer class=" footline" >
@@ -1101,6 +1039,7 @@ default:
             
                 
                     
+                    
                 
                 
 
@@ -1108,6 +1047,234 @@ default:
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -1189,238 +1356,6 @@ default:
             
         
                     
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
             
         
                     
@@ -1447,10 +1382,10 @@ default:
 
 
         
-            <a class="nav nav-prev" href="/resources/strm/" title="Streams"> <i class="fas fa-chevron-left"></i></a>
+            <a class="nav nav-prev" href="/prerequisites/" title="Prerequisites"> <i class="fas fa-chevron-left"></i></a>
         
         
-            <a class="nav nav-next" href="/resources/cron/" title="Schedued Jobs" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
+            <a class="nav nav-next" href="/prerequisites/github/" title="GitHub Access Token" style="margin-right: 0px;"><i class="fas fa-chevron-right"></i></a>
         
     </div>
 

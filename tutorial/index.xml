@@ -12,13 +12,24 @@
     
     
     <item>
-      <title>The Root Domain</title>
+      <title>Getting Started</title>
+      <link>http://microlith-framework.com/tutorial/bootstrap/</link>
+      <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
+      
+      <guid>http://microlith-framework.com/tutorial/bootstrap/</guid>
+      <description>The tutorial will introduce you to Microlith by building a simple &amp;ldquo;Hello, world!&amp;rdquo; app. It&amp;rsquo;s not fancy: &amp;ldquo;GET /&amp;rdquo; returns &amp;ldquo;Hello, world!&amp;rdquo;. We&amp;rsquo;ll slowly refactor the application to show how to build a Microlith app. For a complete, non-trivial app, see the blog example.
+The first step is to create an empty app and bootstrap it.
+Create the Application A Microlith application is just an executable that calls microlith.Main(). Applications are named after domain names, such as &amp;ldquo;tutorial.</description>
+    </item>
+    
+    <item>
+      <title>Hello, World!</title>
       <link>http://microlith-framework.com/tutorial/root/</link>
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/root/</guid>
-      <description>We will be creating a Hello World application. Our application needs to respond to GET / with a 200 and the string &amp;ldquo;Hello, world!&amp;rdquo;. As we refactor the application throughout the tutorial, it should still return the same response.
-To start, we will add a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application and redeploy. We will add the endpoint to the origin of the root domain. The root domain has a specialized API exposed via the top-level microlith package.</description>
+      <description>To start, we will add a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to our application and redeploy. We will add the endpoint to the origin of the root domain. The root domain has a specialized API exposed via the top-level microlith package.
+The Endpoint First, we will create an endpoint Lambda function. To create the Lambda, implement the Handler interface. The endpoint uses the Respond() helper to return a 200 response code and the string &amp;ldquo;Hello, world!</description>
     </item>
     
     <item>
@@ -27,9 +38,8 @@ To start, we will add a single &amp;ldquo;Hello, world!&amp;rdquo; endpoint to o
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/services/</guid>
-      <description>The origin API implements its business logic by making calls on services in the domain. It uses the results of those calls to create a response for the user.
-Let&amp;rsquo;s refactor our domain into services which perform the work of creating words. Then we&amp;rsquo;ll refactor our origin endpoint to use those services to build our &amp;ldquo;Hello, world!&amp;rdquo; response.
-The &amp;ldquo;word&amp;rdquo; Service We will create a &amp;ldquo;word&amp;rdquo; service that returns a fixed word.</description>
+      <description>Although all external traffic goes through a domain&amp;rsquo;s origin API, the origin does not itself implement business logic. It makes calls on services and creates a response for the user.
+Let&amp;rsquo;s show how this works by refactoring our root domain into services. We&amp;rsquo;ll create a Word service that returns a fixed word. Then we&amp;rsquo;ll create two instances of that service, one returning &amp;ldquo;hello&amp;rdquo; and one returning &amp;ldquo;world&amp;rdquo;, and register them with our domain.</description>
     </item>
     
     <item>
@@ -38,8 +48,9 @@ The &amp;ldquo;word&amp;rdquo; Service We will create a &amp;ldquo;word&amp;rdqu
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/channels/</guid>
-      <description>Channels are streams shared between all services in a domain. Services use channels to communicate between each other. Any service can publish events to or process events from a channel. Additionally, the origin can publish events to a channel.
-Let&amp;rsquo;s create a channel for request events. The &amp;ldquo;hello-world&amp;rdquo; endpoint in the origin will publish an event every request. The &amp;ldquo;word&amp;rdquo; service will process the events and write them out to the logs.</description>
+      <description>The origin calls on services to implement business logic, but services within a domain cannot call each other. Instead, services communicate asynchronously using shared broadcast channels.
+When events occur, such as a user deleting a business object, services publish those events to a channel. Services process events on the channel and update themselves according to their own internal business logic, such as purging their related objects.
+Let&amp;rsquo;s create a channel for request events.</description>
     </item>
     
     <item>
@@ -48,8 +59,8 @@ Let&amp;rsquo;s create a channel for request events. The &amp;ldquo;hello-world&
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/subdomains/</guid>
-      <description>An application contains a root domain and a set of named subdomains.
-Let&amp;rsquo;s create a subdomain named &amp;ldquo;sub.domain&amp;rdquo; that mirrors the root domain. It will have one endpoint that returns &amp;ldquo;Hello, subdomain world!&amp;rdquo;. Like the root domain, it will factor the work out into a &amp;ldquo;hello&amp;rdquo; and a &amp;ldquo;world&amp;rdquo; service and have a channel for request events. It will also have a public client method to call the endpoint on the origin.</description>
+      <description>The application has a root domain and a set of subdomains, and it routes traffic to them using DNS. Each domain&amp;rsquo;s origin is mounted under a single DNS name. The root domain is mounted at the base DNS name you specified during the bootstrap process. The subdomains are named using subdomain prefixes, and are mounted as subdomains of the base DNS name.
+Let&amp;rsquo;s create a domain named &amp;ldquo;sub&amp;rdquo; that mirrors the root domain.</description>
     </item>
     
     <item>
@@ -58,8 +69,8 @@ Let&amp;rsquo;s create a subdomain named &amp;ldquo;sub.domain&amp;rdquo; that m
       <pubDate>Thu, 25 Oct 2018 18:10:01 -0600</pubDate>
       
       <guid>http://microlith-framework.com/tutorial/globals/</guid>
-      <description>An application provides global services to share business logic between domains. It also provides global channels to communicate between different domains.
-Let&amp;rsquo;s factor some shared logic out of our application by promoting the &amp;ldquo;world&amp;rdquo; service to a global service. Since the service relies on the requests channel, it will need to be promoted to a global channel. When we are done, both the root domain and the subdomain will each have their own &amp;ldquo;hello&amp;rdquo; service and will use the global &amp;ldquo;world&amp;rdquo; service and &amp;ldquo;requests&amp;rdquo; channel.</description>
+      <description>The application has a special &amp;ldquo;pseudo-domain&amp;rdquo; called the globals. The globals are a set of services and channels that are shared between all domains. You can use them in any domain as if they were part of that domain.
+Let&amp;rsquo;s factor some shared logic out of our application by promoting the &amp;ldquo;world&amp;rdquo; service to a global service. Since the service relies on the requests channel, the channel will need to be promoted to a global channel.</description>
     </item>
     
   </channel>
